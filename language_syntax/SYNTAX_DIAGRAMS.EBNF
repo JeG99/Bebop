@@ -1,3 +1,2 @@
-ROUTINE = routine id ';' VARS FUNCTIONS "main" "{" STATEMENTS "}".
-FUNCTION = def id '(' PARAMS ')' '-' '>' (TYPE | void) '[' '[' {SIMPLE_DECLARATIONS | SIMPLE_ASSIGNMENT} ']' ']' FUNCTION_BLOCK.
-
+ROUTINE = routine id ';' VARS FUNCTIONS main "{" STATEMENTS "}".
+FUNCTION = proc id '(' PARAMS ')' '->' (TYPE | void) FUNCTION_BLOCK.
