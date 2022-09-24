@@ -1,0 +1,3 @@
+ROUTINE = routine id ';' VARS FUNCTIONS "main" "{" STATEMENTS "}".
+FUNCTION = def id '(' PARAMS ')' '-' '>' (TYPE | void) '[' '[' {SIMPLE_DECLARATIONS | SIMPLE_ASSIGNMENT} ']' ']' FUNCTION_BLOCK.
+
