@@ -1,2 +1,19 @@
-ROUTINE = routine id ';' VARS FUNCTIONS main "{" STATEMENTS "}".
-FUNCTION = proc id '(' PARAMS ')' '->' (TYPE | void) FUNCTION_BLOCK.
+ROUTINE = routine id ";" globals ":" { VAR_DECLARATION } procedures ":" { FUNCTION_DECLARATION } begin ":" "[" locals ":" { VAR_DECLARATION } instructions ":" { STATEMENT } "]" .
+VAR_DECLARATION = var id [ "[" const_int "]" [ "[" const_int "]" ] ] ":" ( TYPE | df) ";" .
+FUNCTION_DECLARATION = proc id "(" PARAMS ")" ":" (TYPE | void) "{" locals ":" { VAR_DECLARATIONS } instructions ":" { STATEMENT } [return EXPRESSION] "}" .
+PARAMS = [TYPE id {"," TYPE id}] .
+LOOP = repeat "(" HYPER_EXPRESSION ")" "{" { STATEMENT } "}" .
+CONDITION = if "(" HYPER_EXPRESSION ")" "{" { STATEMENT } "}" [ else "{" { STATEMENT } "}" ] .
+VAR_ASSIGNMENT = id [ "[" EXPRESSION "]" [ "[" EXPRESSION "]" ] ] "=" EXPRESSION .
+HYPER_EXPRESSION = SUPER_EXPRESSION {(and | or) SUPER_EXPRESSION} .
+SUPER_EXPRESSION = EXPRESSION ( | ('<' | '>' | '<>' | '==') EXPRESSION) .
+EXPRESSION = TERM {("+" | "-") TERM} .
+TERM = FACTOR {("*" | "/") FACTOR} .
+FACTOR = id | "(" HYPER_EXPRESSION ")" | const_int | const_float | FUNCTION_CALL .
+STATEMENT = ( WRITE | READ | VAR_ASSIGNMENT | SPECIAL_FUNCTION | CONDITION | LOOP | FUNCTION_CALL ) ";" .
+WRITE = write const_text .
+READ = read id .
+FUNCTION_CALL = id "(" CALL_PARAMS ")" .
+SPECIAL_FUNCTION = ( mean | median | mode | std | kurt | plot | dplot | var | sim | corr | dfread ) "(" CALL_PARAMS ")" | "~(_8^(I)" | "###(_8^ |)" .
+CALL_PARAMS = [EXPRESSION {"," EXPRESSION}] .
+TYPE = int | float .
