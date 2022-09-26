@@ -9,7 +9,7 @@ HYPER_EXPRESSION = SUPER_EXPRESSION {(and | or) SUPER_EXPRESSION} .
 SUPER_EXPRESSION = EXPRESSION ( | ('<' | '>' | '<>' | '==') EXPRESSION) .
 EXPRESSION = TERM {("+" | "-") TERM} .
 TERM = FACTOR {("*" | "/") FACTOR} .
-FACTOR = id | "(" HYPER_EXPRESSION ")" | const_int | const_float | FUNCTION_CALL .
+FACTOR = id [ "[" EXPRESSION "]" [ "[" EXPRESSION "]" ] ] | "(" HYPER_EXPRESSION ")" | const_int | const_float | FUNCTION_CALL .
 STATEMENT = ( WRITE | READ | VAR_ASSIGNMENT | SPECIAL_FUNCTION | CONDITION | LOOP | FUNCTION_CALL ) ";" .
 WRITE = write const_text .
 READ = read id .
