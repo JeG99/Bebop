@@ -1,36 +1,40 @@
 import ply.lex as lex
 
 tokens = (
-'ID',
-'SEMICOLON',
-'COLON',
-'LBRACKET',
-'RBRACKET',
-'LSQBRACKET',
-'RSQBRACKET',
-'LPAREN',
-'RPAREN',
-'COMMA',
-'DOT',
-'AND',
-'OR',
-'NOT',
-'LTHAN',
-'GTHAN',
-'EQUAL',
-'DIFFERENT',
-'ADD',
-'SUB',
-'MUL',
-'DIV',
-'CONST_FLOAT',
-'CONST_INT',
-'CONST_TEXT'
+    'ID',
+    'SEMICOLON',
+    'COLON',
+    'LBRACKET',
+    'RBRACKET',
+    'LSQBRACKET',
+    'RSQBRACKET',
+    'LPAREN',
+    'RPAREN',
+    'COMMA',
+    'DOT',
+    'AND',
+    'OR',
+    'NOT',
+    'LTHAN',
+    'GTHAN',
+    'EQUAL',
+    'DIFFERENT',
+    'ADD',
+    'SUB',
+    'MUL',
+    'DIV',
+    'CONST_FLOAT',
+    'CONST_INT',
+    'CONST_TEXT'
 )
 
 # General use reserved words
-reserved = {
+reserved = { 
     'routine': 'ROUTINE',
+    'globals': 'GLOBALS',
+    'locals': 'LOCALS',
+    'procedures': 'PROCEDURES',
+    'instructions': 'INSTRUCTIONS',
     'int': 'INT',
     'float': 'FLOAT',
     'proc': 'PROC',
@@ -89,4 +93,4 @@ t_CONST_TEXT = r'\"(\"\"|[^\"$])*\"'
 
 t_ignore = ' \t'
 
-lexer = lex.lex()
+tokens = lex.lex()
