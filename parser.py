@@ -1,5 +1,3 @@
-# WRITE SOLO TOMA UN STRING
-
 import ply.yacc as yacc
 from lexer import lexer, tokens
 import sys
