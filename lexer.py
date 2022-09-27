@@ -1,6 +1,6 @@
 import ply.lex as lex
 
-tokens = (
+tokens = [
     'ID',
     'SEMICOLON',
     'COLON',
@@ -12,6 +12,7 @@ tokens = (
     'RPAREN',
     'COMMA',
     'DOT',
+    'ASSIGN',
     'AND',
     'OR',
     'NOT',
@@ -26,46 +27,47 @@ tokens = (
     'CONST_FLOAT',
     'CONST_INT',
     'CONST_TEXT'
-)
+]
 
-# General use reserved words
 reserved = { 
+    # General use reserved words
     'routine': 'ROUTINE',
     'globals': 'GLOBALS',
     'locals': 'LOCALS',
+    'var': 'VAR',
     'procedures': 'PROCEDURES',
     'instructions': 'INSTRUCTIONS',
     'int': 'INT',
     'float': 'FLOAT',
+    'write': 'WRITE',
+    'read': 'READ',
     'proc': 'PROC',
     'begin': 'BEGIN',
     'repeat': 'REPEAT',
     'if': 'IF',
     'else': 'ELSE',
-    'void': 'VOID'
-}
+    'void': 'VOID',
+    'return': 'RETURN',
 
-# Special reserved words
-special_reserved = {
+    # Special reserved words
+    'df': 'DF',
     'mean': 'MEAN',
     'median': 'MEDIAN',
     'mode': 'MODE',
     'std': 'STD',
-    'kurt': 'KURT',
+    'kurtosis': 'KURTOSIS',
     'plot': 'PLOT',
     'dplot': 'DPLOT',
-    'var': 'VAR',
-    'sim': 'SIM',
-    'corr': 'CORR',
-    'df': 'DF',
+    'variance': 'VARIANCE',
+    'simmetry': 'SIMMETRY',
+    'correlation': 'CORRELATION',
     'dfread': 'DFREAD',
-    '~(_8^(I)': '~(_8^(I)',
-    '###( 8^ |)': '###( 8^ |)'
+    '~(_8^(I)': 'HOMERO',
+    '###(_8^ |)': 'MARGE'
 }
 
-tokens += list(reserved.values()) + list(special_reserved.values())
+tokens += list(reserved.values())
 
-t_ID = r'[A-Za-z_][A-Za-z0-9_]*'
 t_SEMICOLON = r';'
 t_COLON = r':'
 t_LBRACKET = r'\{'
@@ -76,6 +78,7 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_COMMA = r','
 t_DOT = r'\.'
+t_ASSIGN = r'='
 t_AND = r'and'
 t_OR = r'or'
 t_NOT = r'not'
@@ -93,4 +96,16 @@ t_CONST_TEXT = r'\"(\"\"|[^\"$])*\"'
 
 t_ignore = ' \t'
 
-tokens = lex.lex()
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value,'ID')
+    return t
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+def t_error(t):
+    t.lexer.skip(1)
+
+lexer = lex.lex()

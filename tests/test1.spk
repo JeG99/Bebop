@@ -1,0 +1,59 @@
+routine programa1;
+
+globals:
+    var var1: df;
+    var var2[6]: float;
+    var var3[10][10]: float;
+    var var3[10][10]: int;
+    var var4: float;
+
+procedures:
+    proc function1(int param1, float param2, int param3): int {
+        
+        locals:
+            var var5: df;
+            var var6[6]: float;
+            var var7[10][10]: float;
+            var var8[10][10]: int;
+            var var9: float;
+            var var10: int;
+        
+        instructions:
+            var9 = var6[0] + var7[5 + 1][5];
+            write "hola ", 2.7, 3.14, var6[2];
+            var10 = 2;
+        return var10;
+    }
+
+    proc function2(int param4, float param5, int param6): void {
+        
+        locals:
+            var var5: df;
+            var var6[6]: float;
+            var var7[10][10]: float;
+            var var8[10][10]: int;
+            var var9: float;
+            var var10: int;
+        
+        instructions:
+            var9 = var6[0] + var7[5 + 1][5];
+            write "hola ", 2.7, 3.14, var6[2];
+            var10 = 2;
+    }
+
+begin: [
+    
+    locals:
+        var var5: df;
+        var var6[6]: float;
+        var var7[10][10]: float;
+        var var8[10][10]: int;
+        var var9: float;
+        var var10: float;
+
+    instructions:
+        var4 = var6[0] + var7[5 + 1][5];
+        write "hola ", 2.7, 3.14, var2[2];
+        var10 = 2;
+
+]
