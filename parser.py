@@ -2,6 +2,8 @@ import ply.yacc as yacc
 from lexer import lexer, tokens
 import sys
 
+proc_dir = {}
+
 def p_routine(p):
     '''
     routine : ROUTINE ID SEMICOLON GLOBALS COLON var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RSQBRACKET

@@ -1,5 +1,5 @@
 ROUTINE = routine id ";" globals ":" { VAR_DECLARATION } procedures ":" { FUNCTION_DECLARATION } begin ":" "[" locals ":" { VAR_DECLARATION } instructions ":" { STATEMENT } "]" .
-VAR_DECLARATION = var id ":" ( TYPE | df) ";" .
+SIMPLE_VAR_DECLARATION = var id ":" ( TYPE | df) ";" .
 INDEXED_VAR_DECLARATION = var id "[" const_int "]" [ "[" const_int "]" ] ":" TYPE ";" .
 FUNCTION_DECLARATION = proc id "(" PARAMS ")" ":" (TYPE | void) "{" locals ":" { VAR_DECLARATIONS } instructions ":" { STATEMENT } [return EXPRESSION ';'] "}" .
 PARAMS = [TYPE id {"," TYPE id}] .
