@@ -1,3 +1,4 @@
+from inspect import stack
 import ply.yacc as yacc
 from lexer import lexer, tokens
 import sys
@@ -15,7 +16,7 @@ def p_routine(p) -> None:
     routine : ROUTINE ID SEMICOLON GLOBALS COLON global_scope_init var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON local_scope_init var_declarations INSTRUCTIONS COLON statements RSQBRACKET
     '''
     p[0] = 1
-    scope_manager.dump_proc_dir()
+    # scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
 
 
@@ -88,8 +89,9 @@ def p_proc_scope_init(p) -> None:
 
 def p_return(p) -> None:
     '''
-    return : RETURN expression
+    return : RETURN push_operator expression
     '''
+    stack_manager.produce_quadruple("return")
 
 
 def p_func_type(p) -> None:
@@ -141,18 +143,36 @@ def p_write(p) -> None:
 
 def p_write_params0(p) -> None:
     '''
-    write_params0 : expression write_params1
-                  | CONST_TEXT write_params1
+    write_params0 : write_operator expression produce_write_quad write_params1
+                  | write_operator const_text produce_write_quad write_params1
     '''
 
 
 def p_write_params1(p) -> None:
     '''
-    write_params1 : COMMA expression write_params1
-                  | COMMA CONST_TEXT write_params1
+    write_params1 : COMMA write_operator expression produce_write_quad write_params1
+                  | COMMA write_operator const_text produce_write_quad write_params1
                   | empty
     '''
 
+
+def p_const_text(p):
+    '''
+    const_text : CONST_TEXT
+    '''
+    stack_manager.push_operand(p[1], "text")
+
+def p_write_operator(p):
+    '''
+    write_operator : 
+    '''
+    stack_manager.push_operator("write")
+
+def p_produce_write_quad(p):
+    '''
+    produce_write_quad : 
+    '''
+    stack_manager.produce_quadruple("write")
 
 def p_read(p) -> None:
     '''
@@ -170,8 +190,9 @@ def p_var_assignment(p) -> None:
 
 def p_simple_assignment(p) -> None:
     '''
-    simple_assignment : ID ASSIGN push_operator expression
+    simple_assignment : identifier ASSIGN push_operator expression
     '''
+    stack_manager.produce_quadruple("simple_assignment")
 
 
 def p_array_assignment(p) -> None:
@@ -236,30 +257,32 @@ def p_special_function_call(p) -> None:
                      | MARGE
     '''
 
-#TODO AGREGAR AQUI DESPUES DE TODO HYPER_EXPRESSION EL PUNTO NEURALGICO 4 Y 5
+# TODO AGREGAR AQUI DESPUES DE TODO HYPER_EXPRESSION EL PUNTO NEURALGICO 4 Y 5
+
+
 def p_hyper_expression(p) -> None:
     '''
-    hyper_expression : hyper_expression AND push_operator hyper_expression  
+    hyper_expression : hyper_expression AND push_operator hyper_expression
                      | hyper_expression OR push_operator hyper_expression
-                     | super_expression
+                     | super_expression produce_hyperexp_quad
     '''
 
 
 def p_super_expression(p) -> None:
     '''
-    super_expression : super_expression LTHAN push_operator super_expression  
+    super_expression : super_expression LTHAN push_operator super_expression
                      | super_expression GTHAN push_operator super_expression
                      | super_expression EQUAL push_operator super_expression
                      | super_expression DIFFERENT super_expression
-                     | expression
+                     | expression produce_superexp_quad
     '''
 
 
 def p_expression(p) -> None:
     '''
-    expression : expression ADD push_operator expression  
-               | expression SUB push_operator expression
-               | term
+    expression : expression ADD push_operator expression
+               | expression SUB push_operator expression 
+               | term produce_exp_quad
     '''
 
 
@@ -267,7 +290,7 @@ def p_term(p) -> None:
     '''
     term : term MUL push_operator term
          | term DIV push_operator term
-         | factor
+         | factor produce_term_quad
     '''
 
 
@@ -276,6 +299,34 @@ def p_push_operator(p) -> None:
     push_operator : 
     '''
     stack_manager.push_operator(p[-1])
+
+
+def p_produce_hyperexp_quad(p) -> None:
+    '''
+    produce_hyperexp_quad : 
+    '''
+    stack_manager.produce_quadruple("hyperexp")
+
+
+def p_produce_superexp_quad(p) -> None:
+    '''
+    produce_superexp_quad : 
+    '''
+    stack_manager.produce_quadruple("superexp")
+
+
+def p_produce_exp_quad(p) -> None:
+    '''
+    produce_exp_quad : 
+    '''
+    stack_manager.produce_quadruple("exp")
+
+
+def p_produce_term_quad(p) -> None:
+    '''
+    produce_term_quad : 
+    '''
+    stack_manager.produce_quadruple("term")
 
 
 def p_factor(p) -> None:

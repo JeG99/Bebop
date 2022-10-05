@@ -6,17 +6,26 @@ class semantic_cube():
                 'int': {
                     'int': 'int',
                     'float': 'float',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'float': {
                     'int': 'float',
                     'float': 'float',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'bool': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
+                },
+                'text': {
+                    'int': 'ERR',
+                    'float': 'ERR',
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 }
             },
             # SUB
@@ -24,170 +33,254 @@ class semantic_cube():
                 'int': {
                     'int': 'int',
                     'float': 'float',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'float': {
                     'int': 'float',
                     'float': 'float',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'bool': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
+                },
+                'text': {
+                    'int': 'ERR',
+                    'float': 'ERR',
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 }
             },
             '*': {
                 'int': {
                     'int': 'int',
                     'float': 'float',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'float': {
                     'int': 'float',
                     'float': 'float',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'bool': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
+                },
+                'text': {
+                    'int': 'ERR',
+                    'float': 'ERR',
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 }
             },
             '/': {
                 'int': {
                     'int': 'int',
                     'float': 'float',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'float': {
                     'int': 'float',
                     'float': 'float',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'bool': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
+                },
+                'text': {
+                    'int': 'ERR',
+                    'float': 'ERR',
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 }
             },
             '<': {
                 'int': {
                     'int': 'bool',
                     'float': 'bool',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'float': {
                     'int': 'bool',
                     'float': 'bool',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'bool': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
+                },
+                'text': {
+                    'int': 'ERR',
+                    'float': 'ERR',
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 }
             },
             '>': {
                 'int': {
                     'int': 'bool',
                     'float': 'bool',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'float': {
                     'int': 'bool',
                     'float': 'bool',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'bool': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
+                },
+                'text': {
+                    'int': 'ERR',
+                    'float': 'ERR',
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 }
             },
             '==': {
                 'int': {
                     'int': 'bool',
                     'float': 'bool',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'float': {
                     'int': 'bool',
                     'float': 'bool',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'bool': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
+                },
+                'text': {
+                    'int': 'ERR',
+                    'float': 'ERR',
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 }
             },
             '<>': {
                 'int': {
                     'int': 'bool',
                     'float': 'bool',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'float': {
                     'int': 'bool',
                     'float': 'bool',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'bool': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
+                },
+                'text': {
+                    'int': 'ERR',
+                    'float': 'ERR',
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 }
             },
             'or': {
                 'int': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'float': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'bool': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'bool'
+                    'bool': 'bool',
+                    'text': 'ERR'
+                },
+                'text': {
+                    'int': 'ERR',
+                    'float': 'ERR',
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 }
             },
             'and': {
                 'int': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'float': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'bool': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'bool'
+                    'bool': 'bool',
+                    'text': 'ERR'
+                },
+                'text': {
+                    'int': 'ERR',
+                    'float': 'ERR',
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 }
             },
             '=': {
                 'int': {
                     'int': 'bool',
                     'float': 'ERR',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'float': {
                     'int': 'ERR',
                     'float': 'bool',
-                    'bool': 'ERR'
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 },
                 'bool': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'bool'
+                    'bool': 'bool',
+                    'text': 'ERR'
                 }
             }
         }

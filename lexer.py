@@ -11,7 +11,6 @@ tokens = [
     'LPAREN',
     'RPAREN',
     'COMMA',
-    'DOT',
     'ASSIGN',
     'AND',
     'OR',
@@ -77,7 +76,6 @@ t_RSQBRACKET = r'\]'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_COMMA = r','
-t_DOT = r'\.'
 t_ASSIGN = r'='
 t_AND = r'and'
 t_OR = r'or'
