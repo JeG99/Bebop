@@ -296,7 +296,7 @@ if __name__ == "__main__":
         parser = yacc.yacc()
         code = sys.argv[1]
 
-        if ".spk" != code.split(".")[-1]:
+        if "spk" != code.split(".")[-1]:
             p_error(None, "bad_extension")
 
         try:
