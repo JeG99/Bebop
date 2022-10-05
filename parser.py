@@ -3,8 +3,9 @@ from lexer import lexer, tokens
 import sys
 
 from scope_manager import scope_manager
+from error_handler import p_error
 
-scope_manager = scope_manager()
+scope_manager = scope_manager(p_error)
 
 
 def p_routine(p):
@@ -289,32 +290,18 @@ def p_empty(p):
     pass
 
 
-def p_error(p):
-    if p == None:
-        token = "end of file"
-    else:
-        token = f"{p.type}({p.value}) on line {p.lineno}"
-
-    print(f"Syntax error: Unexpected {token}")
-
-
-class Error(Exception):
-    """Base class for other exceptions"""
-    pass
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) > 1:
 
         parser = yacc.yacc()
         code = sys.argv[1]
 
-        if ".spk" not in code:
-            raise Error("File extension not valid")
+        if ".spk" != code.split(".")[-1]:
+            p_error(None, "bad_extension")
 
         try:
 
-            _file = open(code, 'r')
+            _file = open(code, "r")
             source = _file.read()
             _file.close()
             lexer.input(source)
@@ -330,4 +317,4 @@ if __name__ == '__main__':
             print(EOFError)
 
     else:
-        print('A file must be provided as argument.')
+        print("A file must be provided as argument.")
