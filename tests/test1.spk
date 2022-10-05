@@ -8,7 +8,7 @@ globals:
     var var4: float;
 
 procedures:
-    proc function1(int param1, float param2, int param3): int {
+    proc function1(param1: int, param2: float, param3: int): int {
         
         locals:
             var var5: df;
@@ -25,7 +25,7 @@ procedures:
         return var10;
     }
 
-    proc function2(int param4, float param5, int param6): void {
+    proc function2(param4: int, param5: float, param6: int): void {
         
         locals:
             var var5: df;

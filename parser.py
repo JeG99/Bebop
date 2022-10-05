@@ -102,24 +102,26 @@ def p_func_type(p):
               | VOID
     '''
 
-# def p_params(p):
-#     '''
-#     params : type ID params
-#            | COMMA type ID params
-#            | empty
-#     '''
-
 def p_params0(p):
     '''
-    params0 : type ID params1
+    params0 : param params1
             | empty
     '''
 
 def p_params1(p):
     '''
-    params1 : COMMA type ID params1
+    params1 : COMMA param params1
             | empty
     '''
+
+def p_param(p): 
+    '''
+    param : ID COLON type
+    '''
+    proc_dir[curr_scope]['var_table'][p[1]] = {     
+        'type': p[3],
+        'indexed': False
+    }
 
 def p_statements(p):
     '''
