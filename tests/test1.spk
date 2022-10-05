@@ -4,7 +4,7 @@ globals:
     var var1: df;
     var var2[6]: float;
     var var3[10][10]: float;
-    var var3[10][10]: int;
+    var var21[10][10]: int;
     var var4: float;
 
 procedures:
