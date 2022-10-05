@@ -78,8 +78,8 @@ def p_var_type(p):
 
 def p_function_declarations(p):
     '''
-    function_declarations : PROC ID proc_scope_init LPAREN params RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RBRACKET function_declarations
-                          | PROC ID proc_scope_init LPAREN params RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements return SEMICOLON RBRACKET function_declarations
+    function_declarations : PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RBRACKET function_declarations
+                          | PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements return SEMICOLON RBRACKET function_declarations
                           | empty
     '''
 
@@ -102,11 +102,23 @@ def p_func_type(p):
               | VOID
     '''
 
-def p_params(p):
+# def p_params(p):
+#     '''
+#     params : type ID params
+#            | COMMA type ID params
+#            | empty
+#     '''
+
+def p_params0(p):
     '''
-    params : type ID params
-           | COMMA type ID params
-           | empty
+    params0 : type ID params1
+            | empty
+    '''
+
+def p_params1(p):
+    '''
+    params1 : COMMA type ID params1
+            | empty
     '''
 
 def p_statements(p):
