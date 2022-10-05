@@ -1,5 +1,5 @@
 class semantic_cube():
-    def __init__(self):
+    def __init__(self) -> None:
         self.sem_cube = {
             # ADD
             '+': {

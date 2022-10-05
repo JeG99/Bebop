@@ -3,7 +3,7 @@ class Error(Exception):
     pass
 
 
-def raise_error(p, cause="bad_syntax", **args):
+def raise_error(p, cause="bad_syntax", **args) -> None:
     if cause == "bad_extension":
         raise Error("File extension not valid")
     elif cause == "bad_syntax":

@@ -3,12 +3,12 @@ import json
 
 class scope_manager():
 
-    def __init__(self, error_handler):
+    def __init__(self, error_handler) -> None:
         self.proc_dir = {}
         self.curr_scope = ""
         self.error_func = error_handler
 
-    def context_change(self, context: str):
+    def context_change(self, context: str) -> None:
         self.proc_dir[context] = {"var_table": {}}
         self.curr_scope = context
 
@@ -34,5 +34,5 @@ class scope_manager():
             var_body["columns"] = yacc_production[6]
         self.proc_dir[self.curr_scope]["var_table"][yacc_production[1]] = var_body
 
-    def dump_proc_dir(self):
+    def dump_proc_dir(self) -> None:
         print(json.dumps(self.proc_dir, indent=4))
