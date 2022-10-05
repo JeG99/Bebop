@@ -1,22 +1,33 @@
 import ply.yacc as yacc
 from lexer import lexer, tokens
 import sys
+import json
 
 proc_dir = {}
-curr_scope = "global"
+curr_scope = ""
 
 def p_routine(p):
     '''
-    routine : ROUTINE proc_dir_init ID SEMICOLON GLOBALS COLON var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RSQBRACKET
+    routine : ROUTINE ID SEMICOLON GLOBALS COLON global_scope_init var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON local_scope_init var_declarations INSTRUCTIONS COLON statements RSQBRACKET
     ''' 
     p[0] = 1
+    print(json.dumps(proc_dir, indent=4))
 
-def p_proc_dir_init(p):
+def p_global_scope_init(p):
     '''
-    proc_dir_init :
+    global_scope_init :
     '''
+    global curr_scope
     proc_dir['global'] = { 'var_table' : {} }
     curr_scope = 'global'
+
+def p_local_scope_init(p):
+    '''
+    local_scope_init : 
+    '''
+    global curr_scope
+    proc_dir['local'] = { 'var_table' : {} }
+    curr_scope = 'local'
 
 def p_var_declarations(p):
     '''
@@ -30,39 +41,33 @@ def p_simple_declaration(p):
     '''
     simple_declaration : ID COLON var_type SEMICOLON 
     '''
-    proc_dir[curr_scope]['var_table'].append({ 
-        p[1] : {
-            'type': p[3],
-            'indexed': False
-        } 
-    })
+    proc_dir[curr_scope]['var_table'][p[1]] = {     
+        'type': p[3],
+        'indexed': False
+    }
 
 def p_array_declaration(p):
     '''
     array_declaration : ID LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON 
     '''
-    proc_dir[curr_scope]['var_table'].append({ 
-        p[1] : {
-            'type': p[6],
-            'indexed': True,
-            'dimensionality': 1,
-            'size': p[3]
-        } 
-    })
+    proc_dir[curr_scope]['var_table'][p[1]] = { 
+        'type': p[6],
+        'indexed': True,
+        'dimensionality': 1,
+        'size': p[3]
+    } 
 
 def p_matrix_declaration(p):
     '''
     matrix_declaration : ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON
     '''
-    proc_dir[curr_scope]['var_table'].append({ 
-        p[1] : {
-            'type': p[9],
-            'indexed': True,
-            'dimensionality': 2,
-            'rows': p[3],
-            'columns': p[6]
-        } 
-    })
+    proc_dir[curr_scope]['var_table'][p[1]] = { 
+        'type': p[9],
+        'indexed': True,
+        'dimensionality': 2,
+        'rows': p[3],
+        'columns': p[6]
+    }
 
 def p_var_type(p):
     '''
@@ -73,10 +78,18 @@ def p_var_type(p):
 
 def p_function_declarations(p):
     '''
-    function_declarations : PROC ID LPAREN params RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RBRACKET function_declarations
-                          | PROC ID LPAREN params RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements return SEMICOLON RBRACKET function_declarations
+    function_declarations : PROC ID proc_scope_init LPAREN params RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RBRACKET function_declarations
+                          | PROC ID proc_scope_init LPAREN params RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements return SEMICOLON RBRACKET function_declarations
                           | empty
     '''
+
+def p_proc_scope_init(p):
+    '''
+    proc_scope_init : 
+    '''
+    global curr_scope
+    proc_dir[p[-1]] = { 'var_table' : {} }
+    curr_scope = p[-1]
 
 def p_return(p):
     '''
