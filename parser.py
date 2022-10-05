@@ -11,7 +11,7 @@ def p_routine(p):
     routine : ROUTINE ID SEMICOLON GLOBALS COLON global_scope_init var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON local_scope_init var_declarations INSTRUCTIONS COLON statements RSQBRACKET
     ''' 
     p[0] = 1
-    print(json.dumps(proc_dir, indent=4))
+    print(json.dumps(proc_dir, indent=4), type(p))
 
 def p_global_scope_init(p):
     '''
@@ -55,7 +55,7 @@ def p_array_declaration(p):
         'indexed': True,
         'dimensionality': 1,
         'size': p[3]
-    } 
+    }
 
 def p_matrix_declaration(p):
     '''

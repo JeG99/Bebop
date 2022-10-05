@@ -1,4 +1,4 @@
-class SemanticCube():
+class semantic_cube():
     def __init__(self):
         self.sem_cube = {
             # ADD
