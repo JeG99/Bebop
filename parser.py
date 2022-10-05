@@ -3,12 +3,20 @@ from lexer import lexer, tokens
 import sys
 
 proc_dir = {}
+curr_scope = "global"
 
 def p_routine(p):
     '''
-    routine : ROUTINE ID SEMICOLON GLOBALS COLON var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RSQBRACKET
+    routine : ROUTINE proc_dir_init ID SEMICOLON GLOBALS COLON var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RSQBRACKET
     ''' 
     p[0] = 1
+
+def p_proc_dir_init(p):
+    '''
+    proc_dir_init :
+    '''
+    proc_dir['global'] = { 'var_table' : {} }
+    curr_scope = 'global'
 
 def p_var_declarations(p):
     '''
@@ -22,22 +30,46 @@ def p_simple_declaration(p):
     '''
     simple_declaration : ID COLON var_type SEMICOLON 
     '''
+    proc_dir[curr_scope]['var_table'].append({ 
+        p[1] : {
+            'type': p[3],
+            'indexed': False
+        } 
+    })
 
 def p_array_declaration(p):
     '''
     array_declaration : ID LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON 
     '''
+    proc_dir[curr_scope]['var_table'].append({ 
+        p[1] : {
+            'type': p[6],
+            'indexed': True,
+            'dimensionality': 1,
+            'size': p[3]
+        } 
+    })
 
 def p_matrix_declaration(p):
     '''
     matrix_declaration : ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON
     '''
+    proc_dir[curr_scope]['var_table'].append({ 
+        p[1] : {
+            'type': p[9],
+            'indexed': True,
+            'dimensionality': 2,
+            'rows': p[3],
+            'columns': p[6]
+        } 
+    })
 
 def p_var_type(p):
     '''
     var_type : type
              | DF
     '''
+    p[0] = p[1]
 
 def p_function_declarations(p):
     '''
@@ -208,6 +240,7 @@ def p_type(p):
     type : INT
          | FLOAT
     '''
+    p[0] = p[1]
 
 def p_empty(p):
     '''
