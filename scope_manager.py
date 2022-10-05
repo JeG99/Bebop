@@ -1,3 +1,5 @@
+import json
+
 class scope_manager():
 
     def __init__(self):
@@ -28,3 +30,6 @@ class scope_manager():
             var_body['columns'] = yacc_production[6]
 
         self.proc_dir[self.curr_scope]['var_table'][yacc_production[1]] = var_body
+
+    def dump_proc_dir(self):
+        print(json.dumps(self.proc_dir, indent=4))

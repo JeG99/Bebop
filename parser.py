@@ -1,33 +1,29 @@
 import ply.yacc as yacc
 from lexer import lexer, tokens
 import sys
-import json
 
-proc_dir = {}
-curr_scope = ""
+from scope_manager import scope_manager
+
+scope_manager = scope_manager()
 
 def p_routine(p):
     '''
     routine : ROUTINE ID SEMICOLON GLOBALS COLON global_scope_init var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON local_scope_init var_declarations INSTRUCTIONS COLON statements RSQBRACKET
     ''' 
     p[0] = 1
-    print(json.dumps(proc_dir, indent=4), type(p))
+    scope_manager.dump_proc_dir()
 
 def p_global_scope_init(p):
     '''
     global_scope_init :
     '''
-    global curr_scope
-    proc_dir['global'] = { 'var_table' : {} }
-    curr_scope = 'global'
+    scope_manager.context_change("global")
 
 def p_local_scope_init(p):
     '''
     local_scope_init : 
     '''
-    global curr_scope
-    proc_dir['local'] = { 'var_table' : {} }
-    curr_scope = 'local'
+    scope_manager.context_change("local")
 
 def p_var_declarations(p):
     '''
@@ -41,33 +37,19 @@ def p_simple_declaration(p):
     '''
     simple_declaration : ID COLON var_type SEMICOLON 
     '''
-    proc_dir[curr_scope]['var_table'][p[1]] = {     
-        'type': p[3],
-        'indexed': False
-    }
+    scope_manager.store_variable(p, "simple")
 
 def p_array_declaration(p):
     '''
     array_declaration : ID LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON 
     '''
-    proc_dir[curr_scope]['var_table'][p[1]] = { 
-        'type': p[6],
-        'indexed': True,
-        'dimensionality': 1,
-        'size': p[3]
-    }
+    scope_manager.store_variable(p, "array")
 
 def p_matrix_declaration(p):
     '''
     matrix_declaration : ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON
     '''
-    proc_dir[curr_scope]['var_table'][p[1]] = { 
-        'type': p[9],
-        'indexed': True,
-        'dimensionality': 2,
-        'rows': p[3],
-        'columns': p[6]
-    }
+    scope_manager.store_variable(p, "matrix")
 
 def p_var_type(p):
     '''
@@ -87,9 +69,7 @@ def p_proc_scope_init(p):
     '''
     proc_scope_init : 
     '''
-    global curr_scope
-    proc_dir[p[-1]] = { 'var_table' : {} }
-    curr_scope = p[-1]
+    scope_manager.context_change(p[-1])
 
 def p_return(p):
     '''
@@ -118,10 +98,7 @@ def p_param(p):
     '''
     param : ID COLON type
     '''
-    proc_dir[curr_scope]['var_table'][p[1]] = {     
-        'type': p[3],
-        'indexed': False
-    }
+    scope_manager.store_variable(p, "simple")
 
 def p_statements(p):
     '''
