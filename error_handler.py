@@ -15,5 +15,8 @@ def raise_error(p, cause="bad_syntax", **args) -> None:
     elif cause == "variable_declaration":
         raise Error(
             f"Semantic error: Variable <{args['args'][0]}> already declared as type <{args['args'][1]}>")
+    elif cause == "undeclared_variable":
+        raise Error(
+            f"Semantic error: Variable <{args['args'][0]}> not declared in current scope <{args['args'][1]}>")
     elif cause == "type_missmatch":
         pass

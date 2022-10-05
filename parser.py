@@ -16,6 +16,7 @@ def p_routine(p) -> None:
     '''
     p[0] = 1
     scope_manager.dump_proc_dir()
+    stack_manager.dump_stacks()
 
 
 def p_global_scope_init(p) -> None:
@@ -169,7 +170,7 @@ def p_var_assignment(p) -> None:
 
 def p_simple_assignment(p) -> None:
     '''
-    simple_assignment : ID ASSIGN expression
+    simple_assignment : ID ASSIGN push_operator expression
     '''
 
 
@@ -235,20 +236,20 @@ def p_special_function_call(p) -> None:
                      | MARGE
     '''
 
-
+#TODO AGREGAR AQUI DESPUES DE TODO HYPER_EXPRESSION EL PUNTO NEURALGICO 4 Y 5
 def p_hyper_expression(p) -> None:
     '''
-    hyper_expression : hyper_expression AND hyper_expression  
-                     | hyper_expression OR hyper_expression
+    hyper_expression : hyper_expression AND push_operator hyper_expression  
+                     | hyper_expression OR push_operator hyper_expression
                      | super_expression
     '''
 
 
 def p_super_expression(p) -> None:
     '''
-    super_expression : super_expression LTHAN super_expression  
-                     | super_expression GTHAN super_expression
-                     | super_expression EQUAL super_expression
+    super_expression : super_expression LTHAN push_operator super_expression  
+                     | super_expression GTHAN push_operator super_expression
+                     | super_expression EQUAL push_operator super_expression
                      | super_expression DIFFERENT super_expression
                      | expression
     '''
@@ -256,31 +257,73 @@ def p_super_expression(p) -> None:
 
 def p_expression(p) -> None:
     '''
-    expression : expression ADD expression  
-               | expression SUB expression
+    expression : expression ADD push_operator expression  
+               | expression SUB push_operator expression
                | term
     '''
 
 
 def p_term(p) -> None:
     '''
-    term : term MUL term
-         | term DIV term
+    term : term MUL push_operator term
+         | term DIV push_operator term
          | factor
     '''
 
 
+def p_push_operator(p) -> None:
+    '''
+    push_operator : 
+    '''
+    stack_manager.push_operator(p[-1])
+
+
 def p_factor(p) -> None:
     '''
-    factor : ID
+    factor : identifier
+           | const_int
+           | const_float
+           | LPAREN push_cap expression RPAREN pop_cap
            | array_access
            | matrix_access
-           | LPAREN expression RPAREN
-           | CONST_INT
-           | CONST_FLOAT
            | function_call
            | special_function_call
     '''
+
+
+def p_idendifier(p) -> None:
+    '''
+    identifier : ID
+    '''
+    stack_manager.push_operand(p[1], scope_manager.get_var_type(p[1]))
+
+
+def p_const_int(p) -> None:
+    '''
+    const_int : CONST_INT
+    '''
+    stack_manager.push_operand(p[1], "int")
+
+
+def p_const_float(p) -> None:
+    '''
+    const_float : CONST_FLOAT
+    '''
+    stack_manager.push_operand(p[1], "float")
+
+
+def p_push_cap(p) -> None:
+    '''
+    push_cap : 
+    '''
+    stack_manager.push_operator('(')
+
+
+def p_pop_cap(p) -> None:
+    '''
+    pop_cap : 
+    '''
+    stack_manager.pop_operator()
 
 
 def p_array_access(p) -> None:

@@ -34,5 +34,12 @@ class scope_manager():
             var_body["columns"] = yacc_production[6]
         self.proc_dir[self.curr_scope]["var_table"][yacc_production[1]] = var_body
 
+    def get_var_type(self, id: str) -> str:
+        if id not in list(self.proc_dir[self.curr_scope]["var_table"]):
+            self.error_func(None, "undeclared_variable",
+                            args=(id, self.curr_scope))
+        else:
+            return self.proc_dir[self.curr_scope]["var_table"][id]["type"]
+
     def dump_proc_dir(self) -> None:
         print(json.dumps(self.proc_dir, indent=4))
