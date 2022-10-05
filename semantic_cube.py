@@ -187,7 +187,7 @@ class semantic_cube():
                 'bool': {
                     'int': 'ERR',
                     'float': 'ERR',
-                    'bool': 'bools'
+                    'bool': 'bool'
                 }
             }
         }

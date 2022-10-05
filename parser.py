@@ -3,9 +3,9 @@ from lexer import lexer, tokens
 import sys
 
 from scope_manager import scope_manager
-from error_handler import p_error
+from error_handler import raise_error
 
-scope_manager = scope_manager(p_error)
+scope_manager = scope_manager(raise_error)
 
 
 def p_routine(p):
@@ -159,9 +159,27 @@ def p_read(p):
 
 def p_var_assignment(p):
     '''
-    var_assignment : ID ASSIGN expression
-                   | ID LSQBRACKET expression RSQBRACKET ASSIGN expression
-                   | ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET ASSIGN expression
+    var_assignment : simple_assignment
+                   | array_assignment
+                   | matrix_assignment
+    '''
+
+
+def p_simple_assignment(p):
+    '''
+    simple_assignment : ID ASSIGN expression
+    '''
+    
+
+def p_array_assignment(p):
+    '''
+    array_assignment : ID LSQBRACKET expression RSQBRACKET ASSIGN expression
+    '''
+
+
+def p_matrix_assignment(p):
+    '''
+    matrix_assignment : ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET ASSIGN expression
     '''
 
 
@@ -285,7 +303,7 @@ def p_type(p):
 
 def p_empty(p):
     '''
-    empty :
+    empty : 
     '''
     pass
 
@@ -297,7 +315,7 @@ if __name__ == "__main__":
         code = sys.argv[1]
 
         if "spk" != code.split(".")[-1]:
-            p_error(None, "bad_extension")
+            raise_error(p=None, cause="bad_extension")
 
         try:
 
