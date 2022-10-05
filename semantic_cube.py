@@ -20,7 +20,7 @@ class semantic_cube():
                 }
             },
             # SUB
-            '-': {            
+            '-': {
                 'int': {
                     'int': 'int',
                     'float': 'float',
@@ -191,6 +191,6 @@ class semantic_cube():
                 }
             }
         }
-        
+
     def type_match(self, operator: str, operand1: str, operand2: str):
         return self.sem_cube[operator][operand1][operand2]

@@ -6,12 +6,14 @@ from scope_manager import scope_manager
 
 scope_manager = scope_manager()
 
+
 def p_routine(p):
     '''
     routine : ROUTINE ID SEMICOLON GLOBALS COLON global_scope_init var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON local_scope_init var_declarations INSTRUCTIONS COLON statements RSQBRACKET
-    ''' 
+    '''
     p[0] = 1
     scope_manager.dump_proc_dir()
+
 
 def p_global_scope_init(p):
     '''
@@ -19,11 +21,13 @@ def p_global_scope_init(p):
     '''
     scope_manager.context_change("global")
 
+
 def p_local_scope_init(p):
     '''
     local_scope_init : 
     '''
     scope_manager.context_change("local")
+
 
 def p_var_declarations(p):
     '''
@@ -33,11 +37,13 @@ def p_var_declarations(p):
                      | empty
     '''
 
-def p_simple_declaration(p): 
+
+def p_simple_declaration(p):
     '''
     simple_declaration : ID COLON var_type SEMICOLON 
     '''
     scope_manager.store_variable(p, "simple")
+
 
 def p_array_declaration(p):
     '''
@@ -45,11 +51,13 @@ def p_array_declaration(p):
     '''
     scope_manager.store_variable(p, "array")
 
+
 def p_matrix_declaration(p):
     '''
     matrix_declaration : ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON
     '''
     scope_manager.store_variable(p, "matrix")
+
 
 def p_var_type(p):
     '''
@@ -58,6 +66,7 @@ def p_var_type(p):
     '''
     p[0] = p[1]
 
+
 def p_function_declarations(p):
     '''
     function_declarations : PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RBRACKET function_declarations
@@ -65,16 +74,19 @@ def p_function_declarations(p):
                           | empty
     '''
 
+
 def p_proc_scope_init(p):
     '''
     proc_scope_init : 
     '''
     scope_manager.context_change(p[-1])
 
+
 def p_return(p):
     '''
     return : RETURN expression
     '''
+
 
 def p_func_type(p):
     '''
@@ -82,11 +94,13 @@ def p_func_type(p):
               | VOID
     '''
 
+
 def p_params0(p):
     '''
     params0 : param params1
             | empty
     '''
+
 
 def p_params1(p):
     '''
@@ -94,11 +108,13 @@ def p_params1(p):
             | empty
     '''
 
-def p_param(p): 
+
+def p_param(p):
     '''
     param : ID COLON type
     '''
     scope_manager.store_variable(p, "simple")
+
 
 def p_statements(p):
     '''
@@ -112,16 +128,19 @@ def p_statements(p):
                | empty
     '''
 
+
 def p_write(p):
     '''
     write : WRITE write_params0
     '''
+
 
 def p_write_params0(p):
     '''
     write_params0 : expression write_params1
                   | CONST_TEXT write_params1
     '''
+
 
 def p_write_params1(p):
     '''
@@ -130,10 +149,12 @@ def p_write_params1(p):
                   | empty
     '''
 
+
 def p_read(p):
     '''
     read : READ ID
     '''
+
 
 def p_var_assignment(p):
     '''
@@ -142,21 +163,25 @@ def p_var_assignment(p):
                    | ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET ASSIGN expression
     '''
 
+
 def p_condition(p):
     '''
     condition : IF LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET
               | IF LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET ELSE LBRACKET statements RBRACKET    
     '''
 
+
 def p_loop(p):
     '''
     loop : REPEAT LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET
     '''
 
+
 def p_function_call(p):
     '''
     function_call : ID LPAREN call_params0 RPAREN 
     '''
+
 
 def p_call_params0(p):
     '''
@@ -164,11 +189,13 @@ def p_call_params0(p):
                  | empty
     '''
 
+
 def p_call_params1(p):
     '''
     call_params1 : COMMA expression call_params1
                  | empty
     '''
+
 
 def p_special_function_call(p):
     '''
@@ -187,12 +214,14 @@ def p_special_function_call(p):
                      | MARGE
     '''
 
+
 def p_hyper_expression(p):
     '''
     hyper_expression : hyper_expression AND hyper_expression  
                      | hyper_expression OR hyper_expression
                      | super_expression
     '''
+
 
 def p_super_expression(p):
     '''
@@ -203,6 +232,7 @@ def p_super_expression(p):
                      | expression
     '''
 
+
 def p_expression(p):
     '''
     expression : expression ADD expression  
@@ -210,12 +240,14 @@ def p_expression(p):
                | term
     '''
 
+
 def p_term(p):
     '''
     term : term MUL term
          | term DIV term
          | factor
     '''
+
 
 def p_factor(p):
     '''
@@ -229,15 +261,18 @@ def p_factor(p):
            | special_function_call
     '''
 
+
 def p_array_access(p):
     '''
     array_access : ID LSQBRACKET expression RSQBRACKET
     '''
 
+
 def p_matrix_access(p):
     '''
     matrix_access : ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET
     '''
+
 
 def p_type(p):
     '''
@@ -246,11 +281,13 @@ def p_type(p):
     '''
     p[0] = p[1]
 
+
 def p_empty(p):
     '''
     empty :
     '''
     pass
+
 
 def p_error(p):
     if p == None:
@@ -260,16 +297,18 @@ def p_error(p):
 
     print(f"Syntax error: Unexpected {token}")
 
+
 class Error(Exception):
     """Base class for other exceptions"""
     pass
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
 
         parser = yacc.yacc()
         code = sys.argv[1]
-        
+
         if ".spk" not in code:
             raise Error("File extension not valid")
 
@@ -280,7 +319,7 @@ if __name__ == '__main__':
             _file.close()
             lexer.input(source)
 
-            #for lexem in lexer:
+            # for lexem in lexer:
             #    print(lexem)
 
             lexer.lineno = 1
