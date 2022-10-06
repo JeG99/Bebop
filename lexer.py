@@ -12,8 +12,6 @@ tokens = [
     'RPAREN',
     'COMMA',
     'ASSIGN',
-    'AND',
-    'OR',
     'NOT',
     'LTHAN',
     'GTHAN',
@@ -47,6 +45,9 @@ reserved = {
     'else': 'ELSE',
     'void': 'VOID',
     'return': 'RETURN',
+    'and': 'AND',
+    'or': 'OR',
+    'not': 'NOT',
 
     # Special reserved words
     'df': 'DF',
@@ -77,9 +78,6 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_COMMA = r','
 t_ASSIGN = r'='
-t_AND = r'and'
-t_OR = r'or'
-t_NOT = r'not'
 t_LTHAN = r'\<'
 t_GTHAN = r'\>'
 t_EQUAL = r'=='

@@ -127,8 +127,8 @@ def p_statements(p) -> None:
     statements : write SEMICOLON statements
                | read SEMICOLON statements
                | var_assignment SEMICOLON statements
-               | condition SEMICOLON statements
-               | loop SEMICOLON statements
+               | condition statements
+               | loop statements
                | function_call SEMICOLON statements
                | special_function_call SEMICOLON statements
                | empty
@@ -213,10 +213,32 @@ def p_matrix_assignment(p) -> None:
 
 def p_condition(p) -> None:
     '''
-    condition : IF LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET
-              | IF LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET ELSE LBRACKET statements RBRACKET    
+    condition : IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET fill_pending_jump
+              | IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET ELSE LBRACKET statements RBRACKET fill_pending_jump   
     '''
 
+
+
+def p_cond_lparen(p) -> None:
+    '''
+    cond_lparen : LPAREN
+    '''
+    stack_manager.push_operator("gotof")
+
+
+def p_cond_rparen(p) -> None:
+    '''
+    cond_rparen : RPAREN
+    '''
+    stack_manager.produce_quadruple("gotof")
+    stack_manager.push_jump(stack_manager.get_current_istruction_pointer() - 1)
+
+
+def p_fill_pending_jump(p):
+    '''
+    fill_pending_jump : 
+    '''
+    stack_manager.assign_quadruple_jump(stack_manager.pop_jump(), stack_manager.get_current_istruction_pointer())
 
 def p_loop(p) -> None:
     '''
@@ -260,8 +282,6 @@ def p_special_function_call(p) -> None:
                      | HOMERO
                      | MARGE
     '''
-
-# TODO AGREGAR AQUI DESPUES DE TODO HYPER_EXPRESSION EL PUNTO NEURALGICO 4 Y 5
 
 
 def p_hyper_expression(p) -> None:

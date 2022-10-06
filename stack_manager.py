@@ -21,10 +21,12 @@ class stack_manager():
         self.Tp = 11000
 
         self.temp_counter = 0
+        self.instruction_counter = 0
         self.sc_instance = semantic_cube()
         self.operator_stack = []
         self.operand_stack = []
         self.type_stack = []
+        self.jump_stack = []
         self.quadruples = []
 
     def push_operand(self, operand: str, type: str) -> None:
@@ -43,20 +45,36 @@ class stack_manager():
     def pop_operator(self) -> str:
         return self.operator_stack.pop()
 
+    def push_jump(self, instruction_pointer: int) -> None:
+        self.jump_stack.append(instruction_pointer)
+
+    def pop_jump(self) -> int:
+        return self.jump_stack.pop()
+
+    def get_current_istruction_pointer(self) -> int:
+        return self.instruction_counter
+
+    def assign_quadruple_jump(self, quad: int, jump: int) -> None:
+        self.quadruples[quad][3] = jump
+
     def dump_stacks(self) -> None:
         print("Operators stack:", self.operator_stack)
         print("Operands stack:", self.operand_stack)
         print("Types stack:", self.type_stack)
+        print("Jumps stack:", self.jump_stack)
         print("Quadruples:")
         s = [[str(e) for e in row] for row in self.quadruples]
         lens = [max(map(len, col)) for col in zip(*s)]
         fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
-        table = [fmt.format(*row) for row in s]
+        table = [str(s.index(row)) + " ==> " + fmt.format(*row) for row in s]
         print('\n'.join(table))
 
     def produce_quadruple(self, level: str) -> None:
-        self.dump_stacks()
-        if level == "return":
+        if level == "gotof":
+            ops = ["gotof"]
+        if level == "goto":
+            ops = ["goto"]
+        elif level == "return":
             ops = ["return"]
         elif level == "read":
             ops = ["read"]
@@ -74,7 +92,10 @@ class stack_manager():
             ops = ["*", "/"]
         if self.check_top_operator() in ops:
             operator = self.pop_operator()
-            if level == "return":
+            if level == "gotof":
+                operand1 = self.pop_operand()
+                self.quadruples.append([operator, operand1[0], None, None])
+            elif level == "return":
                 operand1 = self.pop_operand()
                 self.quadruples.append([operator, None, None, operand1[0]])
             elif level == "simple_assignment":
@@ -101,3 +122,4 @@ class stack_manager():
                 else:
                     raise_error(None, "type_mismatch", args=(
                         operator, operand1, operand2))
+            self.instruction_counter += 1
