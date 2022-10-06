@@ -156,23 +156,26 @@ def p_write_params1(p) -> None:
     '''
 
 
-def p_const_text(p):
+def p_const_text(p) -> None:
     '''
     const_text : CONST_TEXT
     '''
     stack_manager.push_operand(p[1], "text")
 
-def p_write_operator(p):
+
+def p_write_operator(p) -> None:
     '''
     write_operator : 
     '''
     stack_manager.push_operator("write")
 
-def p_produce_write_quad(p):
+
+def p_produce_write_quad(p) -> None:
     '''
     produce_write_quad : 
     '''
     stack_manager.produce_quadruple("write")
+
 
 def p_read(p) -> None:
     '''
