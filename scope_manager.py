@@ -1,6 +1,7 @@
 import json
 from error_handler import raise_error
 
+
 class scope_manager():
 
     def __init__(self) -> None:
@@ -11,7 +12,7 @@ class scope_manager():
         self.proc_dir[context] = {"var_table": {}}
         self.curr_scope = context
 
-    def store_variable(self, yacc_production, var_type: str):
+    def store_variable(self, yacc_production, var_type: str) -> None:
         if yacc_production[1] in list(self.proc_dir[self.curr_scope]["var_table"]):
             raise_error(yacc_production, "variable_declaration", args=(
                 yacc_production[1], self.proc_dir[self.curr_scope]["var_table"][yacc_production[1]]["type"]))
@@ -36,7 +37,7 @@ class scope_manager():
     def get_var_type(self, id: str) -> str:
         if id not in list(self.proc_dir[self.curr_scope]["var_table"]):
             raise_error(None, "undeclared_variable",
-                            args=(id, self.curr_scope))
+                        args=(id, self.curr_scope))
         else:
             return self.proc_dir[self.curr_scope]["var_table"][id]["type"]
 

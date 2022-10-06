@@ -242,6 +242,7 @@ def p_fill_pending_jump(p) -> None:
     stack_manager.assign_quadruple_jump(
         stack_manager.pop_jump(), stack_manager.get_current_istruction_pointer())
 
+
 def p_else(p) -> None:
     '''
     else : ELSE
@@ -250,14 +251,15 @@ def p_else(p) -> None:
     stack_manager.produce_quadruple("goto")
     false = stack_manager.pop_jump()
     stack_manager.push_jump(stack_manager.get_current_istruction_pointer() - 1)
-    stack_manager.assign_quadruple_jump(false, stack_manager.get_current_istruction_pointer())
-
+    stack_manager.assign_quadruple_jump(
+        false, stack_manager.get_current_istruction_pointer())
 
 
 def p_loop(p) -> None:
     '''
     loop : repeat cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET fill_returning_jump
     '''
+
 
 def p_repeat(p) -> None:
     '''
@@ -273,16 +275,8 @@ def p_fill_returning_jump(p) -> None:
     stack_manager.push_operator("while_goto")
     end_jump = stack_manager.pop_jump()
     stack_manager.produce_quadruple("while_goto")
-    stack_manager.assign_quadruple_jump(end_jump, stack_manager.get_current_istruction_pointer())
-
-
-# def p_while_rparen(p) -> None:
-#     '''
-#     while_rparen : RPAREN
-#     '''
-#     stack_manager.push_operator("gotof")
-#     stack_manager.produce_quadruple("gotof")
-#     stack_manager.push_jump(stack_manager.get_current_istruction_pointer() - 1)
+    stack_manager.assign_quadruple_jump(
+        end_jump, stack_manager.get_current_istruction_pointer())
 
 def p_function_call(p) -> None:
     '''

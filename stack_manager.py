@@ -1,6 +1,7 @@
 from semantic_cube import semantic_cube
 from error_handler import raise_error
 
+
 class stack_manager():
     def __init__(self) -> None:
         # Global addresses
@@ -18,7 +19,7 @@ class stack_manager():
         self.Cf = 10000
         # Pointer Address
         self.Tp = 11000
-        
+
         self.temp_counter = 0
         self.instruction_counter = 0
         self.sc_instance = semantic_cube()
@@ -62,7 +63,8 @@ class stack_manager():
         print("Types stack:", self.type_stack)
         print("Jumps stack:", self.jump_stack)
         print("Quadruples:")
-        s = [["-" if e == None else str(e) for e in row] for row in self.quadruples]
+        s = [["-" if e == None else str(e) for e in row]
+             for row in self.quadruples]
         lens = [max(map(len, col)) for col in zip(*s)]
         fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
         quads = dict(zip([str(i) + " ==> " for i in range(len(s))], s))

@@ -291,5 +291,5 @@ class semantic_cube():
             }
         }
 
-    def type_match(self, operator: str, operand1: str, operand2: str):
+    def type_match(self, operator: str, operand1: str, operand2: str) -> str:
         return self.sem_cube[operator][operand1][operand2]

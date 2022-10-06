@@ -26,7 +26,7 @@ tokens = [
     'CONST_TEXT'
 ]
 
-reserved = { 
+reserved = {
     # General use reserved words
     'routine': 'ROUTINE',
     'globals': 'GLOBALS',
@@ -92,16 +92,20 @@ t_CONST_TEXT = r'\"(\"\"|[^\"$])*\"'
 
 t_ignore = ' \t'
 
+
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value,'ID')
+    t.type = reserved.get(t.value, 'ID')
     return t
+
 
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
+
 def t_error(t):
     t.lexer.skip(1)
+
 
 lexer = lex.lex()
