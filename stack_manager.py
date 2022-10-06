@@ -66,7 +66,8 @@ class stack_manager():
         s = [[str(e) for e in row] for row in self.quadruples]
         lens = [max(map(len, col)) for col in zip(*s)]
         fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
-        table = [str(s.index(row)) + " ==> " + fmt.format(*row) for row in s]
+        quads = dict(zip([str(i) + " ==> " for i in range(len(s))], s))
+        table = [ip + fmt.format(*row) for ip, row in quads.items()]
         print('\n'.join(table))
 
     def produce_quadruple(self, level: str) -> None:
@@ -92,7 +93,9 @@ class stack_manager():
             ops = ["*", "/"]
         if self.check_top_operator() in ops:
             operator = self.pop_operator()
-            if level == "gotof":
+            if level == "goto":
+                self.quadruples.append([operator, None, None, None])
+            elif level == "gotof":
                 operand1 = self.pop_operand()
                 self.quadruples.append([operator, operand1[0], None, None])
             elif level == "return":

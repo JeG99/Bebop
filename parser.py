@@ -214,9 +214,8 @@ def p_matrix_assignment(p) -> None:
 def p_condition(p) -> None:
     '''
     condition : IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET fill_pending_jump
-              | IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET ELSE LBRACKET statements RBRACKET fill_pending_jump   
+              | IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET else LBRACKET statements RBRACKET fill_pending_jump   
     '''
-
 
 
 def p_cond_lparen(p) -> None:
@@ -238,7 +237,20 @@ def p_fill_pending_jump(p):
     '''
     fill_pending_jump : 
     '''
-    stack_manager.assign_quadruple_jump(stack_manager.pop_jump(), stack_manager.get_current_istruction_pointer())
+    stack_manager.assign_quadruple_jump(
+        stack_manager.pop_jump(), stack_manager.get_current_istruction_pointer())
+
+def p_else(p):
+    '''
+    else : ELSE
+    '''
+    stack_manager.push_operator("goto")
+    stack_manager.produce_quadruple("goto")
+    false = stack_manager.pop_jump()
+    stack_manager.push_jump(stack_manager.get_current_istruction_pointer() - 1)
+    stack_manager.assign_quadruple_jump(false, stack_manager.get_current_istruction_pointer())
+
+
 
 def p_loop(p) -> None:
     '''
