@@ -1,4 +1,4 @@
-# data-lang
+# Bebop - the data exploration language
 
 ## Análisis léxico-sintáctico:
 
