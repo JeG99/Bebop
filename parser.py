@@ -18,7 +18,7 @@ def p_routine(p) -> None:
     '''
     p[0] = 1
     stack_manager.finish_instructions()
-    # scope_manager.dump_proc_dir()
+    scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
 
 
@@ -409,6 +409,7 @@ def p_const_int(p) -> None:
     '''
     const_int : CONST_INT
     '''
+    stack_manager.push_constant(p[1], "int")
     stack_manager.push_operand(p[1], "int")
 
 
@@ -416,6 +417,7 @@ def p_const_float(p) -> None:
     '''
     const_float : CONST_FLOAT
     '''
+    stack_manager.push_constant(p[1], "float")
     stack_manager.push_operand(p[1], "float")
 
 

@@ -1,3 +1,4 @@
+import json
 from semantic_cube import semantic_cube
 from error_handler import raise_error
 
@@ -20,6 +21,7 @@ class stack_manager():
         # Pointer Address
         self.Tp = 11000
 
+        self.constants_table = {}
         self.temp_counter = 0
         self.instruction_counter = 0
         self.sc_instance = semantic_cube()
@@ -28,6 +30,12 @@ class stack_manager():
         self.type_stack = []
         self.jump_stack = []
         self.quadruples = []
+
+    def push_constant(self, const: str, type: str) -> None:
+        if const not in self.constants_table:
+            self.constants_table[const] = self.Ci * (type == "int") + self.Cf * (type == "float")
+            self.Ci += 1 * type == "int"
+            self.Cf += 1 * type == "float"
 
     def push_operand(self, operand: str, type: str) -> None:
         self.operand_stack.append(operand)
@@ -58,6 +66,7 @@ class stack_manager():
         self.quadruples[quad][3] = jump
 
     def dump_stacks(self) -> None:
+        print("Constants table:", json.dumps(self.constants_table, indent=4))
         print("Operators stack:", self.operator_stack)
         print("Operands stack:", self.operand_stack)
         print("Types stack:", self.type_stack)

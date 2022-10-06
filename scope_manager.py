@@ -16,23 +16,28 @@ class scope_manager():
         if yacc_production[1] in list(self.proc_dir[self.curr_scope]["var_table"]):
             raise_error(yacc_production, "variable_declaration", args=(
                 yacc_production[1], self.proc_dir[self.curr_scope]["var_table"][yacc_production[1]]["type"]))
-
-        var_body = {
-            "type": yacc_production[3],
-            "indexed": False
-        }
-        if (var_type == "array"):
-            var_body["type"] = yacc_production[6]
-            var_body["indexed"] = True
-            var_body["dimensionality"] = 1
-            var_body["size"] = yacc_production[3]
-        elif (var_type == "matrix"):
-            var_body["type"] = yacc_production[9]
-            var_body["indexed"] = True
-            var_body["dimensionality"] = 2
-            var_body["rows"] = yacc_production[3]
-            var_body["columns"] = yacc_production[6]
-        self.proc_dir[self.curr_scope]["var_table"][yacc_production[1]] = var_body
+        else:
+            if var_type == "simple":
+                var_body = {
+                    "type": yacc_production[3],
+                    "indexed": False
+                }
+            if (var_type == "array"):
+                var_body = {
+                    "type": yacc_production[6],
+                    "indexed": True,
+                    "dimensionality": 1,
+                    "size": yacc_production[3]
+                }
+            elif (var_type == "matrix"):
+                var_body = {
+                    "type": yacc_production[9],
+                    "indexed": True,
+                    "dimensionality": 2,
+                    "rows": yacc_production[3],
+                    "columns": yacc_production[6]
+                }
+            self.proc_dir[self.curr_scope]["var_table"][yacc_production[1]] = var_body
 
     def get_var_type(self, id: str) -> str:
         if id not in list(self.proc_dir[self.curr_scope]["var_table"]):
