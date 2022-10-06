@@ -5,23 +5,6 @@ from error_handler import raise_error
 
 class stack_manager():
     def __init__(self) -> None:
-        # Global addresses
-        self.Gi = 0
-        self.Gf = 2000
-        # Local Addresses
-        self.Li = 4000
-        self.Lf = 5000
-        # Temporal Addresses
-        self.Ti = 6000
-        self.Tf = 7000
-        self.Tb = 8000
-        # Constant Addresses
-        self.Ci = 9000
-        self.Cf = 10000
-        # Pointer Address
-        self.Tp = 11000
-
-        self.constants_table = {}
         self.temp_counter = 0
         self.instruction_counter = 0
         self.sc_instance = semantic_cube()
@@ -30,12 +13,6 @@ class stack_manager():
         self.type_stack = []
         self.jump_stack = []
         self.quadruples = []
-
-    def push_constant(self, const: str, type: str) -> None:
-        if const not in self.constants_table:
-            self.constants_table[const] = self.Ci * (type == "int") + self.Cf * (type == "float")
-            self.Ci += 1 * type == "int"
-            self.Cf += 1 * type == "float"
 
     def push_operand(self, operand: str, type: str) -> None:
         self.operand_stack.append(operand)
@@ -66,7 +43,6 @@ class stack_manager():
         self.quadruples[quad][3] = jump
 
     def dump_stacks(self) -> None:
-        print("Constants table:", json.dumps(self.constants_table, indent=4))
         print("Operators stack:", self.operator_stack)
         print("Operands stack:", self.operand_stack)
         print("Types stack:", self.type_stack)
