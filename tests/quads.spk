@@ -64,5 +64,8 @@ begin: [
         repeat(var10 < 10) {
             write "postambien";
         }
+        repeat(var10 < 10) {
+            write "postambien";
+        }
 
 ]

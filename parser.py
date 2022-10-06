@@ -8,7 +8,7 @@ from scope_manager import scope_manager
 from stack_manager import stack_manager
 from error_handler import raise_error
 
-scope_manager = scope_manager(raise_error)
+scope_manager = scope_manager()
 stack_manager = stack_manager()
 
 
