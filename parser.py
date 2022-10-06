@@ -19,7 +19,7 @@ def p_routine(p) -> None:
     p[0] = 1
     stack_manager.finish_instructions()
     scope_manager.dump_proc_dir()
-    stack_manager.dump_stacks()
+    # stack_manager.dump_stacks()
 
 
 def p_global_scope_init(p) -> None:

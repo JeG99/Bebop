@@ -7,19 +7,19 @@ class scope_manager():
     def __init__(self) -> None:
                 # Global addresses
         self.Gi = 0
-        self.Gf = 2000
+        self.Gf = 1000
         # Local Addresses
-        self.Li = 4000
-        self.Lf = 5000
+        self.Li = 2000
+        self.Lf = 3000
         # Temporal Addresses
-        self.Ti = 6000
-        self.Tf = 7000
-        self.Tb = 8000
+        self.Ti = 4000
+        self.Tf = 5000
+        self.Tb = 6000
         # Constant Addresses
-        self.Ci = 9000
-        self.Cf = 10000
+        self.Ci = 7000
+        self.Cf = 8000
         # Pointer Address
-        self.Tp = 11000
+        self.Tp = 9000
 
         self.constants_table = {}
         self.proc_dir = {}
@@ -34,6 +34,8 @@ class scope_manager():
     def context_change(self, context: str) -> None:
         self.proc_dir[context] = {"var_table": {}}
         self.curr_scope = context
+        self.Li = 2000
+        self.Lf = 3000
 
     def store_variable(self, yacc_production, var_type: str) -> None:
         if yacc_production[1] in list(self.proc_dir[self.curr_scope]["var_table"]):
@@ -60,6 +62,11 @@ class scope_manager():
                     "rows": yacc_production[3],
                     "columns": yacc_production[6]
                 }
+            var_body["virtual_direction"] = (self.curr_scope == "global") * (self.Gi * (var_body["type"] == "int") + self.Gf * (var_body["type"] == "float")) + (self.curr_scope != "global") * (self.Li * (var_body["type"] == "int") + self.Lf * (var_body["type"] == "float"))
+            self.Gi += 1 * var_body["type"] == "int" and self.curr_scope == "global"
+            self.Gf += 1 * var_body["type"] == "float" and self.curr_scope == "global"
+            self.Li += 1 * var_body["type"] == "int" and self.curr_scope != "global"
+            self.Lf += 1 * var_body["type"] == "float" and self.curr_scope != "global"
             self.proc_dir[self.curr_scope]["var_table"][yacc_production[1]] = var_body
 
     def get_var_type(self, id: str) -> str:
