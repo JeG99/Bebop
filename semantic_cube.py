@@ -281,6 +281,12 @@ class semantic_cube():
                     'float': 'ERR',
                     'bool': 'bool',
                     'text': 'ERR'
+                },
+                'text': {
+                    'int': 'ERR',
+                    'float': 'ERR',
+                    'bool': 'ERR',
+                    'text': 'ERR'
                 }
             }
         }

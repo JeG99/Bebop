@@ -179,8 +179,9 @@ def p_produce_write_quad(p) -> None:
 
 def p_read(p) -> None:
     '''
-    read : READ ID
+    read : READ push_operator identifier
     '''
+    stack_manager.produce_quadruple("read")
 
 
 def p_var_assignment(p) -> None:

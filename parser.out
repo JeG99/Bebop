@@ -48,7 +48,7 @@ Rule 38    write_params1 -> empty
 Rule 39    const_text -> CONST_TEXT
 Rule 40    write_operator -> <empty>
 Rule 41    produce_write_quad -> <empty>
-Rule 42    read -> READ ID
+Rule 42    read -> READ push_operator identifier
 Rule 43    var_assignment -> simple_assignment
 Rule 44    var_assignment -> array_assignment
 Rule 45    var_assignment -> matrix_assignment
@@ -137,7 +137,7 @@ FLOAT                : 105
 GLOBALS              : 1
 GTHAN                : 74
 HOMERO               : 68
-ID                   : 1 8 9 10 13 14 24 42 47 48 52 97 102 103
+ID                   : 1 8 9 10 13 14 24 47 48 52 97 102 103
 IF                   : 49 50
 INSTRUCTIONS         : 1 13 14
 INT                  : 104
@@ -193,7 +193,7 @@ function_call        : 30 95
 function_declarations : 1 13 14
 global_scope_init    : 1
 hyper_expression     : 49 50 51 70 70 71 71
-identifier           : 46 89
+identifier           : 42 46 89
 local_scope_init     : 1
 loop                 : 29
 matrix_access        : 94
@@ -210,7 +210,7 @@ produce_superexp_quad : 77
 produce_term_quad    : 83
 produce_write_quad   : 34 35 36 37
 push_cap             : 92
-push_operator        : 17 46 70 71 73 74 75 78 79 81 82
+push_operator        : 17 42 46 70 71 73 74 75 78 79 81 82
 read                 : 26
 return               : 14
 routine              : 0
@@ -883,7 +883,7 @@ state 70
     (31) statements -> . special_function_call SEMICOLON statements
     (32) statements -> . empty
     (33) write -> . WRITE write_params0
-    (42) read -> . READ ID
+    (42) read -> . READ push_operator identifier
     (43) var_assignment -> . simple_assignment
     (44) var_assignment -> . array_assignment
     (45) var_assignment -> . matrix_assignment
@@ -912,22 +912,22 @@ state 70
 
     WRITE           shift and go to state 82
     READ            shift and go to state 83
-    IF              shift and go to state 87
-    REPEAT          shift and go to state 88
+    IF              shift and go to state 88
+    REPEAT          shift and go to state 89
     ID              shift and go to state 72
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
     RSQBRACKET      reduce using rule 106 (empty -> .)
 
     statements                     shift and go to state 73
@@ -939,10 +939,10 @@ state 70
     function_call                  shift and go to state 79
     special_function_call          shift and go to state 80
     empty                          shift and go to state 81
-    simple_assignment              shift and go to state 84
-    array_assignment               shift and go to state 85
-    matrix_assignment              shift and go to state 86
-    identifier                     shift and go to state 102
+    identifier                     shift and go to state 84
+    simple_assignment              shift and go to state 85
+    array_assignment               shift and go to state 86
+    matrix_assignment              shift and go to state 87
 
 state 71
 
@@ -1060,125 +1060,134 @@ state 82
 
 state 83
 
-    (42) read -> READ . ID
+    (42) read -> READ . push_operator identifier
+    (84) push_operator -> .
 
-    ID              shift and go to state 116
+    ID              reduce using rule 84 (push_operator -> .)
 
+    push_operator                  shift and go to state 116
 
 state 84
+
+    (46) simple_assignment -> identifier . ASSIGN push_operator expression
+
+    ASSIGN          shift and go to state 117
+
+
+state 85
 
     (43) var_assignment -> simple_assignment .
 
     SEMICOLON       reduce using rule 43 (var_assignment -> simple_assignment .)
 
 
-state 85
+state 86
 
     (44) var_assignment -> array_assignment .
 
     SEMICOLON       reduce using rule 44 (var_assignment -> array_assignment .)
 
 
-state 86
+state 87
 
     (45) var_assignment -> matrix_assignment .
 
     SEMICOLON       reduce using rule 45 (var_assignment -> matrix_assignment .)
 
 
-state 87
+state 88
 
     (49) condition -> IF . LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET
     (50) condition -> IF . LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET ELSE LBRACKET statements RBRACKET
-
-    LPAREN          shift and go to state 117
-
-
-state 88
-
-    (51) loop -> REPEAT . LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET
 
     LPAREN          shift and go to state 118
 
 
 state 89
 
-    (57) special_function_call -> MEAN . LPAREN call_params0 RPAREN
+    (51) loop -> REPEAT . LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET
 
     LPAREN          shift and go to state 119
 
 
 state 90
 
-    (58) special_function_call -> MEDIAN . LPAREN call_params0 RPAREN
+    (57) special_function_call -> MEAN . LPAREN call_params0 RPAREN
 
     LPAREN          shift and go to state 120
 
 
 state 91
 
-    (59) special_function_call -> MODE . LPAREN call_params0 RPAREN
+    (58) special_function_call -> MEDIAN . LPAREN call_params0 RPAREN
 
     LPAREN          shift and go to state 121
 
 
 state 92
 
-    (60) special_function_call -> STD . LPAREN call_params0 RPAREN
+    (59) special_function_call -> MODE . LPAREN call_params0 RPAREN
 
     LPAREN          shift and go to state 122
 
 
 state 93
 
-    (61) special_function_call -> KURTOSIS . LPAREN call_params0 RPAREN
+    (60) special_function_call -> STD . LPAREN call_params0 RPAREN
 
     LPAREN          shift and go to state 123
 
 
 state 94
 
-    (62) special_function_call -> PLOT . LPAREN call_params0 RPAREN
+    (61) special_function_call -> KURTOSIS . LPAREN call_params0 RPAREN
 
     LPAREN          shift and go to state 124
 
 
 state 95
 
-    (63) special_function_call -> DPLOT . LPAREN call_params0 RPAREN
+    (62) special_function_call -> PLOT . LPAREN call_params0 RPAREN
 
     LPAREN          shift and go to state 125
 
 
 state 96
 
-    (64) special_function_call -> VARIANCE . LPAREN call_params0 RPAREN
+    (63) special_function_call -> DPLOT . LPAREN call_params0 RPAREN
 
     LPAREN          shift and go to state 126
 
 
 state 97
 
-    (65) special_function_call -> SIMMETRY . LPAREN call_params0 RPAREN
+    (64) special_function_call -> VARIANCE . LPAREN call_params0 RPAREN
 
     LPAREN          shift and go to state 127
 
 
 state 98
 
-    (66) special_function_call -> CORRELATION . LPAREN call_params0 RPAREN
+    (65) special_function_call -> SIMMETRY . LPAREN call_params0 RPAREN
 
     LPAREN          shift and go to state 128
 
 
 state 99
 
-    (67) special_function_call -> DFREAD . LPAREN CONST_TEXT RPAREN
+    (66) special_function_call -> CORRELATION . LPAREN call_params0 RPAREN
 
     LPAREN          shift and go to state 129
 
 
 state 100
+
+    (67) special_function_call -> DFREAD . LPAREN CONST_TEXT RPAREN
+
+    LPAREN          shift and go to state 130
+
+
+state 101
 
     (68) special_function_call -> HOMERO .
 
@@ -1198,7 +1207,7 @@ state 100
     OR              reduce using rule 68 (special_function_call -> HOMERO .)
 
 
-state 101
+state 102
 
     (69) special_function_call -> MARGE .
 
@@ -1216,13 +1225,6 @@ state 101
     DIFFERENT       reduce using rule 69 (special_function_call -> MARGE .)
     AND             reduce using rule 69 (special_function_call -> MARGE .)
     OR              reduce using rule 69 (special_function_call -> MARGE .)
-
-
-state 102
-
-    (46) simple_assignment -> identifier . ASSIGN push_operator expression
-
-    ASSIGN          shift and go to state 130
 
 
 state 103
@@ -1286,19 +1288,19 @@ state 104
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
     call_params0                   shift and go to state 134
     expression                     shift and go to state 135
@@ -1355,19 +1357,19 @@ state 105
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
     expression                     shift and go to state 148
     term                           shift and go to state 137
@@ -1399,7 +1401,7 @@ state 107
     (31) statements -> . special_function_call SEMICOLON statements
     (32) statements -> . empty
     (33) write -> . WRITE write_params0
-    (42) read -> . READ ID
+    (42) read -> . READ push_operator identifier
     (43) var_assignment -> . simple_assignment
     (44) var_assignment -> . array_assignment
     (45) var_assignment -> . matrix_assignment
@@ -1428,22 +1430,22 @@ state 107
 
     WRITE           shift and go to state 82
     READ            shift and go to state 83
-    IF              shift and go to state 87
-    REPEAT          shift and go to state 88
+    IF              shift and go to state 88
+    REPEAT          shift and go to state 89
     ID              shift and go to state 72
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
     RSQBRACKET      reduce using rule 106 (empty -> .)
     RBRACKET        reduce using rule 106 (empty -> .)
     RETURN          reduce using rule 106 (empty -> .)
@@ -1457,10 +1459,10 @@ state 107
     function_call                  shift and go to state 79
     special_function_call          shift and go to state 80
     empty                          shift and go to state 81
-    simple_assignment              shift and go to state 84
-    array_assignment               shift and go to state 85
-    matrix_assignment              shift and go to state 86
-    identifier                     shift and go to state 102
+    identifier                     shift and go to state 84
+    simple_assignment              shift and go to state 85
+    array_assignment               shift and go to state 86
+    matrix_assignment              shift and go to state 87
 
 state 108
 
@@ -1474,7 +1476,7 @@ state 108
     (31) statements -> . special_function_call SEMICOLON statements
     (32) statements -> . empty
     (33) write -> . WRITE write_params0
-    (42) read -> . READ ID
+    (42) read -> . READ push_operator identifier
     (43) var_assignment -> . simple_assignment
     (44) var_assignment -> . array_assignment
     (45) var_assignment -> . matrix_assignment
@@ -1503,22 +1505,22 @@ state 108
 
     WRITE           shift and go to state 82
     READ            shift and go to state 83
-    IF              shift and go to state 87
-    REPEAT          shift and go to state 88
+    IF              shift and go to state 88
+    REPEAT          shift and go to state 89
     ID              shift and go to state 72
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
     RSQBRACKET      reduce using rule 106 (empty -> .)
     RBRACKET        reduce using rule 106 (empty -> .)
     RETURN          reduce using rule 106 (empty -> .)
@@ -1532,10 +1534,10 @@ state 108
     function_call                  shift and go to state 79
     special_function_call          shift and go to state 80
     empty                          shift and go to state 81
-    simple_assignment              shift and go to state 84
-    array_assignment               shift and go to state 85
-    matrix_assignment              shift and go to state 86
-    identifier                     shift and go to state 102
+    identifier                     shift and go to state 84
+    simple_assignment              shift and go to state 85
+    array_assignment               shift and go to state 86
+    matrix_assignment              shift and go to state 87
 
 state 109
 
@@ -1549,7 +1551,7 @@ state 109
     (31) statements -> . special_function_call SEMICOLON statements
     (32) statements -> . empty
     (33) write -> . WRITE write_params0
-    (42) read -> . READ ID
+    (42) read -> . READ push_operator identifier
     (43) var_assignment -> . simple_assignment
     (44) var_assignment -> . array_assignment
     (45) var_assignment -> . matrix_assignment
@@ -1578,22 +1580,22 @@ state 109
 
     WRITE           shift and go to state 82
     READ            shift and go to state 83
-    IF              shift and go to state 87
-    REPEAT          shift and go to state 88
+    IF              shift and go to state 88
+    REPEAT          shift and go to state 89
     ID              shift and go to state 72
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
     RSQBRACKET      reduce using rule 106 (empty -> .)
     RBRACKET        reduce using rule 106 (empty -> .)
     RETURN          reduce using rule 106 (empty -> .)
@@ -1607,10 +1609,10 @@ state 109
     function_call                  shift and go to state 79
     special_function_call          shift and go to state 80
     empty                          shift and go to state 81
-    simple_assignment              shift and go to state 84
-    array_assignment               shift and go to state 85
-    matrix_assignment              shift and go to state 86
-    identifier                     shift and go to state 102
+    identifier                     shift and go to state 84
+    simple_assignment              shift and go to state 85
+    array_assignment               shift and go to state 86
+    matrix_assignment              shift and go to state 87
 
 state 110
 
@@ -1624,7 +1626,7 @@ state 110
     (31) statements -> . special_function_call SEMICOLON statements
     (32) statements -> . empty
     (33) write -> . WRITE write_params0
-    (42) read -> . READ ID
+    (42) read -> . READ push_operator identifier
     (43) var_assignment -> . simple_assignment
     (44) var_assignment -> . array_assignment
     (45) var_assignment -> . matrix_assignment
@@ -1653,22 +1655,22 @@ state 110
 
     WRITE           shift and go to state 82
     READ            shift and go to state 83
-    IF              shift and go to state 87
-    REPEAT          shift and go to state 88
+    IF              shift and go to state 88
+    REPEAT          shift and go to state 89
     ID              shift and go to state 72
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
     RSQBRACKET      reduce using rule 106 (empty -> .)
     RBRACKET        reduce using rule 106 (empty -> .)
     RETURN          reduce using rule 106 (empty -> .)
@@ -1682,10 +1684,10 @@ state 110
     function_call                  shift and go to state 79
     special_function_call          shift and go to state 80
     empty                          shift and go to state 81
-    simple_assignment              shift and go to state 84
-    array_assignment               shift and go to state 85
-    matrix_assignment              shift and go to state 86
-    identifier                     shift and go to state 102
+    identifier                     shift and go to state 84
+    simple_assignment              shift and go to state 85
+    array_assignment               shift and go to state 86
+    matrix_assignment              shift and go to state 87
 
 state 111
 
@@ -1699,7 +1701,7 @@ state 111
     (31) statements -> . special_function_call SEMICOLON statements
     (32) statements -> . empty
     (33) write -> . WRITE write_params0
-    (42) read -> . READ ID
+    (42) read -> . READ push_operator identifier
     (43) var_assignment -> . simple_assignment
     (44) var_assignment -> . array_assignment
     (45) var_assignment -> . matrix_assignment
@@ -1728,22 +1730,22 @@ state 111
 
     WRITE           shift and go to state 82
     READ            shift and go to state 83
-    IF              shift and go to state 87
-    REPEAT          shift and go to state 88
+    IF              shift and go to state 88
+    REPEAT          shift and go to state 89
     ID              shift and go to state 72
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
     RSQBRACKET      reduce using rule 106 (empty -> .)
     RBRACKET        reduce using rule 106 (empty -> .)
     RETURN          reduce using rule 106 (empty -> .)
@@ -1757,10 +1759,10 @@ state 111
     function_call                  shift and go to state 79
     special_function_call          shift and go to state 80
     empty                          shift and go to state 81
-    simple_assignment              shift and go to state 84
-    array_assignment               shift and go to state 85
-    matrix_assignment              shift and go to state 86
-    identifier                     shift and go to state 102
+    identifier                     shift and go to state 84
+    simple_assignment              shift and go to state 85
+    array_assignment               shift and go to state 86
+    matrix_assignment              shift and go to state 87
 
 state 112
 
@@ -1774,7 +1776,7 @@ state 112
     (31) statements -> . special_function_call SEMICOLON statements
     (32) statements -> . empty
     (33) write -> . WRITE write_params0
-    (42) read -> . READ ID
+    (42) read -> . READ push_operator identifier
     (43) var_assignment -> . simple_assignment
     (44) var_assignment -> . array_assignment
     (45) var_assignment -> . matrix_assignment
@@ -1803,22 +1805,22 @@ state 112
 
     WRITE           shift and go to state 82
     READ            shift and go to state 83
-    IF              shift and go to state 87
-    REPEAT          shift and go to state 88
+    IF              shift and go to state 88
+    REPEAT          shift and go to state 89
     ID              shift and go to state 72
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
     RSQBRACKET      reduce using rule 106 (empty -> .)
     RBRACKET        reduce using rule 106 (empty -> .)
     RETURN          reduce using rule 106 (empty -> .)
@@ -1832,10 +1834,10 @@ state 112
     loop                           shift and go to state 78
     special_function_call          shift and go to state 80
     empty                          shift and go to state 81
-    simple_assignment              shift and go to state 84
-    array_assignment               shift and go to state 85
-    matrix_assignment              shift and go to state 86
-    identifier                     shift and go to state 102
+    identifier                     shift and go to state 84
+    simple_assignment              shift and go to state 85
+    array_assignment               shift and go to state 86
+    matrix_assignment              shift and go to state 87
 
 state 113
 
@@ -1849,7 +1851,7 @@ state 113
     (31) statements -> . special_function_call SEMICOLON statements
     (32) statements -> . empty
     (33) write -> . WRITE write_params0
-    (42) read -> . READ ID
+    (42) read -> . READ push_operator identifier
     (43) var_assignment -> . simple_assignment
     (44) var_assignment -> . array_assignment
     (45) var_assignment -> . matrix_assignment
@@ -1878,22 +1880,22 @@ state 113
 
     WRITE           shift and go to state 82
     READ            shift and go to state 83
-    IF              shift and go to state 87
-    REPEAT          shift and go to state 88
+    IF              shift and go to state 88
+    REPEAT          shift and go to state 89
     ID              shift and go to state 72
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
     RSQBRACKET      reduce using rule 106 (empty -> .)
     RBRACKET        reduce using rule 106 (empty -> .)
     RETURN          reduce using rule 106 (empty -> .)
@@ -1907,10 +1909,10 @@ state 113
     loop                           shift and go to state 78
     function_call                  shift and go to state 79
     empty                          shift and go to state 81
-    simple_assignment              shift and go to state 84
-    array_assignment               shift and go to state 85
-    matrix_assignment              shift and go to state 86
-    identifier                     shift and go to state 102
+    identifier                     shift and go to state 84
+    simple_assignment              shift and go to state 85
+    array_assignment               shift and go to state 86
+    matrix_assignment              shift and go to state 87
 
 state 114
 
@@ -1963,19 +1965,19 @@ state 115
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
     expression                     shift and go to state 156
     const_text                     shift and go to state 157
@@ -1991,12 +1993,39 @@ state 115
 
 state 116
 
-    (42) read -> READ ID .
+    (42) read -> READ push_operator . identifier
+    (97) identifier -> . ID
 
-    SEMICOLON       reduce using rule 42 (read -> READ ID .)
+    ID              shift and go to state 160
 
+    identifier                     shift and go to state 159
 
 state 117
+
+    (46) simple_assignment -> identifier ASSIGN . push_operator expression
+    (84) push_operator -> .
+
+    LPAREN          reduce using rule 84 (push_operator -> .)
+    ID              reduce using rule 84 (push_operator -> .)
+    CONST_INT       reduce using rule 84 (push_operator -> .)
+    CONST_FLOAT     reduce using rule 84 (push_operator -> .)
+    MEAN            reduce using rule 84 (push_operator -> .)
+    MEDIAN          reduce using rule 84 (push_operator -> .)
+    MODE            reduce using rule 84 (push_operator -> .)
+    STD             reduce using rule 84 (push_operator -> .)
+    KURTOSIS        reduce using rule 84 (push_operator -> .)
+    PLOT            reduce using rule 84 (push_operator -> .)
+    DPLOT           reduce using rule 84 (push_operator -> .)
+    VARIANCE        reduce using rule 84 (push_operator -> .)
+    SIMMETRY        reduce using rule 84 (push_operator -> .)
+    CORRELATION     reduce using rule 84 (push_operator -> .)
+    DFREAD          reduce using rule 84 (push_operator -> .)
+    HOMERO          reduce using rule 84 (push_operator -> .)
+    MARGE           reduce using rule 84 (push_operator -> .)
+
+    push_operator                  shift and go to state 161
+
+state 118
 
     (49) condition -> IF LPAREN . hyper_expression RPAREN LBRACKET statements RBRACKET
     (50) condition -> IF LPAREN . hyper_expression RPAREN LBRACKET statements RBRACKET ELSE LBRACKET statements RBRACKET
@@ -2046,23 +2075,23 @@ state 117
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    hyper_expression               shift and go to state 159
-    super_expression               shift and go to state 160
-    expression                     shift and go to state 161
+    hyper_expression               shift and go to state 162
+    super_expression               shift and go to state 163
+    expression                     shift and go to state 164
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -2073,7 +2102,7 @@ state 117
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 118
+state 119
 
     (51) loop -> REPEAT LPAREN . hyper_expression RPAREN LBRACKET statements RBRACKET
     (70) hyper_expression -> . hyper_expression AND push_operator hyper_expression
@@ -2122,23 +2151,23 @@ state 118
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    hyper_expression               shift and go to state 162
-    super_expression               shift and go to state 160
-    expression                     shift and go to state 161
+    hyper_expression               shift and go to state 165
+    super_expression               shift and go to state 163
+    expression                     shift and go to state 164
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -2149,7 +2178,7 @@ state 118
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 119
+state 120
 
     (57) special_function_call -> MEAN LPAREN . call_params0 RPAREN
     (53) call_params0 -> . expression call_params1
@@ -2194,21 +2223,21 @@ state 119
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    call_params0                   shift and go to state 163
+    call_params0                   shift and go to state 166
     expression                     shift and go to state 135
     empty                          shift and go to state 136
     term                           shift and go to state 137
@@ -2221,7 +2250,7 @@ state 119
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 120
+state 121
 
     (58) special_function_call -> MEDIAN LPAREN . call_params0 RPAREN
     (53) call_params0 -> . expression call_params1
@@ -2266,21 +2295,21 @@ state 120
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    call_params0                   shift and go to state 164
+    call_params0                   shift and go to state 167
     expression                     shift and go to state 135
     empty                          shift and go to state 136
     term                           shift and go to state 137
@@ -2293,7 +2322,7 @@ state 120
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 121
+state 122
 
     (59) special_function_call -> MODE LPAREN . call_params0 RPAREN
     (53) call_params0 -> . expression call_params1
@@ -2338,21 +2367,21 @@ state 121
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    call_params0                   shift and go to state 165
+    call_params0                   shift and go to state 168
     expression                     shift and go to state 135
     empty                          shift and go to state 136
     term                           shift and go to state 137
@@ -2365,7 +2394,7 @@ state 121
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 122
+state 123
 
     (60) special_function_call -> STD LPAREN . call_params0 RPAREN
     (53) call_params0 -> . expression call_params1
@@ -2410,21 +2439,21 @@ state 122
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    call_params0                   shift and go to state 166
+    call_params0                   shift and go to state 169
     expression                     shift and go to state 135
     empty                          shift and go to state 136
     term                           shift and go to state 137
@@ -2437,7 +2466,7 @@ state 122
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 123
+state 124
 
     (61) special_function_call -> KURTOSIS LPAREN . call_params0 RPAREN
     (53) call_params0 -> . expression call_params1
@@ -2482,21 +2511,21 @@ state 123
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    call_params0                   shift and go to state 167
+    call_params0                   shift and go to state 170
     expression                     shift and go to state 135
     empty                          shift and go to state 136
     term                           shift and go to state 137
@@ -2509,7 +2538,7 @@ state 123
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 124
+state 125
 
     (62) special_function_call -> PLOT LPAREN . call_params0 RPAREN
     (53) call_params0 -> . expression call_params1
@@ -2554,21 +2583,21 @@ state 124
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    call_params0                   shift and go to state 168
+    call_params0                   shift and go to state 171
     expression                     shift and go to state 135
     empty                          shift and go to state 136
     term                           shift and go to state 137
@@ -2581,7 +2610,7 @@ state 124
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 125
+state 126
 
     (63) special_function_call -> DPLOT LPAREN . call_params0 RPAREN
     (53) call_params0 -> . expression call_params1
@@ -2626,21 +2655,21 @@ state 125
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    call_params0                   shift and go to state 169
+    call_params0                   shift and go to state 172
     expression                     shift and go to state 135
     empty                          shift and go to state 136
     term                           shift and go to state 137
@@ -2653,7 +2682,7 @@ state 125
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 126
+state 127
 
     (64) special_function_call -> VARIANCE LPAREN . call_params0 RPAREN
     (53) call_params0 -> . expression call_params1
@@ -2698,21 +2727,21 @@ state 126
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    call_params0                   shift and go to state 170
+    call_params0                   shift and go to state 173
     expression                     shift and go to state 135
     empty                          shift and go to state 136
     term                           shift and go to state 137
@@ -2725,7 +2754,7 @@ state 126
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 127
+state 128
 
     (65) special_function_call -> SIMMETRY LPAREN . call_params0 RPAREN
     (53) call_params0 -> . expression call_params1
@@ -2770,21 +2799,21 @@ state 127
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    call_params0                   shift and go to state 171
+    call_params0                   shift and go to state 174
     expression                     shift and go to state 135
     empty                          shift and go to state 136
     term                           shift and go to state 137
@@ -2797,7 +2826,7 @@ state 127
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 128
+state 129
 
     (66) special_function_call -> CORRELATION LPAREN . call_params0 RPAREN
     (53) call_params0 -> . expression call_params1
@@ -2842,21 +2871,21 @@ state 128
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    call_params0                   shift and go to state 172
+    call_params0                   shift and go to state 175
     expression                     shift and go to state 135
     empty                          shift and go to state 136
     term                           shift and go to state 137
@@ -2869,44 +2898,19 @@ state 128
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 129
+state 130
 
     (67) special_function_call -> DFREAD LPAREN . CONST_TEXT RPAREN
 
-    CONST_TEXT      shift and go to state 173
+    CONST_TEXT      shift and go to state 176
 
-
-state 130
-
-    (46) simple_assignment -> identifier ASSIGN . push_operator expression
-    (84) push_operator -> .
-
-    LPAREN          reduce using rule 84 (push_operator -> .)
-    ID              reduce using rule 84 (push_operator -> .)
-    CONST_INT       reduce using rule 84 (push_operator -> .)
-    CONST_FLOAT     reduce using rule 84 (push_operator -> .)
-    MEAN            reduce using rule 84 (push_operator -> .)
-    MEDIAN          reduce using rule 84 (push_operator -> .)
-    MODE            reduce using rule 84 (push_operator -> .)
-    STD             reduce using rule 84 (push_operator -> .)
-    KURTOSIS        reduce using rule 84 (push_operator -> .)
-    PLOT            reduce using rule 84 (push_operator -> .)
-    DPLOT           reduce using rule 84 (push_operator -> .)
-    VARIANCE        reduce using rule 84 (push_operator -> .)
-    SIMMETRY        reduce using rule 84 (push_operator -> .)
-    CORRELATION     reduce using rule 84 (push_operator -> .)
-    DFREAD          reduce using rule 84 (push_operator -> .)
-    HOMERO          reduce using rule 84 (push_operator -> .)
-    MARGE           reduce using rule 84 (push_operator -> .)
-
-    push_operator                  shift and go to state 174
 
 state 131
 
     (13) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations . INSTRUCTIONS COLON statements RBRACKET function_declarations
     (14) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations . INSTRUCTIONS COLON statements return SEMICOLON RBRACKET function_declarations
 
-    INSTRUCTIONS    shift and go to state 175
+    INSTRUCTIONS    shift and go to state 177
 
 
 state 132
@@ -2930,7 +2934,7 @@ state 132
     DIFFERENT       reduce using rule 97 (identifier -> ID .)
     AND             reduce using rule 97 (identifier -> ID .)
     OR              reduce using rule 97 (identifier -> ID .)
-    LSQBRACKET      shift and go to state 176
+    LSQBRACKET      shift and go to state 178
     LPAREN          shift and go to state 104
 
 
@@ -2957,13 +2961,13 @@ state 133
     HOMERO          reduce using rule 100 (push_cap -> .)
     MARGE           reduce using rule 100 (push_cap -> .)
 
-    push_cap                       shift and go to state 177
+    push_cap                       shift and go to state 179
 
 state 134
 
     (52) function_call -> ID LPAREN call_params0 . RPAREN
 
-    RPAREN          shift and go to state 178
+    RPAREN          shift and go to state 180
 
 
 state 135
@@ -2975,13 +2979,13 @@ state 135
     (56) call_params1 -> . empty
     (106) empty -> .
 
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
-    COMMA           shift and go to state 182
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
+    COMMA           shift and go to state 184
     RPAREN          reduce using rule 106 (empty -> .)
 
-    call_params1                   shift and go to state 179
-    empty                          shift and go to state 183
+    call_params1                   shift and go to state 181
+    empty                          shift and go to state 185
 
 state 136
 
@@ -2997,8 +3001,8 @@ state 137
     (82) term -> term . DIV push_operator term
     (87) produce_exp_quad -> .
 
-    MUL             shift and go to state 185
-    DIV             shift and go to state 186
+    MUL             shift and go to state 187
+    DIV             shift and go to state 188
     ADD             reduce using rule 87 (produce_exp_quad -> .)
     SUB             reduce using rule 87 (produce_exp_quad -> .)
     COMMA           reduce using rule 87 (produce_exp_quad -> .)
@@ -3012,7 +3016,7 @@ state 137
     AND             reduce using rule 87 (produce_exp_quad -> .)
     OR              reduce using rule 87 (produce_exp_quad -> .)
 
-    produce_exp_quad               shift and go to state 184
+    produce_exp_quad               shift and go to state 186
 
 state 138
 
@@ -3034,7 +3038,7 @@ state 138
     AND             reduce using rule 88 (produce_term_quad -> .)
     OR              reduce using rule 88 (produce_term_quad -> .)
 
-    produce_term_quad              shift and go to state 187
+    produce_term_quad              shift and go to state 189
 
 state 139
 
@@ -3223,9 +3227,9 @@ state 148
     (78) expression -> expression . ADD push_operator expression
     (79) expression -> expression . SUB push_operator expression
 
-    RSQBRACKET      shift and go to state 188
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
+    RSQBRACKET      shift and go to state 190
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
 
 
 state 149
@@ -3298,12 +3302,12 @@ state 156
     (79) expression -> expression . SUB push_operator expression
     (41) produce_write_quad -> .
 
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
     COMMA           reduce using rule 41 (produce_write_quad -> .)
     SEMICOLON       reduce using rule 41 (produce_write_quad -> .)
 
-    produce_write_quad             shift and go to state 189
+    produce_write_quad             shift and go to state 191
 
 state 157
 
@@ -3313,7 +3317,7 @@ state 157
     COMMA           reduce using rule 41 (produce_write_quad -> .)
     SEMICOLON       reduce using rule 41 (produce_write_quad -> .)
 
-    produce_write_quad             shift and go to state 190
+    produce_write_quad             shift and go to state 192
 
 state 158
 
@@ -3325,143 +3329,19 @@ state 158
 
 state 159
 
-    (49) condition -> IF LPAREN hyper_expression . RPAREN LBRACKET statements RBRACKET
-    (50) condition -> IF LPAREN hyper_expression . RPAREN LBRACKET statements RBRACKET ELSE LBRACKET statements RBRACKET
-    (70) hyper_expression -> hyper_expression . AND push_operator hyper_expression
-    (71) hyper_expression -> hyper_expression . OR push_operator hyper_expression
+    (42) read -> READ push_operator identifier .
 
-    RPAREN          shift and go to state 191
-    AND             shift and go to state 192
-    OR              shift and go to state 193
+    SEMICOLON       reduce using rule 42 (read -> READ push_operator identifier .)
 
 
 state 160
 
-    (72) hyper_expression -> super_expression . produce_hyperexp_quad
-    (73) super_expression -> super_expression . LTHAN push_operator super_expression
-    (74) super_expression -> super_expression . GTHAN push_operator super_expression
-    (75) super_expression -> super_expression . EQUAL push_operator super_expression
-    (76) super_expression -> super_expression . DIFFERENT super_expression
-    (85) produce_hyperexp_quad -> .
+    (97) identifier -> ID .
 
-    LTHAN           shift and go to state 195
-    GTHAN           shift and go to state 196
-    EQUAL           shift and go to state 197
-    DIFFERENT       shift and go to state 198
-    RPAREN          reduce using rule 85 (produce_hyperexp_quad -> .)
-    AND             reduce using rule 85 (produce_hyperexp_quad -> .)
-    OR              reduce using rule 85 (produce_hyperexp_quad -> .)
+    SEMICOLON       reduce using rule 97 (identifier -> ID .)
 
-    produce_hyperexp_quad          shift and go to state 194
 
 state 161
-
-    (77) super_expression -> expression . produce_superexp_quad
-    (78) expression -> expression . ADD push_operator expression
-    (79) expression -> expression . SUB push_operator expression
-    (86) produce_superexp_quad -> .
-
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
-    LTHAN           reduce using rule 86 (produce_superexp_quad -> .)
-    GTHAN           reduce using rule 86 (produce_superexp_quad -> .)
-    EQUAL           reduce using rule 86 (produce_superexp_quad -> .)
-    DIFFERENT       reduce using rule 86 (produce_superexp_quad -> .)
-    RPAREN          reduce using rule 86 (produce_superexp_quad -> .)
-    AND             reduce using rule 86 (produce_superexp_quad -> .)
-    OR              reduce using rule 86 (produce_superexp_quad -> .)
-
-    produce_superexp_quad          shift and go to state 199
-
-state 162
-
-    (51) loop -> REPEAT LPAREN hyper_expression . RPAREN LBRACKET statements RBRACKET
-    (70) hyper_expression -> hyper_expression . AND push_operator hyper_expression
-    (71) hyper_expression -> hyper_expression . OR push_operator hyper_expression
-
-    RPAREN          shift and go to state 200
-    AND             shift and go to state 192
-    OR              shift and go to state 193
-
-
-state 163
-
-    (57) special_function_call -> MEAN LPAREN call_params0 . RPAREN
-
-    RPAREN          shift and go to state 201
-
-
-state 164
-
-    (58) special_function_call -> MEDIAN LPAREN call_params0 . RPAREN
-
-    RPAREN          shift and go to state 202
-
-
-state 165
-
-    (59) special_function_call -> MODE LPAREN call_params0 . RPAREN
-
-    RPAREN          shift and go to state 203
-
-
-state 166
-
-    (60) special_function_call -> STD LPAREN call_params0 . RPAREN
-
-    RPAREN          shift and go to state 204
-
-
-state 167
-
-    (61) special_function_call -> KURTOSIS LPAREN call_params0 . RPAREN
-
-    RPAREN          shift and go to state 205
-
-
-state 168
-
-    (62) special_function_call -> PLOT LPAREN call_params0 . RPAREN
-
-    RPAREN          shift and go to state 206
-
-
-state 169
-
-    (63) special_function_call -> DPLOT LPAREN call_params0 . RPAREN
-
-    RPAREN          shift and go to state 207
-
-
-state 170
-
-    (64) special_function_call -> VARIANCE LPAREN call_params0 . RPAREN
-
-    RPAREN          shift and go to state 208
-
-
-state 171
-
-    (65) special_function_call -> SIMMETRY LPAREN call_params0 . RPAREN
-
-    RPAREN          shift and go to state 209
-
-
-state 172
-
-    (66) special_function_call -> CORRELATION LPAREN call_params0 . RPAREN
-
-    RPAREN          shift and go to state 210
-
-
-state 173
-
-    (67) special_function_call -> DFREAD LPAREN CONST_TEXT . RPAREN
-
-    RPAREN          shift and go to state 211
-
-
-state 174
 
     (46) simple_assignment -> identifier ASSIGN push_operator . expression
     (78) expression -> . expression ADD push_operator expression
@@ -3502,22 +3382,22 @@ state 174
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
     identifier                     shift and go to state 139
-    expression                     shift and go to state 212
+    expression                     shift and go to state 193
     term                           shift and go to state 137
     factor                         shift and go to state 138
     const_int                      shift and go to state 140
@@ -3527,15 +3407,153 @@ state 174
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
+state 162
+
+    (49) condition -> IF LPAREN hyper_expression . RPAREN LBRACKET statements RBRACKET
+    (50) condition -> IF LPAREN hyper_expression . RPAREN LBRACKET statements RBRACKET ELSE LBRACKET statements RBRACKET
+    (70) hyper_expression -> hyper_expression . AND push_operator hyper_expression
+    (71) hyper_expression -> hyper_expression . OR push_operator hyper_expression
+
+    RPAREN          shift and go to state 194
+    AND             shift and go to state 195
+    OR              shift and go to state 196
+
+
+state 163
+
+    (72) hyper_expression -> super_expression . produce_hyperexp_quad
+    (73) super_expression -> super_expression . LTHAN push_operator super_expression
+    (74) super_expression -> super_expression . GTHAN push_operator super_expression
+    (75) super_expression -> super_expression . EQUAL push_operator super_expression
+    (76) super_expression -> super_expression . DIFFERENT super_expression
+    (85) produce_hyperexp_quad -> .
+
+    LTHAN           shift and go to state 198
+    GTHAN           shift and go to state 199
+    EQUAL           shift and go to state 200
+    DIFFERENT       shift and go to state 201
+    RPAREN          reduce using rule 85 (produce_hyperexp_quad -> .)
+    AND             reduce using rule 85 (produce_hyperexp_quad -> .)
+    OR              reduce using rule 85 (produce_hyperexp_quad -> .)
+
+    produce_hyperexp_quad          shift and go to state 197
+
+state 164
+
+    (77) super_expression -> expression . produce_superexp_quad
+    (78) expression -> expression . ADD push_operator expression
+    (79) expression -> expression . SUB push_operator expression
+    (86) produce_superexp_quad -> .
+
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
+    LTHAN           reduce using rule 86 (produce_superexp_quad -> .)
+    GTHAN           reduce using rule 86 (produce_superexp_quad -> .)
+    EQUAL           reduce using rule 86 (produce_superexp_quad -> .)
+    DIFFERENT       reduce using rule 86 (produce_superexp_quad -> .)
+    RPAREN          reduce using rule 86 (produce_superexp_quad -> .)
+    AND             reduce using rule 86 (produce_superexp_quad -> .)
+    OR              reduce using rule 86 (produce_superexp_quad -> .)
+
+    produce_superexp_quad          shift and go to state 202
+
+state 165
+
+    (51) loop -> REPEAT LPAREN hyper_expression . RPAREN LBRACKET statements RBRACKET
+    (70) hyper_expression -> hyper_expression . AND push_operator hyper_expression
+    (71) hyper_expression -> hyper_expression . OR push_operator hyper_expression
+
+    RPAREN          shift and go to state 203
+    AND             shift and go to state 195
+    OR              shift and go to state 196
+
+
+state 166
+
+    (57) special_function_call -> MEAN LPAREN call_params0 . RPAREN
+
+    RPAREN          shift and go to state 204
+
+
+state 167
+
+    (58) special_function_call -> MEDIAN LPAREN call_params0 . RPAREN
+
+    RPAREN          shift and go to state 205
+
+
+state 168
+
+    (59) special_function_call -> MODE LPAREN call_params0 . RPAREN
+
+    RPAREN          shift and go to state 206
+
+
+state 169
+
+    (60) special_function_call -> STD LPAREN call_params0 . RPAREN
+
+    RPAREN          shift and go to state 207
+
+
+state 170
+
+    (61) special_function_call -> KURTOSIS LPAREN call_params0 . RPAREN
+
+    RPAREN          shift and go to state 208
+
+
+state 171
+
+    (62) special_function_call -> PLOT LPAREN call_params0 . RPAREN
+
+    RPAREN          shift and go to state 209
+
+
+state 172
+
+    (63) special_function_call -> DPLOT LPAREN call_params0 . RPAREN
+
+    RPAREN          shift and go to state 210
+
+
+state 173
+
+    (64) special_function_call -> VARIANCE LPAREN call_params0 . RPAREN
+
+    RPAREN          shift and go to state 211
+
+
+state 174
+
+    (65) special_function_call -> SIMMETRY LPAREN call_params0 . RPAREN
+
+    RPAREN          shift and go to state 212
+
+
 state 175
+
+    (66) special_function_call -> CORRELATION LPAREN call_params0 . RPAREN
+
+    RPAREN          shift and go to state 213
+
+
+state 176
+
+    (67) special_function_call -> DFREAD LPAREN CONST_TEXT . RPAREN
+
+    RPAREN          shift and go to state 214
+
+
+state 177
 
     (13) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS . COLON statements RBRACKET function_declarations
     (14) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS . COLON statements return SEMICOLON RBRACKET function_declarations
 
-    COLON           shift and go to state 213
+    COLON           shift and go to state 215
 
 
-state 176
+state 178
 
     (102) array_access -> ID LSQBRACKET . expression RSQBRACKET
     (103) matrix_access -> ID LSQBRACKET . expression RSQBRACKET LSQBRACKET expression RSQBRACKET
@@ -3577,21 +3595,21 @@ state 176
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    expression                     shift and go to state 214
+    expression                     shift and go to state 216
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -3602,7 +3620,7 @@ state 176
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 177
+state 179
 
     (92) factor -> LPAREN push_cap . expression RPAREN pop_cap
     (78) expression -> . expression ADD push_operator expression
@@ -3643,21 +3661,21 @@ state 177
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    expression                     shift and go to state 215
+    expression                     shift and go to state 217
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -3668,7 +3686,7 @@ state 177
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 178
+state 180
 
     (52) function_call -> ID LPAREN call_params0 RPAREN .
 
@@ -3688,14 +3706,14 @@ state 178
     OR              reduce using rule 52 (function_call -> ID LPAREN call_params0 RPAREN .)
 
 
-state 179
+state 181
 
     (53) call_params0 -> expression call_params1 .
 
     RPAREN          reduce using rule 53 (call_params0 -> expression call_params1 .)
 
 
-state 180
+state 182
 
     (78) expression -> expression ADD . push_operator expression
     (84) push_operator -> .
@@ -3718,9 +3736,9 @@ state 180
     HOMERO          reduce using rule 84 (push_operator -> .)
     MARGE           reduce using rule 84 (push_operator -> .)
 
-    push_operator                  shift and go to state 216
+    push_operator                  shift and go to state 218
 
-state 181
+state 183
 
     (79) expression -> expression SUB . push_operator expression
     (84) push_operator -> .
@@ -3743,9 +3761,9 @@ state 181
     HOMERO          reduce using rule 84 (push_operator -> .)
     MARGE           reduce using rule 84 (push_operator -> .)
 
-    push_operator                  shift and go to state 217
+    push_operator                  shift and go to state 219
 
-state 182
+state 184
 
     (55) call_params1 -> COMMA . expression call_params1
     (78) expression -> . expression ADD push_operator expression
@@ -3786,21 +3804,21 @@ state 182
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    expression                     shift and go to state 218
+    expression                     shift and go to state 220
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -3811,14 +3829,14 @@ state 182
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 183
+state 185
 
     (56) call_params1 -> empty .
 
     RPAREN          reduce using rule 56 (call_params1 -> empty .)
 
 
-state 184
+state 186
 
     (80) expression -> term produce_exp_quad .
 
@@ -3836,7 +3854,7 @@ state 184
     OR              reduce using rule 80 (expression -> term produce_exp_quad .)
 
 
-state 185
+state 187
 
     (81) term -> term MUL . push_operator term
     (84) push_operator -> .
@@ -3859,9 +3877,9 @@ state 185
     HOMERO          reduce using rule 84 (push_operator -> .)
     MARGE           reduce using rule 84 (push_operator -> .)
 
-    push_operator                  shift and go to state 219
+    push_operator                  shift and go to state 221
 
-state 186
+state 188
 
     (82) term -> term DIV . push_operator term
     (84) push_operator -> .
@@ -3884,9 +3902,9 @@ state 186
     HOMERO          reduce using rule 84 (push_operator -> .)
     MARGE           reduce using rule 84 (push_operator -> .)
 
-    push_operator                  shift and go to state 220
+    push_operator                  shift and go to state 222
 
-state 187
+state 189
 
     (83) term -> factor produce_term_quad .
 
@@ -3906,16 +3924,16 @@ state 187
     OR              reduce using rule 83 (term -> factor produce_term_quad .)
 
 
-state 188
+state 190
 
     (47) array_assignment -> ID LSQBRACKET expression RSQBRACKET . ASSIGN expression
     (48) matrix_assignment -> ID LSQBRACKET expression RSQBRACKET . LSQBRACKET expression RSQBRACKET ASSIGN expression
 
-    ASSIGN          shift and go to state 222
-    LSQBRACKET      shift and go to state 221
+    ASSIGN          shift and go to state 224
+    LSQBRACKET      shift and go to state 223
 
 
-state 189
+state 191
 
     (34) write_params0 -> write_operator expression produce_write_quad . write_params1
     (36) write_params1 -> . COMMA write_operator expression produce_write_quad write_params1
@@ -3923,13 +3941,13 @@ state 189
     (38) write_params1 -> . empty
     (106) empty -> .
 
-    COMMA           shift and go to state 224
+    COMMA           shift and go to state 226
     SEMICOLON       reduce using rule 106 (empty -> .)
 
-    write_params1                  shift and go to state 223
-    empty                          shift and go to state 225
+    write_params1                  shift and go to state 225
+    empty                          shift and go to state 227
 
-state 190
+state 192
 
     (35) write_params0 -> write_operator const_text produce_write_quad . write_params1
     (36) write_params1 -> . COMMA write_operator expression produce_write_quad write_params1
@@ -3937,82 +3955,34 @@ state 190
     (38) write_params1 -> . empty
     (106) empty -> .
 
-    COMMA           shift and go to state 224
+    COMMA           shift and go to state 226
     SEMICOLON       reduce using rule 106 (empty -> .)
 
-    write_params1                  shift and go to state 226
-    empty                          shift and go to state 225
+    write_params1                  shift and go to state 228
+    empty                          shift and go to state 227
 
-state 191
+state 193
+
+    (46) simple_assignment -> identifier ASSIGN push_operator expression .
+    (78) expression -> expression . ADD push_operator expression
+    (79) expression -> expression . SUB push_operator expression
+
+    SEMICOLON       reduce using rule 46 (simple_assignment -> identifier ASSIGN push_operator expression .)
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
+
+
+state 194
 
     (49) condition -> IF LPAREN hyper_expression RPAREN . LBRACKET statements RBRACKET
     (50) condition -> IF LPAREN hyper_expression RPAREN . LBRACKET statements RBRACKET ELSE LBRACKET statements RBRACKET
 
-    LBRACKET        shift and go to state 227
-
-
-state 192
-
-    (70) hyper_expression -> hyper_expression AND . push_operator hyper_expression
-    (84) push_operator -> .
-
-    LPAREN          reduce using rule 84 (push_operator -> .)
-    ID              reduce using rule 84 (push_operator -> .)
-    CONST_INT       reduce using rule 84 (push_operator -> .)
-    CONST_FLOAT     reduce using rule 84 (push_operator -> .)
-    MEAN            reduce using rule 84 (push_operator -> .)
-    MEDIAN          reduce using rule 84 (push_operator -> .)
-    MODE            reduce using rule 84 (push_operator -> .)
-    STD             reduce using rule 84 (push_operator -> .)
-    KURTOSIS        reduce using rule 84 (push_operator -> .)
-    PLOT            reduce using rule 84 (push_operator -> .)
-    DPLOT           reduce using rule 84 (push_operator -> .)
-    VARIANCE        reduce using rule 84 (push_operator -> .)
-    SIMMETRY        reduce using rule 84 (push_operator -> .)
-    CORRELATION     reduce using rule 84 (push_operator -> .)
-    DFREAD          reduce using rule 84 (push_operator -> .)
-    HOMERO          reduce using rule 84 (push_operator -> .)
-    MARGE           reduce using rule 84 (push_operator -> .)
-
-    push_operator                  shift and go to state 228
-
-state 193
-
-    (71) hyper_expression -> hyper_expression OR . push_operator hyper_expression
-    (84) push_operator -> .
-
-    LPAREN          reduce using rule 84 (push_operator -> .)
-    ID              reduce using rule 84 (push_operator -> .)
-    CONST_INT       reduce using rule 84 (push_operator -> .)
-    CONST_FLOAT     reduce using rule 84 (push_operator -> .)
-    MEAN            reduce using rule 84 (push_operator -> .)
-    MEDIAN          reduce using rule 84 (push_operator -> .)
-    MODE            reduce using rule 84 (push_operator -> .)
-    STD             reduce using rule 84 (push_operator -> .)
-    KURTOSIS        reduce using rule 84 (push_operator -> .)
-    PLOT            reduce using rule 84 (push_operator -> .)
-    DPLOT           reduce using rule 84 (push_operator -> .)
-    VARIANCE        reduce using rule 84 (push_operator -> .)
-    SIMMETRY        reduce using rule 84 (push_operator -> .)
-    CORRELATION     reduce using rule 84 (push_operator -> .)
-    DFREAD          reduce using rule 84 (push_operator -> .)
-    HOMERO          reduce using rule 84 (push_operator -> .)
-    MARGE           reduce using rule 84 (push_operator -> .)
-
-    push_operator                  shift and go to state 229
-
-state 194
-
-    (72) hyper_expression -> super_expression produce_hyperexp_quad .
-
-    RPAREN          reduce using rule 72 (hyper_expression -> super_expression produce_hyperexp_quad .)
-    AND             reduce using rule 72 (hyper_expression -> super_expression produce_hyperexp_quad .)
-    OR              reduce using rule 72 (hyper_expression -> super_expression produce_hyperexp_quad .)
+    LBRACKET        shift and go to state 229
 
 
 state 195
 
-    (73) super_expression -> super_expression LTHAN . push_operator super_expression
+    (70) hyper_expression -> hyper_expression AND . push_operator hyper_expression
     (84) push_operator -> .
 
     LPAREN          reduce using rule 84 (push_operator -> .)
@@ -4037,7 +4007,7 @@ state 195
 
 state 196
 
-    (74) super_expression -> super_expression GTHAN . push_operator super_expression
+    (71) hyper_expression -> hyper_expression OR . push_operator hyper_expression
     (84) push_operator -> .
 
     LPAREN          reduce using rule 84 (push_operator -> .)
@@ -4062,7 +4032,16 @@ state 196
 
 state 197
 
-    (75) super_expression -> super_expression EQUAL . push_operator super_expression
+    (72) hyper_expression -> super_expression produce_hyperexp_quad .
+
+    RPAREN          reduce using rule 72 (hyper_expression -> super_expression produce_hyperexp_quad .)
+    AND             reduce using rule 72 (hyper_expression -> super_expression produce_hyperexp_quad .)
+    OR              reduce using rule 72 (hyper_expression -> super_expression produce_hyperexp_quad .)
+
+
+state 198
+
+    (73) super_expression -> super_expression LTHAN . push_operator super_expression
     (84) push_operator -> .
 
     LPAREN          reduce using rule 84 (push_operator -> .)
@@ -4085,7 +4064,57 @@ state 197
 
     push_operator                  shift and go to state 232
 
-state 198
+state 199
+
+    (74) super_expression -> super_expression GTHAN . push_operator super_expression
+    (84) push_operator -> .
+
+    LPAREN          reduce using rule 84 (push_operator -> .)
+    ID              reduce using rule 84 (push_operator -> .)
+    CONST_INT       reduce using rule 84 (push_operator -> .)
+    CONST_FLOAT     reduce using rule 84 (push_operator -> .)
+    MEAN            reduce using rule 84 (push_operator -> .)
+    MEDIAN          reduce using rule 84 (push_operator -> .)
+    MODE            reduce using rule 84 (push_operator -> .)
+    STD             reduce using rule 84 (push_operator -> .)
+    KURTOSIS        reduce using rule 84 (push_operator -> .)
+    PLOT            reduce using rule 84 (push_operator -> .)
+    DPLOT           reduce using rule 84 (push_operator -> .)
+    VARIANCE        reduce using rule 84 (push_operator -> .)
+    SIMMETRY        reduce using rule 84 (push_operator -> .)
+    CORRELATION     reduce using rule 84 (push_operator -> .)
+    DFREAD          reduce using rule 84 (push_operator -> .)
+    HOMERO          reduce using rule 84 (push_operator -> .)
+    MARGE           reduce using rule 84 (push_operator -> .)
+
+    push_operator                  shift and go to state 233
+
+state 200
+
+    (75) super_expression -> super_expression EQUAL . push_operator super_expression
+    (84) push_operator -> .
+
+    LPAREN          reduce using rule 84 (push_operator -> .)
+    ID              reduce using rule 84 (push_operator -> .)
+    CONST_INT       reduce using rule 84 (push_operator -> .)
+    CONST_FLOAT     reduce using rule 84 (push_operator -> .)
+    MEAN            reduce using rule 84 (push_operator -> .)
+    MEDIAN          reduce using rule 84 (push_operator -> .)
+    MODE            reduce using rule 84 (push_operator -> .)
+    STD             reduce using rule 84 (push_operator -> .)
+    KURTOSIS        reduce using rule 84 (push_operator -> .)
+    PLOT            reduce using rule 84 (push_operator -> .)
+    DPLOT           reduce using rule 84 (push_operator -> .)
+    VARIANCE        reduce using rule 84 (push_operator -> .)
+    SIMMETRY        reduce using rule 84 (push_operator -> .)
+    CORRELATION     reduce using rule 84 (push_operator -> .)
+    DFREAD          reduce using rule 84 (push_operator -> .)
+    HOMERO          reduce using rule 84 (push_operator -> .)
+    MARGE           reduce using rule 84 (push_operator -> .)
+
+    push_operator                  shift and go to state 234
+
+state 201
 
     (76) super_expression -> super_expression DIFFERENT . super_expression
     (73) super_expression -> . super_expression LTHAN push_operator super_expression
@@ -4131,22 +4160,22 @@ state 198
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    super_expression               shift and go to state 233
-    expression                     shift and go to state 161
+    super_expression               shift and go to state 235
+    expression                     shift and go to state 164
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -4157,7 +4186,7 @@ state 198
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 199
+state 202
 
     (77) super_expression -> expression produce_superexp_quad .
 
@@ -4170,14 +4199,14 @@ state 199
     OR              reduce using rule 77 (super_expression -> expression produce_superexp_quad .)
 
 
-state 200
+state 203
 
     (51) loop -> REPEAT LPAREN hyper_expression RPAREN . LBRACKET statements RBRACKET
 
-    LBRACKET        shift and go to state 234
+    LBRACKET        shift and go to state 236
 
 
-state 201
+state 204
 
     (57) special_function_call -> MEAN LPAREN call_params0 RPAREN .
 
@@ -4197,7 +4226,7 @@ state 201
     OR              reduce using rule 57 (special_function_call -> MEAN LPAREN call_params0 RPAREN .)
 
 
-state 202
+state 205
 
     (58) special_function_call -> MEDIAN LPAREN call_params0 RPAREN .
 
@@ -4217,7 +4246,7 @@ state 202
     OR              reduce using rule 58 (special_function_call -> MEDIAN LPAREN call_params0 RPAREN .)
 
 
-state 203
+state 206
 
     (59) special_function_call -> MODE LPAREN call_params0 RPAREN .
 
@@ -4237,7 +4266,7 @@ state 203
     OR              reduce using rule 59 (special_function_call -> MODE LPAREN call_params0 RPAREN .)
 
 
-state 204
+state 207
 
     (60) special_function_call -> STD LPAREN call_params0 RPAREN .
 
@@ -4257,7 +4286,7 @@ state 204
     OR              reduce using rule 60 (special_function_call -> STD LPAREN call_params0 RPAREN .)
 
 
-state 205
+state 208
 
     (61) special_function_call -> KURTOSIS LPAREN call_params0 RPAREN .
 
@@ -4277,7 +4306,7 @@ state 205
     OR              reduce using rule 61 (special_function_call -> KURTOSIS LPAREN call_params0 RPAREN .)
 
 
-state 206
+state 209
 
     (62) special_function_call -> PLOT LPAREN call_params0 RPAREN .
 
@@ -4297,7 +4326,7 @@ state 206
     OR              reduce using rule 62 (special_function_call -> PLOT LPAREN call_params0 RPAREN .)
 
 
-state 207
+state 210
 
     (63) special_function_call -> DPLOT LPAREN call_params0 RPAREN .
 
@@ -4317,7 +4346,7 @@ state 207
     OR              reduce using rule 63 (special_function_call -> DPLOT LPAREN call_params0 RPAREN .)
 
 
-state 208
+state 211
 
     (64) special_function_call -> VARIANCE LPAREN call_params0 RPAREN .
 
@@ -4337,7 +4366,7 @@ state 208
     OR              reduce using rule 64 (special_function_call -> VARIANCE LPAREN call_params0 RPAREN .)
 
 
-state 209
+state 212
 
     (65) special_function_call -> SIMMETRY LPAREN call_params0 RPAREN .
 
@@ -4357,7 +4386,7 @@ state 209
     OR              reduce using rule 65 (special_function_call -> SIMMETRY LPAREN call_params0 RPAREN .)
 
 
-state 210
+state 213
 
     (66) special_function_call -> CORRELATION LPAREN call_params0 RPAREN .
 
@@ -4377,7 +4406,7 @@ state 210
     OR              reduce using rule 66 (special_function_call -> CORRELATION LPAREN call_params0 RPAREN .)
 
 
-state 211
+state 214
 
     (67) special_function_call -> DFREAD LPAREN CONST_TEXT RPAREN .
 
@@ -4397,18 +4426,7 @@ state 211
     OR              reduce using rule 67 (special_function_call -> DFREAD LPAREN CONST_TEXT RPAREN .)
 
 
-state 212
-
-    (46) simple_assignment -> identifier ASSIGN push_operator expression .
-    (78) expression -> expression . ADD push_operator expression
-    (79) expression -> expression . SUB push_operator expression
-
-    SEMICOLON       reduce using rule 46 (simple_assignment -> identifier ASSIGN push_operator expression .)
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
-
-
-state 213
+state 215
 
     (13) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON . statements RBRACKET function_declarations
     (14) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON . statements return SEMICOLON RBRACKET function_declarations
@@ -4421,7 +4439,7 @@ state 213
     (31) statements -> . special_function_call SEMICOLON statements
     (32) statements -> . empty
     (33) write -> . WRITE write_params0
-    (42) read -> . READ ID
+    (42) read -> . READ push_operator identifier
     (43) var_assignment -> . simple_assignment
     (44) var_assignment -> . array_assignment
     (45) var_assignment -> . matrix_assignment
@@ -4450,26 +4468,26 @@ state 213
 
     WRITE           shift and go to state 82
     READ            shift and go to state 83
-    IF              shift and go to state 87
-    REPEAT          shift and go to state 88
+    IF              shift and go to state 88
+    REPEAT          shift and go to state 89
     ID              shift and go to state 72
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
     RBRACKET        reduce using rule 106 (empty -> .)
     RETURN          reduce using rule 106 (empty -> .)
 
-    statements                     shift and go to state 235
+    statements                     shift and go to state 237
     write                          shift and go to state 74
     read                           shift and go to state 75
     var_assignment                 shift and go to state 76
@@ -4478,35 +4496,35 @@ state 213
     function_call                  shift and go to state 79
     special_function_call          shift and go to state 80
     empty                          shift and go to state 81
-    simple_assignment              shift and go to state 84
-    array_assignment               shift and go to state 85
-    matrix_assignment              shift and go to state 86
-    identifier                     shift and go to state 102
+    identifier                     shift and go to state 84
+    simple_assignment              shift and go to state 85
+    array_assignment               shift and go to state 86
+    matrix_assignment              shift and go to state 87
 
-state 214
+state 216
 
     (102) array_access -> ID LSQBRACKET expression . RSQBRACKET
     (103) matrix_access -> ID LSQBRACKET expression . RSQBRACKET LSQBRACKET expression RSQBRACKET
     (78) expression -> expression . ADD push_operator expression
     (79) expression -> expression . SUB push_operator expression
 
-    RSQBRACKET      shift and go to state 236
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
+    RSQBRACKET      shift and go to state 238
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
 
 
-state 215
+state 217
 
     (92) factor -> LPAREN push_cap expression . RPAREN pop_cap
     (78) expression -> expression . ADD push_operator expression
     (79) expression -> expression . SUB push_operator expression
 
-    RPAREN          shift and go to state 237
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
+    RPAREN          shift and go to state 239
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
 
 
-state 216
+state 218
 
     (78) expression -> expression ADD push_operator . expression
     (78) expression -> . expression ADD push_operator expression
@@ -4547,21 +4565,21 @@ state 216
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    expression                     shift and go to state 238
+    expression                     shift and go to state 240
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -4572,7 +4590,7 @@ state 216
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 217
+state 219
 
     (79) expression -> expression SUB push_operator . expression
     (78) expression -> . expression ADD push_operator expression
@@ -4613,21 +4631,21 @@ state 217
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    expression                     shift and go to state 239
+    expression                     shift and go to state 241
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -4638,7 +4656,7 @@ state 217
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 218
+state 220
 
     (55) call_params1 -> COMMA expression . call_params1
     (78) expression -> expression . ADD push_operator expression
@@ -4647,15 +4665,15 @@ state 218
     (56) call_params1 -> . empty
     (106) empty -> .
 
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
-    COMMA           shift and go to state 182
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
+    COMMA           shift and go to state 184
     RPAREN          reduce using rule 106 (empty -> .)
 
-    call_params1                   shift and go to state 240
-    empty                          shift and go to state 183
+    call_params1                   shift and go to state 242
+    empty                          shift and go to state 185
 
-state 219
+state 221
 
     (81) term -> term MUL push_operator . term
     (81) term -> . term MUL push_operator term
@@ -4693,21 +4711,21 @@ state 219
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    term                           shift and go to state 241
+    term                           shift and go to state 243
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
     const_int                      shift and go to state 140
@@ -4717,7 +4735,7 @@ state 219
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 220
+state 222
 
     (82) term -> term DIV push_operator . term
     (81) term -> . term MUL push_operator term
@@ -4755,21 +4773,21 @@ state 220
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    term                           shift and go to state 242
+    term                           shift and go to state 244
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
     const_int                      shift and go to state 140
@@ -4779,7 +4797,7 @@ state 220
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 221
+state 223
 
     (48) matrix_assignment -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET . expression RSQBRACKET ASSIGN expression
     (78) expression -> . expression ADD push_operator expression
@@ -4820,21 +4838,21 @@ state 221
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    expression                     shift and go to state 243
+    expression                     shift and go to state 245
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -4845,7 +4863,7 @@ state 221
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 222
+state 224
 
     (47) array_assignment -> ID LSQBRACKET expression RSQBRACKET ASSIGN . expression
     (78) expression -> . expression ADD push_operator expression
@@ -4886,21 +4904,21 @@ state 222
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    expression                     shift and go to state 244
+    expression                     shift and go to state 246
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -4911,14 +4929,14 @@ state 222
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 223
+state 225
 
     (34) write_params0 -> write_operator expression produce_write_quad write_params1 .
 
     SEMICOLON       reduce using rule 34 (write_params0 -> write_operator expression produce_write_quad write_params1 .)
 
 
-state 224
+state 226
 
     (36) write_params1 -> COMMA . write_operator expression produce_write_quad write_params1
     (37) write_params1 -> COMMA . write_operator const_text produce_write_quad write_params1
@@ -4943,23 +4961,23 @@ state 224
     HOMERO          reduce using rule 40 (write_operator -> .)
     MARGE           reduce using rule 40 (write_operator -> .)
 
-    write_operator                 shift and go to state 245
+    write_operator                 shift and go to state 247
 
-state 225
+state 227
 
     (38) write_params1 -> empty .
 
     SEMICOLON       reduce using rule 38 (write_params1 -> empty .)
 
 
-state 226
+state 228
 
     (35) write_params0 -> write_operator const_text produce_write_quad write_params1 .
 
     SEMICOLON       reduce using rule 35 (write_params0 -> write_operator const_text produce_write_quad write_params1 .)
 
 
-state 227
+state 229
 
     (49) condition -> IF LPAREN hyper_expression RPAREN LBRACKET . statements RBRACKET
     (50) condition -> IF LPAREN hyper_expression RPAREN LBRACKET . statements RBRACKET ELSE LBRACKET statements RBRACKET
@@ -4972,7 +4990,7 @@ state 227
     (31) statements -> . special_function_call SEMICOLON statements
     (32) statements -> . empty
     (33) write -> . WRITE write_params0
-    (42) read -> . READ ID
+    (42) read -> . READ push_operator identifier
     (43) var_assignment -> . simple_assignment
     (44) var_assignment -> . array_assignment
     (45) var_assignment -> . matrix_assignment
@@ -5001,25 +5019,25 @@ state 227
 
     WRITE           shift and go to state 82
     READ            shift and go to state 83
-    IF              shift and go to state 87
-    REPEAT          shift and go to state 88
+    IF              shift and go to state 88
+    REPEAT          shift and go to state 89
     ID              shift and go to state 72
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
     RBRACKET        reduce using rule 106 (empty -> .)
 
-    statements                     shift and go to state 246
+    statements                     shift and go to state 248
     write                          shift and go to state 74
     read                           shift and go to state 75
     var_assignment                 shift and go to state 76
@@ -5028,12 +5046,12 @@ state 227
     function_call                  shift and go to state 79
     special_function_call          shift and go to state 80
     empty                          shift and go to state 81
-    simple_assignment              shift and go to state 84
-    array_assignment               shift and go to state 85
-    matrix_assignment              shift and go to state 86
-    identifier                     shift and go to state 102
+    identifier                     shift and go to state 84
+    simple_assignment              shift and go to state 85
+    array_assignment               shift and go to state 86
+    matrix_assignment              shift and go to state 87
 
-state 228
+state 230
 
     (70) hyper_expression -> hyper_expression AND push_operator . hyper_expression
     (70) hyper_expression -> . hyper_expression AND push_operator hyper_expression
@@ -5082,23 +5100,23 @@ state 228
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    hyper_expression               shift and go to state 247
-    super_expression               shift and go to state 160
-    expression                     shift and go to state 161
+    hyper_expression               shift and go to state 249
+    super_expression               shift and go to state 163
+    expression                     shift and go to state 164
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -5109,7 +5127,7 @@ state 228
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 229
+state 231
 
     (71) hyper_expression -> hyper_expression OR push_operator . hyper_expression
     (70) hyper_expression -> . hyper_expression AND push_operator hyper_expression
@@ -5158,23 +5176,23 @@ state 229
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    hyper_expression               shift and go to state 248
-    super_expression               shift and go to state 160
-    expression                     shift and go to state 161
+    hyper_expression               shift and go to state 250
+    super_expression               shift and go to state 163
+    expression                     shift and go to state 164
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -5185,7 +5203,7 @@ state 229
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 230
+state 232
 
     (73) super_expression -> super_expression LTHAN push_operator . super_expression
     (73) super_expression -> . super_expression LTHAN push_operator super_expression
@@ -5231,22 +5249,22 @@ state 230
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    super_expression               shift and go to state 249
-    expression                     shift and go to state 161
+    super_expression               shift and go to state 251
+    expression                     shift and go to state 164
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -5257,7 +5275,7 @@ state 230
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 231
+state 233
 
     (74) super_expression -> super_expression GTHAN push_operator . super_expression
     (73) super_expression -> . super_expression LTHAN push_operator super_expression
@@ -5303,22 +5321,22 @@ state 231
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    super_expression               shift and go to state 250
-    expression                     shift and go to state 161
+    super_expression               shift and go to state 252
+    expression                     shift and go to state 164
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -5329,7 +5347,7 @@ state 231
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 232
+state 234
 
     (75) super_expression -> super_expression EQUAL push_operator . super_expression
     (73) super_expression -> . super_expression LTHAN push_operator super_expression
@@ -5375,22 +5393,22 @@ state 232
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    super_expression               shift and go to state 251
-    expression                     shift and go to state 161
+    super_expression               shift and go to state 253
+    expression                     shift and go to state 164
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -5401,7 +5419,7 @@ state 232
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 233
+state 235
 
     (76) super_expression -> super_expression DIFFERENT super_expression .
     (73) super_expression -> super_expression . LTHAN push_operator super_expression
@@ -5416,10 +5434,10 @@ state 233
     RPAREN          reduce using rule 76 (super_expression -> super_expression DIFFERENT super_expression .)
     AND             reduce using rule 76 (super_expression -> super_expression DIFFERENT super_expression .)
     OR              reduce using rule 76 (super_expression -> super_expression DIFFERENT super_expression .)
-    LTHAN           shift and go to state 195
-    GTHAN           shift and go to state 196
-    EQUAL           shift and go to state 197
-    DIFFERENT       shift and go to state 198
+    LTHAN           shift and go to state 198
+    GTHAN           shift and go to state 199
+    EQUAL           shift and go to state 200
+    DIFFERENT       shift and go to state 201
 
   ! LTHAN           [ reduce using rule 76 (super_expression -> super_expression DIFFERENT super_expression .) ]
   ! GTHAN           [ reduce using rule 76 (super_expression -> super_expression DIFFERENT super_expression .) ]
@@ -5427,7 +5445,7 @@ state 233
   ! DIFFERENT       [ reduce using rule 76 (super_expression -> super_expression DIFFERENT super_expression .) ]
 
 
-state 234
+state 236
 
     (51) loop -> REPEAT LPAREN hyper_expression RPAREN LBRACKET . statements RBRACKET
     (25) statements -> . write SEMICOLON statements
@@ -5439,7 +5457,7 @@ state 234
     (31) statements -> . special_function_call SEMICOLON statements
     (32) statements -> . empty
     (33) write -> . WRITE write_params0
-    (42) read -> . READ ID
+    (42) read -> . READ push_operator identifier
     (43) var_assignment -> . simple_assignment
     (44) var_assignment -> . array_assignment
     (45) var_assignment -> . matrix_assignment
@@ -5468,25 +5486,25 @@ state 234
 
     WRITE           shift and go to state 82
     READ            shift and go to state 83
-    IF              shift and go to state 87
-    REPEAT          shift and go to state 88
+    IF              shift and go to state 88
+    REPEAT          shift and go to state 89
     ID              shift and go to state 72
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
     RBRACKET        reduce using rule 106 (empty -> .)
 
-    statements                     shift and go to state 252
+    statements                     shift and go to state 254
     write                          shift and go to state 74
     read                           shift and go to state 75
     var_assignment                 shift and go to state 76
@@ -5495,23 +5513,23 @@ state 234
     function_call                  shift and go to state 79
     special_function_call          shift and go to state 80
     empty                          shift and go to state 81
-    simple_assignment              shift and go to state 84
-    array_assignment               shift and go to state 85
-    matrix_assignment              shift and go to state 86
-    identifier                     shift and go to state 102
+    identifier                     shift and go to state 84
+    simple_assignment              shift and go to state 85
+    array_assignment               shift and go to state 86
+    matrix_assignment              shift and go to state 87
 
-state 235
+state 237
 
     (13) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements . RBRACKET function_declarations
     (14) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements . return SEMICOLON RBRACKET function_declarations
     (17) return -> . RETURN push_operator expression
 
-    RBRACKET        shift and go to state 253
-    RETURN          shift and go to state 255
+    RBRACKET        shift and go to state 255
+    RETURN          shift and go to state 257
 
-    return                         shift and go to state 254
+    return                         shift and go to state 256
 
-state 236
+state 238
 
     (102) array_access -> ID LSQBRACKET expression RSQBRACKET .
     (103) matrix_access -> ID LSQBRACKET expression RSQBRACKET . LSQBRACKET expression RSQBRACKET
@@ -5530,10 +5548,10 @@ state 236
     DIFFERENT       reduce using rule 102 (array_access -> ID LSQBRACKET expression RSQBRACKET .)
     AND             reduce using rule 102 (array_access -> ID LSQBRACKET expression RSQBRACKET .)
     OR              reduce using rule 102 (array_access -> ID LSQBRACKET expression RSQBRACKET .)
-    LSQBRACKET      shift and go to state 256
+    LSQBRACKET      shift and go to state 258
 
 
-state 237
+state 239
 
     (92) factor -> LPAREN push_cap expression RPAREN . pop_cap
     (101) pop_cap -> .
@@ -5553,9 +5571,9 @@ state 237
     AND             reduce using rule 101 (pop_cap -> .)
     OR              reduce using rule 101 (pop_cap -> .)
 
-    pop_cap                        shift and go to state 257
+    pop_cap                        shift and go to state 259
 
-state 238
+state 240
 
     (78) expression -> expression ADD push_operator expression .
     (78) expression -> expression . ADD push_operator expression
@@ -5573,14 +5591,14 @@ state 238
     DIFFERENT       reduce using rule 78 (expression -> expression ADD push_operator expression .)
     AND             reduce using rule 78 (expression -> expression ADD push_operator expression .)
     OR              reduce using rule 78 (expression -> expression ADD push_operator expression .)
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
 
   ! ADD             [ reduce using rule 78 (expression -> expression ADD push_operator expression .) ]
   ! SUB             [ reduce using rule 78 (expression -> expression ADD push_operator expression .) ]
 
 
-state 239
+state 241
 
     (79) expression -> expression SUB push_operator expression .
     (78) expression -> expression . ADD push_operator expression
@@ -5598,21 +5616,21 @@ state 239
     DIFFERENT       reduce using rule 79 (expression -> expression SUB push_operator expression .)
     AND             reduce using rule 79 (expression -> expression SUB push_operator expression .)
     OR              reduce using rule 79 (expression -> expression SUB push_operator expression .)
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
 
   ! ADD             [ reduce using rule 79 (expression -> expression SUB push_operator expression .) ]
   ! SUB             [ reduce using rule 79 (expression -> expression SUB push_operator expression .) ]
 
 
-state 240
+state 242
 
     (55) call_params1 -> COMMA expression call_params1 .
 
     RPAREN          reduce using rule 55 (call_params1 -> COMMA expression call_params1 .)
 
 
-state 241
+state 243
 
     (81) term -> term MUL push_operator term .
     (81) term -> term . MUL push_operator term
@@ -5632,14 +5650,14 @@ state 241
     DIFFERENT       reduce using rule 81 (term -> term MUL push_operator term .)
     AND             reduce using rule 81 (term -> term MUL push_operator term .)
     OR              reduce using rule 81 (term -> term MUL push_operator term .)
-    MUL             shift and go to state 185
-    DIV             shift and go to state 186
+    MUL             shift and go to state 187
+    DIV             shift and go to state 188
 
   ! MUL             [ reduce using rule 81 (term -> term MUL push_operator term .) ]
   ! DIV             [ reduce using rule 81 (term -> term MUL push_operator term .) ]
 
 
-state 242
+state 244
 
     (82) term -> term DIV push_operator term .
     (81) term -> term . MUL push_operator term
@@ -5659,36 +5677,36 @@ state 242
     DIFFERENT       reduce using rule 82 (term -> term DIV push_operator term .)
     AND             reduce using rule 82 (term -> term DIV push_operator term .)
     OR              reduce using rule 82 (term -> term DIV push_operator term .)
-    MUL             shift and go to state 185
-    DIV             shift and go to state 186
+    MUL             shift and go to state 187
+    DIV             shift and go to state 188
 
   ! MUL             [ reduce using rule 82 (term -> term DIV push_operator term .) ]
   ! DIV             [ reduce using rule 82 (term -> term DIV push_operator term .) ]
 
 
-state 243
+state 245
 
     (48) matrix_assignment -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression . RSQBRACKET ASSIGN expression
     (78) expression -> expression . ADD push_operator expression
     (79) expression -> expression . SUB push_operator expression
 
-    RSQBRACKET      shift and go to state 258
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
+    RSQBRACKET      shift and go to state 260
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
 
 
-state 244
+state 246
 
     (47) array_assignment -> ID LSQBRACKET expression RSQBRACKET ASSIGN expression .
     (78) expression -> expression . ADD push_operator expression
     (79) expression -> expression . SUB push_operator expression
 
     SEMICOLON       reduce using rule 47 (array_assignment -> ID LSQBRACKET expression RSQBRACKET ASSIGN expression .)
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
 
 
-state 245
+state 247
 
     (36) write_params1 -> COMMA write_operator . expression produce_write_quad write_params1
     (37) write_params1 -> COMMA write_operator . const_text produce_write_quad write_params1
@@ -5732,22 +5750,22 @@ state 245
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    expression                     shift and go to state 259
-    const_text                     shift and go to state 260
+    expression                     shift and go to state 261
+    const_text                     shift and go to state 262
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -5758,15 +5776,15 @@ state 245
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 246
+state 248
 
     (49) condition -> IF LPAREN hyper_expression RPAREN LBRACKET statements . RBRACKET
     (50) condition -> IF LPAREN hyper_expression RPAREN LBRACKET statements . RBRACKET ELSE LBRACKET statements RBRACKET
 
-    RBRACKET        shift and go to state 261
+    RBRACKET        shift and go to state 263
 
 
-state 247
+state 249
 
     (70) hyper_expression -> hyper_expression AND push_operator hyper_expression .
     (70) hyper_expression -> hyper_expression . AND push_operator hyper_expression
@@ -5775,14 +5793,14 @@ state 247
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
     RPAREN          reduce using rule 70 (hyper_expression -> hyper_expression AND push_operator hyper_expression .)
-    AND             shift and go to state 192
-    OR              shift and go to state 193
+    AND             shift and go to state 195
+    OR              shift and go to state 196
 
   ! AND             [ reduce using rule 70 (hyper_expression -> hyper_expression AND push_operator hyper_expression .) ]
   ! OR              [ reduce using rule 70 (hyper_expression -> hyper_expression AND push_operator hyper_expression .) ]
 
 
-state 248
+state 250
 
     (71) hyper_expression -> hyper_expression OR push_operator hyper_expression .
     (70) hyper_expression -> hyper_expression . AND push_operator hyper_expression
@@ -5791,14 +5809,14 @@ state 248
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
     RPAREN          reduce using rule 71 (hyper_expression -> hyper_expression OR push_operator hyper_expression .)
-    AND             shift and go to state 192
-    OR              shift and go to state 193
+    AND             shift and go to state 195
+    OR              shift and go to state 196
 
   ! AND             [ reduce using rule 71 (hyper_expression -> hyper_expression OR push_operator hyper_expression .) ]
   ! OR              [ reduce using rule 71 (hyper_expression -> hyper_expression OR push_operator hyper_expression .) ]
 
 
-state 249
+state 251
 
     (73) super_expression -> super_expression LTHAN push_operator super_expression .
     (73) super_expression -> super_expression . LTHAN push_operator super_expression
@@ -5813,10 +5831,10 @@ state 249
     RPAREN          reduce using rule 73 (super_expression -> super_expression LTHAN push_operator super_expression .)
     AND             reduce using rule 73 (super_expression -> super_expression LTHAN push_operator super_expression .)
     OR              reduce using rule 73 (super_expression -> super_expression LTHAN push_operator super_expression .)
-    LTHAN           shift and go to state 195
-    GTHAN           shift and go to state 196
-    EQUAL           shift and go to state 197
-    DIFFERENT       shift and go to state 198
+    LTHAN           shift and go to state 198
+    GTHAN           shift and go to state 199
+    EQUAL           shift and go to state 200
+    DIFFERENT       shift and go to state 201
 
   ! LTHAN           [ reduce using rule 73 (super_expression -> super_expression LTHAN push_operator super_expression .) ]
   ! GTHAN           [ reduce using rule 73 (super_expression -> super_expression LTHAN push_operator super_expression .) ]
@@ -5824,7 +5842,7 @@ state 249
   ! DIFFERENT       [ reduce using rule 73 (super_expression -> super_expression LTHAN push_operator super_expression .) ]
 
 
-state 250
+state 252
 
     (74) super_expression -> super_expression GTHAN push_operator super_expression .
     (73) super_expression -> super_expression . LTHAN push_operator super_expression
@@ -5839,10 +5857,10 @@ state 250
     RPAREN          reduce using rule 74 (super_expression -> super_expression GTHAN push_operator super_expression .)
     AND             reduce using rule 74 (super_expression -> super_expression GTHAN push_operator super_expression .)
     OR              reduce using rule 74 (super_expression -> super_expression GTHAN push_operator super_expression .)
-    LTHAN           shift and go to state 195
-    GTHAN           shift and go to state 196
-    EQUAL           shift and go to state 197
-    DIFFERENT       shift and go to state 198
+    LTHAN           shift and go to state 198
+    GTHAN           shift and go to state 199
+    EQUAL           shift and go to state 200
+    DIFFERENT       shift and go to state 201
 
   ! LTHAN           [ reduce using rule 74 (super_expression -> super_expression GTHAN push_operator super_expression .) ]
   ! GTHAN           [ reduce using rule 74 (super_expression -> super_expression GTHAN push_operator super_expression .) ]
@@ -5850,7 +5868,7 @@ state 250
   ! DIFFERENT       [ reduce using rule 74 (super_expression -> super_expression GTHAN push_operator super_expression .) ]
 
 
-state 251
+state 253
 
     (75) super_expression -> super_expression EQUAL push_operator super_expression .
     (73) super_expression -> super_expression . LTHAN push_operator super_expression
@@ -5865,10 +5883,10 @@ state 251
     RPAREN          reduce using rule 75 (super_expression -> super_expression EQUAL push_operator super_expression .)
     AND             reduce using rule 75 (super_expression -> super_expression EQUAL push_operator super_expression .)
     OR              reduce using rule 75 (super_expression -> super_expression EQUAL push_operator super_expression .)
-    LTHAN           shift and go to state 195
-    GTHAN           shift and go to state 196
-    EQUAL           shift and go to state 197
-    DIFFERENT       shift and go to state 198
+    LTHAN           shift and go to state 198
+    GTHAN           shift and go to state 199
+    EQUAL           shift and go to state 200
+    DIFFERENT       shift and go to state 201
 
   ! LTHAN           [ reduce using rule 75 (super_expression -> super_expression EQUAL push_operator super_expression .) ]
   ! GTHAN           [ reduce using rule 75 (super_expression -> super_expression EQUAL push_operator super_expression .) ]
@@ -5876,14 +5894,14 @@ state 251
   ! DIFFERENT       [ reduce using rule 75 (super_expression -> super_expression EQUAL push_operator super_expression .) ]
 
 
-state 252
+state 254
 
     (51) loop -> REPEAT LPAREN hyper_expression RPAREN LBRACKET statements . RBRACKET
 
-    RBRACKET        shift and go to state 262
+    RBRACKET        shift and go to state 264
 
 
-state 253
+state 255
 
     (13) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RBRACKET . function_declarations
     (13) function_declarations -> . PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RBRACKET function_declarations
@@ -5894,17 +5912,17 @@ state 253
     PROC            shift and go to state 23
     BEGIN           reduce using rule 106 (empty -> .)
 
-    function_declarations          shift and go to state 263
+    function_declarations          shift and go to state 265
     empty                          shift and go to state 24
 
-state 254
+state 256
 
     (14) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements return . SEMICOLON RBRACKET function_declarations
 
-    SEMICOLON       shift and go to state 264
+    SEMICOLON       shift and go to state 266
 
 
-state 255
+state 257
 
     (17) return -> RETURN . push_operator expression
     (84) push_operator -> .
@@ -5927,9 +5945,9 @@ state 255
     HOMERO          reduce using rule 84 (push_operator -> .)
     MARGE           reduce using rule 84 (push_operator -> .)
 
-    push_operator                  shift and go to state 265
+    push_operator                  shift and go to state 267
 
-state 256
+state 258
 
     (103) matrix_access -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET . expression RSQBRACKET
     (78) expression -> . expression ADD push_operator expression
@@ -5970,21 +5988,21 @@ state 256
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    expression                     shift and go to state 266
+    expression                     shift and go to state 268
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -5995,7 +6013,7 @@ state 256
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 257
+state 259
 
     (92) factor -> LPAREN push_cap expression RPAREN pop_cap .
 
@@ -6015,28 +6033,28 @@ state 257
     OR              reduce using rule 92 (factor -> LPAREN push_cap expression RPAREN pop_cap .)
 
 
-state 258
+state 260
 
     (48) matrix_assignment -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET . ASSIGN expression
 
-    ASSIGN          shift and go to state 267
+    ASSIGN          shift and go to state 269
 
 
-state 259
+state 261
 
     (36) write_params1 -> COMMA write_operator expression . produce_write_quad write_params1
     (78) expression -> expression . ADD push_operator expression
     (79) expression -> expression . SUB push_operator expression
     (41) produce_write_quad -> .
 
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
     COMMA           reduce using rule 41 (produce_write_quad -> .)
     SEMICOLON       reduce using rule 41 (produce_write_quad -> .)
 
-    produce_write_quad             shift and go to state 268
+    produce_write_quad             shift and go to state 270
 
-state 260
+state 262
 
     (37) write_params1 -> COMMA write_operator const_text . produce_write_quad write_params1
     (41) produce_write_quad -> .
@@ -6044,39 +6062,39 @@ state 260
     COMMA           reduce using rule 41 (produce_write_quad -> .)
     SEMICOLON       reduce using rule 41 (produce_write_quad -> .)
 
-    produce_write_quad             shift and go to state 269
+    produce_write_quad             shift and go to state 271
 
-state 261
+state 263
 
     (49) condition -> IF LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET .
     (50) condition -> IF LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET . ELSE LBRACKET statements RBRACKET
 
     SEMICOLON       reduce using rule 49 (condition -> IF LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET .)
-    ELSE            shift and go to state 270
+    ELSE            shift and go to state 272
 
 
-state 262
+state 264
 
     (51) loop -> REPEAT LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET .
 
     SEMICOLON       reduce using rule 51 (loop -> REPEAT LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET .)
 
 
-state 263
+state 265
 
     (13) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RBRACKET function_declarations .
 
     BEGIN           reduce using rule 13 (function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RBRACKET function_declarations .)
 
 
-state 264
+state 266
 
     (14) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements return SEMICOLON . RBRACKET function_declarations
 
-    RBRACKET        shift and go to state 271
+    RBRACKET        shift and go to state 273
 
 
-state 265
+state 267
 
     (17) return -> RETURN push_operator . expression
     (78) expression -> . expression ADD push_operator expression
@@ -6117,21 +6135,21 @@ state 265
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    expression                     shift and go to state 272
+    expression                     shift and go to state 274
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -6142,18 +6160,18 @@ state 265
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 266
+state 268
 
     (103) matrix_access -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression . RSQBRACKET
     (78) expression -> expression . ADD push_operator expression
     (79) expression -> expression . SUB push_operator expression
 
-    RSQBRACKET      shift and go to state 273
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
+    RSQBRACKET      shift and go to state 275
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
 
 
-state 267
+state 269
 
     (48) matrix_assignment -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET ASSIGN . expression
     (78) expression -> . expression ADD push_operator expression
@@ -6194,21 +6212,21 @@ state 267
     ID              shift and go to state 132
     CONST_INT       shift and go to state 146
     CONST_FLOAT     shift and go to state 147
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
 
-    expression                     shift and go to state 274
+    expression                     shift and go to state 276
     term                           shift and go to state 137
     factor                         shift and go to state 138
     identifier                     shift and go to state 139
@@ -6219,7 +6237,7 @@ state 267
     function_call                  shift and go to state 144
     special_function_call          shift and go to state 145
 
-state 268
+state 270
 
     (36) write_params1 -> COMMA write_operator expression produce_write_quad . write_params1
     (36) write_params1 -> . COMMA write_operator expression produce_write_quad write_params1
@@ -6227,13 +6245,13 @@ state 268
     (38) write_params1 -> . empty
     (106) empty -> .
 
-    COMMA           shift and go to state 224
+    COMMA           shift and go to state 226
     SEMICOLON       reduce using rule 106 (empty -> .)
 
-    write_params1                  shift and go to state 275
-    empty                          shift and go to state 225
+    write_params1                  shift and go to state 277
+    empty                          shift and go to state 227
 
-state 269
+state 271
 
     (37) write_params1 -> COMMA write_operator const_text produce_write_quad . write_params1
     (36) write_params1 -> . COMMA write_operator expression produce_write_quad write_params1
@@ -6241,20 +6259,20 @@ state 269
     (38) write_params1 -> . empty
     (106) empty -> .
 
-    COMMA           shift and go to state 224
+    COMMA           shift and go to state 226
     SEMICOLON       reduce using rule 106 (empty -> .)
 
-    write_params1                  shift and go to state 276
-    empty                          shift and go to state 225
+    write_params1                  shift and go to state 278
+    empty                          shift and go to state 227
 
-state 270
+state 272
 
     (50) condition -> IF LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET ELSE . LBRACKET statements RBRACKET
 
-    LBRACKET        shift and go to state 277
+    LBRACKET        shift and go to state 279
 
 
-state 271
+state 273
 
     (14) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements return SEMICOLON RBRACKET . function_declarations
     (13) function_declarations -> . PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RBRACKET function_declarations
@@ -6265,21 +6283,21 @@ state 271
     PROC            shift and go to state 23
     BEGIN           reduce using rule 106 (empty -> .)
 
-    function_declarations          shift and go to state 278
+    function_declarations          shift and go to state 280
     empty                          shift and go to state 24
 
-state 272
+state 274
 
     (17) return -> RETURN push_operator expression .
     (78) expression -> expression . ADD push_operator expression
     (79) expression -> expression . SUB push_operator expression
 
     SEMICOLON       reduce using rule 17 (return -> RETURN push_operator expression .)
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
 
 
-state 273
+state 275
 
     (103) matrix_access -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET .
 
@@ -6299,32 +6317,32 @@ state 273
     OR              reduce using rule 103 (matrix_access -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET .)
 
 
-state 274
+state 276
 
     (48) matrix_assignment -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET ASSIGN expression .
     (78) expression -> expression . ADD push_operator expression
     (79) expression -> expression . SUB push_operator expression
 
     SEMICOLON       reduce using rule 48 (matrix_assignment -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET ASSIGN expression .)
-    ADD             shift and go to state 180
-    SUB             shift and go to state 181
+    ADD             shift and go to state 182
+    SUB             shift and go to state 183
 
 
-state 275
+state 277
 
     (36) write_params1 -> COMMA write_operator expression produce_write_quad write_params1 .
 
     SEMICOLON       reduce using rule 36 (write_params1 -> COMMA write_operator expression produce_write_quad write_params1 .)
 
 
-state 276
+state 278
 
     (37) write_params1 -> COMMA write_operator const_text produce_write_quad write_params1 .
 
     SEMICOLON       reduce using rule 37 (write_params1 -> COMMA write_operator const_text produce_write_quad write_params1 .)
 
 
-state 277
+state 279
 
     (50) condition -> IF LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET ELSE LBRACKET . statements RBRACKET
     (25) statements -> . write SEMICOLON statements
@@ -6336,7 +6354,7 @@ state 277
     (31) statements -> . special_function_call SEMICOLON statements
     (32) statements -> . empty
     (33) write -> . WRITE write_params0
-    (42) read -> . READ ID
+    (42) read -> . READ push_operator identifier
     (43) var_assignment -> . simple_assignment
     (44) var_assignment -> . array_assignment
     (45) var_assignment -> . matrix_assignment
@@ -6365,25 +6383,25 @@ state 277
 
     WRITE           shift and go to state 82
     READ            shift and go to state 83
-    IF              shift and go to state 87
-    REPEAT          shift and go to state 88
+    IF              shift and go to state 88
+    REPEAT          shift and go to state 89
     ID              shift and go to state 72
-    MEAN            shift and go to state 89
-    MEDIAN          shift and go to state 90
-    MODE            shift and go to state 91
-    STD             shift and go to state 92
-    KURTOSIS        shift and go to state 93
-    PLOT            shift and go to state 94
-    DPLOT           shift and go to state 95
-    VARIANCE        shift and go to state 96
-    SIMMETRY        shift and go to state 97
-    CORRELATION     shift and go to state 98
-    DFREAD          shift and go to state 99
-    HOMERO          shift and go to state 100
-    MARGE           shift and go to state 101
+    MEAN            shift and go to state 90
+    MEDIAN          shift and go to state 91
+    MODE            shift and go to state 92
+    STD             shift and go to state 93
+    KURTOSIS        shift and go to state 94
+    PLOT            shift and go to state 95
+    DPLOT           shift and go to state 96
+    VARIANCE        shift and go to state 97
+    SIMMETRY        shift and go to state 98
+    CORRELATION     shift and go to state 99
+    DFREAD          shift and go to state 100
+    HOMERO          shift and go to state 101
+    MARGE           shift and go to state 102
     RBRACKET        reduce using rule 106 (empty -> .)
 
-    statements                     shift and go to state 279
+    statements                     shift and go to state 281
     write                          shift and go to state 74
     read                           shift and go to state 75
     var_assignment                 shift and go to state 76
@@ -6392,26 +6410,26 @@ state 277
     function_call                  shift and go to state 79
     special_function_call          shift and go to state 80
     empty                          shift and go to state 81
-    simple_assignment              shift and go to state 84
-    array_assignment               shift and go to state 85
-    matrix_assignment              shift and go to state 86
-    identifier                     shift and go to state 102
+    identifier                     shift and go to state 84
+    simple_assignment              shift and go to state 85
+    array_assignment               shift and go to state 86
+    matrix_assignment              shift and go to state 87
 
-state 278
+state 280
 
     (14) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements return SEMICOLON RBRACKET function_declarations .
 
     BEGIN           reduce using rule 14 (function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements return SEMICOLON RBRACKET function_declarations .)
 
 
-state 279
+state 281
 
     (50) condition -> IF LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET ELSE LBRACKET statements . RBRACKET
 
-    RBRACKET        shift and go to state 280
+    RBRACKET        shift and go to state 282
 
 
-state 280
+state 282
 
     (50) condition -> IF LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET ELSE LBRACKET statements RBRACKET .
 
@@ -6420,31 +6438,31 @@ state 280
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for LTHAN in state 233 resolved as shift
-WARNING: shift/reduce conflict for GTHAN in state 233 resolved as shift
-WARNING: shift/reduce conflict for EQUAL in state 233 resolved as shift
-WARNING: shift/reduce conflict for DIFFERENT in state 233 resolved as shift
-WARNING: shift/reduce conflict for ADD in state 238 resolved as shift
-WARNING: shift/reduce conflict for SUB in state 238 resolved as shift
-WARNING: shift/reduce conflict for ADD in state 239 resolved as shift
-WARNING: shift/reduce conflict for SUB in state 239 resolved as shift
-WARNING: shift/reduce conflict for MUL in state 241 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 241 resolved as shift
-WARNING: shift/reduce conflict for MUL in state 242 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 242 resolved as shift
-WARNING: shift/reduce conflict for AND in state 247 resolved as shift
-WARNING: shift/reduce conflict for OR in state 247 resolved as shift
-WARNING: shift/reduce conflict for AND in state 248 resolved as shift
-WARNING: shift/reduce conflict for OR in state 248 resolved as shift
-WARNING: shift/reduce conflict for LTHAN in state 249 resolved as shift
-WARNING: shift/reduce conflict for GTHAN in state 249 resolved as shift
-WARNING: shift/reduce conflict for EQUAL in state 249 resolved as shift
-WARNING: shift/reduce conflict for DIFFERENT in state 249 resolved as shift
-WARNING: shift/reduce conflict for LTHAN in state 250 resolved as shift
-WARNING: shift/reduce conflict for GTHAN in state 250 resolved as shift
-WARNING: shift/reduce conflict for EQUAL in state 250 resolved as shift
-WARNING: shift/reduce conflict for DIFFERENT in state 250 resolved as shift
+WARNING: shift/reduce conflict for LTHAN in state 235 resolved as shift
+WARNING: shift/reduce conflict for GTHAN in state 235 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 235 resolved as shift
+WARNING: shift/reduce conflict for DIFFERENT in state 235 resolved as shift
+WARNING: shift/reduce conflict for ADD in state 240 resolved as shift
+WARNING: shift/reduce conflict for SUB in state 240 resolved as shift
+WARNING: shift/reduce conflict for ADD in state 241 resolved as shift
+WARNING: shift/reduce conflict for SUB in state 241 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 243 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 243 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 244 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 244 resolved as shift
+WARNING: shift/reduce conflict for AND in state 249 resolved as shift
+WARNING: shift/reduce conflict for OR in state 249 resolved as shift
+WARNING: shift/reduce conflict for AND in state 250 resolved as shift
+WARNING: shift/reduce conflict for OR in state 250 resolved as shift
 WARNING: shift/reduce conflict for LTHAN in state 251 resolved as shift
 WARNING: shift/reduce conflict for GTHAN in state 251 resolved as shift
 WARNING: shift/reduce conflict for EQUAL in state 251 resolved as shift
 WARNING: shift/reduce conflict for DIFFERENT in state 251 resolved as shift
+WARNING: shift/reduce conflict for LTHAN in state 252 resolved as shift
+WARNING: shift/reduce conflict for GTHAN in state 252 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 252 resolved as shift
+WARNING: shift/reduce conflict for DIFFERENT in state 252 resolved as shift
+WARNING: shift/reduce conflict for LTHAN in state 253 resolved as shift
+WARNING: shift/reduce conflict for GTHAN in state 253 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 253 resolved as shift
+WARNING: shift/reduce conflict for DIFFERENT in state 253 resolved as shift

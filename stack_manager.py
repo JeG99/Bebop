@@ -58,6 +58,8 @@ class stack_manager():
         self.dump_stacks()
         if level == "return":
             ops = ["return"]
+        elif level == "read":
+            ops = ["read"]
         elif level == "write":
             ops = ["write"]
         elif level == "simple_assignment":
@@ -78,7 +80,11 @@ class stack_manager():
             elif level == "simple_assignment":
                 operand1 = self.pop_operand()
                 operand2 = self.pop_operand()
-                self.quadruples.append([operator, operand1[0], None, operand2[0]])
+                self.quadruples.append(
+                    [operator, operand1[0], None, operand2[0]])
+            elif level == "read":
+                operand1 = self.pop_operand()
+                self.quadruples.append([operator, None, None, operand1[0]])
             elif level == "write":
                 operand1 = self.pop_operand()
                 self.quadruples.append([operator, None, None, operand1[0]])
@@ -86,11 +92,12 @@ class stack_manager():
                 operand1 = self.pop_operand()
                 operand2 = self.pop_operand()
                 res_type = self.sc_instance.type_match(
-                operator, operand1[1], operand2[1])
+                    operator, operand1[1], operand2[1])
                 if res_type != "ERR":
-                    self.quadruples.append([operator, operand1[0], operand2[0], "t" + str(self.temp_counter)])
+                    self.quadruples.append(
+                        [operator, operand1[0], operand2[0], "t" + str(self.temp_counter)])
                     self.push_operand("t" + str(self.temp_counter), res_type)
                     self.temp_counter += 1
                 else:
-                    raise_error(None, "type_mismatch", args=(operator, operand1, operand2))
-
+                    raise_error(None, "type_mismatch", args=(
+                        operator, operand1, operand2))

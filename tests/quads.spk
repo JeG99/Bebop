@@ -22,6 +22,7 @@ procedures:
             var9 = var6 + var7 + 5 + 1 * 9;
             write "hola", 2.7, 3.14, var6 + 2;
             var10 = 2;
+            read var10;
         return var10;
     }
 
