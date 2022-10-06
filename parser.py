@@ -9,7 +9,7 @@ from stack_manager import stack_manager
 from error_handler import raise_error
 
 scope_manager = scope_manager()
-stack_manager = stack_manager()
+stack_manager = stack_manager(scope_manager)
 
 
 def p_routine(p) -> None:
@@ -17,9 +17,9 @@ def p_routine(p) -> None:
     routine : ROUTINE ID SEMICOLON GLOBALS COLON global_scope_init var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON local_scope_init var_declarations INSTRUCTIONS COLON statements RSQBRACKET
     '''
     p[0] = 1
-    stack_manager.finish_instructions()
-    scope_manager.dump_proc_dir()
-    # stack_manager.dump_stacks()
+    # stack_manager.finish_instructions()
+    # scope_manager.dump_proc_dir()
+    stack_manager.dump_stacks()
 
 
 def p_global_scope_init(p) -> None:

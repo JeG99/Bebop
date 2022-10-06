@@ -69,6 +69,19 @@ class scope_manager():
             self.Lf += 1 * var_body["type"] == "float" and self.curr_scope != "global"
             self.proc_dir[self.curr_scope]["var_table"][yacc_production[1]] = var_body
 
+    def temp_augment(self, temp_type: int) -> int:
+        self.Ti += 1 * temp_type == "int"
+        self.Tf += 1 * temp_type == "float"
+        self.Tb += 1 * temp_type == "bool"
+        return self.Ti * (temp_type == "int") + self.Tf * (temp_type == "float") + self.Tb * (temp_type == "bool")
+
+    def get_operand_virtual_direction(self, operand: tuple) -> tuple:
+        if operand[0] in self.constants_table:
+            return self.constants_table[operand[0]], operand[1]
+        elif operand[0] in self.proc_dir[self.curr_scope]["var_table"]:
+            return self.proc_dir[self.curr_scope]["var_table"][operand[0]]["virtual_direction"], operand[1]
+        elif type(operand[0]) == int:
+            return operand
     def get_var_type(self, id: str) -> str:
         if id not in list(self.proc_dir[self.curr_scope]["var_table"]):
             raise_error(None, "undeclared_variable",

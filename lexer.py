@@ -12,7 +12,6 @@ tokens = [
     'RPAREN',
     'COMMA',
     'ASSIGN',
-    'NOT',
     'LTHAN',
     'GTHAN',
     'EQUAL',

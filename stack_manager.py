@@ -1,13 +1,14 @@
 import json
+from webbrowser import open_new_tab
 from semantic_cube import semantic_cube
 from error_handler import raise_error
 
-
 class stack_manager():
-    def __init__(self) -> None:
+    def __init__(self, scope_manager) -> None:
         self.temp_counter = 0
         self.instruction_counter = 0
         self.sc_instance = semantic_cube()
+        self.sm_instance = scope_manager
         self.operator_stack = []
         self.operand_stack = []
         self.type_stack = []
@@ -96,29 +97,33 @@ class stack_manager():
                 else:
                     raise_error(None, "type_mismatch", args=("cond", operand1))
             elif level == "return":
-                operand1 = self.pop_operand()
+                operand1 = self.sm_instance.get_operand_virtual_direction(self.pop_operand())
                 self.quadruples.append([operator, None, None, operand1[0]])
             elif level == "simple_assignment":
-                operand1 = self.pop_operand()
-                operand2 = self.pop_operand()
+                operand1 = self.sm_instance.get_operand_virtual_direction(self.pop_operand())
+                operand2 = self.sm_instance.get_operand_virtual_direction(self.pop_operand())
                 self.quadruples.append(
                     [operator, operand1[0], None, operand2[0]])
             elif level == "read":
-                operand1 = self.pop_operand()
+                operand1 = self.sm_instance.get_operand_virtual_direction(self.pop_operand())
                 self.quadruples.append([operator, None, None, operand1[0]])
             elif level == "write":
                 operand1 = self.pop_operand()
+                if operand1[1] != "text":
+                    operand1 = self.sm_instance.get_operand_virtual_direction(operand1)
                 self.quadruples.append([operator, None, None, operand1[0]])
             else:
-                operand1 = self.pop_operand()
-                operand2 = self.pop_operand()
+                op1, op2 = self.pop_operand(), self.pop_operand()
+                operand1 = self.sm_instance.get_operand_virtual_direction(op1)
+                operand2 = self.sm_instance.get_operand_virtual_direction(op2)
                 res_type = self.sc_instance.type_match(
                     operator, operand1[1], operand2[1])
                 if res_type != "ERR":
+                    temporal = self.sm_instance.temp_augment(res_type)
                     self.quadruples.append(
-                        [operator, operand1[0], operand2[0], "t" + str(self.temp_counter)])
-                    self.push_operand("t" + str(self.temp_counter), res_type)
-                    self.temp_counter += 1
+                        [operator, operand1[0], operand2[0], temporal])
+                    self.push_operand(temporal, res_type)
+                    # self.temp_counter += 1
                 else:
                     raise_error(None, "type_mismatch", args=(
                         operator, operand1, operand2))
