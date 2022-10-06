@@ -1,4 +1,5 @@
 from inspect import stack
+from turtle import goto
 import ply.yacc as yacc
 from lexer import lexer, tokens
 import sys
@@ -16,6 +17,7 @@ def p_routine(p) -> None:
     routine : ROUTINE ID SEMICOLON GLOBALS COLON global_scope_init var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON local_scope_init var_declarations INSTRUCTIONS COLON statements RSQBRACKET
     '''
     p[0] = 1
+    stack_manager.finish_instructions()
     # scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
 
@@ -233,14 +235,14 @@ def p_cond_rparen(p) -> None:
     stack_manager.push_jump(stack_manager.get_current_istruction_pointer() - 1)
 
 
-def p_fill_pending_jump(p):
+def p_fill_pending_jump(p) -> None:
     '''
     fill_pending_jump : 
     '''
     stack_manager.assign_quadruple_jump(
         stack_manager.pop_jump(), stack_manager.get_current_istruction_pointer())
 
-def p_else(p):
+def p_else(p) -> None:
     '''
     else : ELSE
     '''
@@ -254,9 +256,33 @@ def p_else(p):
 
 def p_loop(p) -> None:
     '''
-    loop : REPEAT LPAREN hyper_expression RPAREN LBRACKET statements RBRACKET
+    loop : repeat cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET fill_returning_jump
     '''
 
+def p_repeat(p) -> None:
+    '''
+    repeat : REPEAT
+    '''
+    stack_manager.push_jump(stack_manager.get_current_istruction_pointer())
+
+
+def p_fill_returning_jump(p) -> None:
+    '''
+    fill_returning_jump : 
+    '''
+    stack_manager.push_operator("while_goto")
+    end_jump = stack_manager.pop_jump()
+    stack_manager.produce_quadruple("while_goto")
+    stack_manager.assign_quadruple_jump(end_jump, stack_manager.get_current_istruction_pointer())
+
+
+# def p_while_rparen(p) -> None:
+#     '''
+#     while_rparen : RPAREN
+#     '''
+#     stack_manager.push_operator("gotof")
+#     stack_manager.produce_quadruple("gotof")
+#     stack_manager.push_jump(stack_manager.get_current_istruction_pointer() - 1)
 
 def p_function_call(p) -> None:
     '''

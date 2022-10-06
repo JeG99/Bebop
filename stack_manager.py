@@ -70,10 +70,15 @@ class stack_manager():
         table = [ip + fmt.format(*row) for ip, row in quads.items()]
         print('\n'.join(table))
 
+    def finish_instructions(self) -> None:
+        self.quadruples.append(["END", None, None, None])
+
     def produce_quadruple(self, level: str) -> None:
-        if level == "gotof":
+        if level == "while_goto":
+            ops = ["while_goto"]
+        elif level == "gotof":
             ops = ["gotof"]
-        if level == "goto":
+        elif level == "goto":
             ops = ["goto"]
         elif level == "return":
             ops = ["return"]
@@ -93,7 +98,10 @@ class stack_manager():
             ops = ["*", "/"]
         if self.check_top_operator() in ops:
             operator = self.pop_operator()
-            if level == "goto":
+            if level == "while_goto":
+                return_jump = self.pop_jump()
+                self.quadruples.append([operator, return_jump, None, None])
+            elif level == "goto":
                 self.quadruples.append([operator, None, None, None])
             elif level == "gotof":
                 operand1 = self.pop_operand()
