@@ -25,3 +25,5 @@ def raise_error(p, cause="bad_syntax", **args) -> None:
         elif len(args["args"]) == 2:
             raise Error(
                 f"Semantic error: Statement <{args['args'][0]}> cannot be <{args['args'][1][0]}: {args['args'][1][1]}> (type mismatch)")
+    elif cause == "undefined_function":
+        raise Error(f"Semantic error: Function <{args['args']}> is undefined")

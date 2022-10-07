@@ -69,6 +69,10 @@ class scope_manager():
             self.Lf += 1 * var_body["type"] == "float" and self.curr_scope != "global"
             self.proc_dir[self.curr_scope]["var_table"][yacc_production[1]] = var_body
 
+    def check_function_definition(self, function_name: str) -> None:
+        if function_name not in self.proc_dir:
+            raise_error(None, "undefined_function", args=(function_name))
+
     def temp_augment(self, temp_type: int) -> int:
         self.Ti += 1 * temp_type == "int"
         self.Tf += 1 * temp_type == "float"

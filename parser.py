@@ -17,7 +17,7 @@ def p_routine(p) -> None:
     routine : ROUTINE ID SEMICOLON GLOBALS COLON global_scope_init var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON local_scope_init var_declarations INSTRUCTIONS COLON statements RSQBRACKET
     '''
     p[0] = 1
-    # stack_manager.finish_instructions()
+    stack_manager.finish_instructions()
     # scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
 
@@ -280,8 +280,14 @@ def p_fill_returning_jump(p) -> None:
 
 def p_function_call(p) -> None:
     '''
-    function_call : ID LPAREN call_params0 RPAREN 
+    function_call : ID function_check LPAREN call_params0 RPAREN 
     '''
+
+def p_function_check(p) -> None:
+    '''
+    function_check : 
+    '''
+    scope_manager.check_function_definition(p[-1])
 
 
 def p_call_params0(p) -> None:
@@ -468,7 +474,7 @@ if __name__ == "__main__":
         parser = yacc.yacc()
         code = sys.argv[1]
 
-        if "spk" != code.split(".")[-1]:
+        if "bbp" != code.split(".")[-1]:
             raise_error(p=None, cause="bad_extension")
 
         try:
