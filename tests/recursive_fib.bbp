@@ -1,0 +1,12 @@
+routine rec_fib;
+
+procedures:
+    proc func(): void {
+        instructions:
+            write "I'm a void function";
+    }
+
+begin: [
+    instructions:
+        write "Hello, World";
+]

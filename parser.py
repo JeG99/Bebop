@@ -1,5 +1,3 @@
-from inspect import stack
-from turtle import goto
 import ply.yacc as yacc
 from lexer import lexer, tokens
 import sys
@@ -14,17 +12,34 @@ stack_manager = stack_manager(scope_manager)
 
 def p_routine(p) -> None:
     '''
-    routine : ROUTINE ID SEMICOLON GLOBALS COLON global_scope_init var_declarations PROCEDURES COLON function_declarations BEGIN COLON LSQBRACKET LOCALS COLON local_scope_init var_declarations INSTRUCTIONS COLON statements RSQBRACKET
+    routine : ROUTINE ID SEMICOLON global_scope_init global_vars_block function_block BEGIN COLON LSQBRACKET local_scope_init local_vars_block instructions_block RSQBRACKET
     '''
     p[0] = 1
     stack_manager.finish_instructions()
     # scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
 
+def p_global_vars_block(p) -> None:
+    '''
+    global_vars_block : GLOBALS COLON var_declarations
+                      | empty
+    '''
+
+def p_local_vars_block(p) -> None:
+    '''
+    local_vars_block : LOCALS COLON var_declarations
+                     | empty
+    '''
+
+def p_instructions_block(p) -> None:
+    '''
+    instructions_block : INSTRUCTIONS COLON statements
+                       | empty
+    '''
 
 def p_global_scope_init(p) -> None:
     '''
-    global_scope_init :
+    global_scope_init : 
     '''
     scope_manager.context_change("global")
 
@@ -34,7 +49,6 @@ def p_local_scope_init(p) -> None:
     local_scope_init : 
     '''
     scope_manager.context_change("local")
-
 
 def p_var_declarations(p) -> None:
     '''
@@ -73,11 +87,16 @@ def p_var_type(p) -> None:
     '''
     p[0] = p[1]
 
+def p_function_block(p) -> None:
+    '''
+    function_block : PROCEDURES COLON function_declarations
+                   | empty
+    '''
 
 def p_function_declarations(p) -> None:
     '''
-    function_declarations : PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements RBRACKET function_declarations
-                          | PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET LOCALS COLON var_declarations INSTRUCTIONS COLON statements return SEMICOLON RBRACKET function_declarations
+    function_declarations : PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID LBRACKET local_vars_block instructions_block RBRACKET function_declarations
+                          | PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET local_vars_block instructions_block return SEMICOLON RBRACKET function_declarations
                           | empty
     '''
 
@@ -99,7 +118,6 @@ def p_return(p) -> None:
 def p_func_type(p) -> None:
     '''
     func_type : type
-              | VOID
     '''
 
 
