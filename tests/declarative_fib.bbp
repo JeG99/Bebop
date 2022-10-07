@@ -2,23 +2,22 @@ routine dec_fib;
 
 procedures:
     proc fib (num: int): int {
-		    locals:
-				var n: int;
-				var m: int;
-				var o: int;
+	    locals:				
+            var n: int;
+			var m: int;
+			var o: int;
 		
-		    instructions:
-				n = 1;
-				m = 0;
+		instructions:
+			n = 1;
+			m = 0;
+			repeat (num > 0) {
+                o = num;
+				n = n + m;
+				m = o;
+				num = num - 1;
+			}
 
-				repeat (num > 0) {
-					o = num;
-					n = n + m;
-					m = o;
-					num = num - 1;
-				}
-
-		    return m; 
+        return m; 
     }
 
 begin: [
