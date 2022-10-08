@@ -6,7 +6,7 @@ procedures:
             var n: int;
 			var m: int;
 			var o: int;
-		
+
 		instructions:
 			n = 1;
 			m = 0;
