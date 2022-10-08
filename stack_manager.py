@@ -67,6 +67,8 @@ class stack_manager():
             ops = ["while_goto"]
         elif level == "gotof":
             ops = ["gotof"]
+        elif level == "endfunc":
+            ops = ["endfunc"]
         elif level == "goto":
             ops = ["goto"]
         elif level == "return":
@@ -90,6 +92,8 @@ class stack_manager():
             if level == "while_goto":
                 return_jump = self.pop_jump()
                 self.quadruples.append([operator, return_jump, None, None])
+            elif level == "endfunc":
+                self.quadruples.append([operator, None, None, None])
             elif level == "goto":
                 self.quadruples.append([operator, None, None, None])
             elif level == "gotof":
@@ -130,7 +134,6 @@ class stack_manager():
                     self.quadruples.append(
                         [operator, operand1[0], operand2[0], temporal])
                     self.push_operand(temporal, res_type)
-                    # self.temp_counter += 1
                 else:
                     raise_error(None, "type_mismatch", args=(
                         operator, operand1, operand2))

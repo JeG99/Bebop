@@ -16,7 +16,7 @@ def p_routine(p) -> None:
     '''
     p[0] = 1
     stack_manager.finish_instructions()
-    # scope_manager.dump_proc_dir()
+    scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
 
 
@@ -68,21 +68,21 @@ def p_simple_declaration(p) -> None:
     '''
     simple_declaration : ID COLON var_type SEMICOLON 
     '''
-    scope_manager.store_variable(p, "simple")
+    scope_manager.store_variable(p, "simple", False)
 
 
 def p_array_declaration(p) -> None:
     '''
     array_declaration : ID LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON 
     '''
-    scope_manager.store_variable(p, "array")
+    scope_manager.store_variable(p, "array", False)
 
 
 def p_matrix_declaration(p) -> None:
     '''
     matrix_declaration : ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON
     '''
-    scope_manager.store_variable(p, "matrix")
+    scope_manager.store_variable(p, "matrix", False)
 
 
 def p_var_type(p) -> None:
@@ -102,17 +102,40 @@ def p_function_block(p) -> None:
 
 def p_function_declarations(p) -> None:
     '''
-    function_declarations : PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID LBRACKET local_vars_block instructions_block RBRACKET function_declarations
-                          | PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type LBRACKET local_vars_block instructions_block return SEMICOLON RBRACKET function_declarations
+    function_declarations : PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
+                          | PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return SEMICOLON function_rbracket function_declarations
                           | empty
     '''
+
+
+def p_function_rbracket(p) -> None:
+    '''
+    function_rbracket : RBRACKET
+    '''
+    stack_manager.push_operator("endfunc")
+    stack_manager.produce_quadruple("endfunc")
 
 
 def p_proc_scope_init(p) -> None:
     '''
     proc_scope_init : 
     '''
+    scope_manager.check_function_definition(p[-1])
     scope_manager.context_change(p[-1])
+
+
+def p_store_curr_ip(p) -> None:
+    '''
+    store_curr_ip : 
+    '''
+    scope_manager.store_proc_ip(stack_manager.get_current_istruction_pointer())
+
+
+def p_set_return_type(p) -> None:
+    '''
+    set_return_type : 
+    '''
+    scope_manager.set_return_type(p[-1])
 
 
 def p_return(p) -> None:
@@ -126,6 +149,7 @@ def p_func_type(p) -> None:
     '''
     func_type : type
     '''
+    p[0] = p[1]
 
 
 def p_params0(p) -> None:
@@ -146,7 +170,7 @@ def p_param(p) -> None:
     '''
     param : ID COLON type
     '''
-    scope_manager.store_variable(p, "simple")
+    scope_manager.store_variable(p, "simple", True)
 
 
 def p_statements(p) -> None:
@@ -306,15 +330,15 @@ def p_fill_returning_jump(p) -> None:
 
 def p_function_call(p) -> None:
     '''
-    function_call : ID function_check LPAREN call_params0 RPAREN 
+    function_call : ID function_call_check LPAREN call_params0 RPAREN 
     '''
 
 
-def p_function_check(p) -> None:
+def p_function_call_check(p) -> None:
     '''
-    function_check : 
+    function_call_check : 
     '''
-    scope_manager.check_function_definition(p[-1])
+    scope_manager.check_function_call(p[-1])
 
 
 def p_call_params0(p) -> None:
