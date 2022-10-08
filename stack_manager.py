@@ -1,7 +1,8 @@
-import json
-from webbrowser import open_new_tab
+import math
+
 from semantic_cube import semantic_cube
 from error_handler import raise_error
+
 
 class stack_manager():
     def __init__(self, scope_manager) -> None:
@@ -53,7 +54,8 @@ class stack_manager():
              for row in self.quadruples]
         lens = [max(map(len, col)) for col in zip(*s)]
         fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
-        quads = dict(zip([str(i) + " ==> " for i in range(len(s))], s))
+        quads = dict(zip(['{:{width}d}'.format(i, width=int(
+            math.log10(len(s)))+1) + " ==> " for i in range(len(s))], s))
         table = [ip + fmt.format(*row) for ip, row in quads.items()]
         print('\n'.join(table))
 
@@ -97,20 +99,25 @@ class stack_manager():
                 else:
                     raise_error(None, "type_mismatch", args=("cond", operand1))
             elif level == "return":
-                operand1 = self.sm_instance.get_operand_virtual_direction(self.pop_operand())
+                operand1 = self.sm_instance.get_operand_virtual_direction(
+                    self.pop_operand())
                 self.quadruples.append([operator, None, None, operand1[0]])
             elif level == "simple_assignment":
-                operand1 = self.sm_instance.get_operand_virtual_direction(self.pop_operand())
-                operand2 = self.sm_instance.get_operand_virtual_direction(self.pop_operand())
+                operand1 = self.sm_instance.get_operand_virtual_direction(
+                    self.pop_operand())
+                operand2 = self.sm_instance.get_operand_virtual_direction(
+                    self.pop_operand())
                 self.quadruples.append(
                     [operator, operand1[0], None, operand2[0]])
             elif level == "read":
-                operand1 = self.sm_instance.get_operand_virtual_direction(self.pop_operand())
+                operand1 = self.sm_instance.get_operand_virtual_direction(
+                    self.pop_operand())
                 self.quadruples.append([operator, None, None, operand1[0]])
             elif level == "write":
                 operand1 = self.pop_operand()
                 if operand1[1] != "text":
-                    operand1 = self.sm_instance.get_operand_virtual_direction(operand1)
+                    operand1 = self.sm_instance.get_operand_virtual_direction(
+                        operand1)
                 self.quadruples.append([operator, None, None, operand1[0]])
             else:
                 op1, op2 = self.pop_operand(), self.pop_operand()

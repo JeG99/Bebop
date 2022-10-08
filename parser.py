@@ -1,7 +1,7 @@
 import ply.yacc as yacc
-from lexer import lexer, tokens
 import sys
 
+from lexer import lexer, tokens
 from scope_manager import scope_manager
 from stack_manager import stack_manager
 from error_handler import raise_error
@@ -19,11 +19,13 @@ def p_routine(p) -> None:
     # scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
 
+
 def p_global_vars_block(p) -> None:
     '''
     global_vars_block : GLOBALS COLON var_declarations
                       | empty
     '''
+
 
 def p_local_vars_block(p) -> None:
     '''
@@ -31,11 +33,13 @@ def p_local_vars_block(p) -> None:
                      | empty
     '''
 
+
 def p_instructions_block(p) -> None:
     '''
     instructions_block : INSTRUCTIONS COLON statements
                        | empty
     '''
+
 
 def p_global_scope_init(p) -> None:
     '''
@@ -49,6 +53,7 @@ def p_local_scope_init(p) -> None:
     local_scope_init : 
     '''
     scope_manager.context_change("local")
+
 
 def p_var_declarations(p) -> None:
     '''
@@ -87,11 +92,13 @@ def p_var_type(p) -> None:
     '''
     p[0] = p[1]
 
+
 def p_function_block(p) -> None:
     '''
     function_block : PROCEDURES COLON function_declarations
                    | empty
     '''
+
 
 def p_function_declarations(p) -> None:
     '''
@@ -296,10 +303,12 @@ def p_fill_returning_jump(p) -> None:
     stack_manager.assign_quadruple_jump(
         end_jump, stack_manager.get_current_istruction_pointer())
 
+
 def p_function_call(p) -> None:
     '''
     function_call : ID function_check LPAREN call_params0 RPAREN 
     '''
+
 
 def p_function_check(p) -> None:
     '''
@@ -484,8 +493,10 @@ def p_empty(p) -> None:
     empty : 
     '''
 
+
 def p_error(p) -> None:
     raise_error(p)
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
