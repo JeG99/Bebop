@@ -483,8 +483,9 @@ def p_empty(p) -> None:
     '''
     empty : 
     '''
-    pass
 
+def p_error(p) -> None:
+    raise_error(p)
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

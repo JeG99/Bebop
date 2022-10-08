@@ -16,8 +16,7 @@ procedures:
 				m = o;
 				num = num - 1;
 			}
-
-        return m; 
+	    return m; 
     }
 
 begin: [
