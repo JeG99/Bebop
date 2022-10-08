@@ -1,8 +1,9 @@
 routine dec_fib;
 
 procedures:
+
     proc fib (num: int): int {
-	    locals:				
+	    locals:
             var n: int;
 			var m: int;
 			var o: int;
@@ -16,10 +17,12 @@ procedures:
 				m = o;
 				num = num - 1;
 			}
-	    return m; 
+	    return m;
     }
+
+	proc voidfunc(): void {}
 
 begin: [
     instructions:
-        write fib(4);
+        write voidfunc();
 ]

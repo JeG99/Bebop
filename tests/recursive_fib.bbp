@@ -9,4 +9,5 @@ procedures:
 begin: [
     instructions:
         write "Hello, World";
+        func();
 ]

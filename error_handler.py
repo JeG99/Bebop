@@ -26,6 +26,13 @@ def raise_error(p, cause="bad_syntax", **args) -> None:
             raise Error(
                 f"Semantic error: Statement <{args['args'][0]}> cannot be <{args['args'][1][0]}: {args['args'][1][1]}> (type mismatch)")
     elif cause == "function_declaration":
-        raise Error(f"Semantic error: Function <{args['args']}> already declared")
+        raise Error(
+            f"Semantic error: Function <{args['args']}> already declared")
     elif cause == "undefined_function":
         raise Error(f"Semantic error: Function <{args['args']}> is undefined")
+    elif cause == "param_type_mismatch":
+        raise Error(
+            f"Semantic error: Parameter in <{args['args'][0]}> <{args['args'][1]}> expected <{args['args'][2]}> expression, found <{args['args'][3]}> instead")
+    elif cause == "param_count":
+        raise Error(
+            f"Semantic error: Procedure <{args['args'][0]}> takes exactly <{args['args'][1]}> arguments, found <{args['args'][2]}> instead")

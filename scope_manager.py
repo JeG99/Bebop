@@ -1,4 +1,5 @@
 import json
+from subprocess import call
 
 from error_handler import raise_error
 
@@ -22,6 +23,9 @@ class scope_manager():
         # Pointer Address
         self.tp = 9000
 
+        self.curr_executing_procedure = ""
+        self.curr_executing_procedure_type = ""
+        self.call_param_count = 0
         self.constants_table = {}
         self.proc_dir = {}
         self.curr_scope = ""
@@ -47,8 +51,57 @@ class scope_manager():
         self.li = 2000
         self.lf = 3000
 
+    def define_return_global_var(self) -> None:
+        var_body = {
+            "type": self.proc_dir[self.curr_scope]["return_type"],
+            "indexed": False
+        }
+        var_body["virtual_direction"] = self.gi * \
+            (var_body["type"] == "int") + \
+            self.gf * (var_body["type"] == "float")
+        self.gi += 1 * var_body["type"] == "int"
+        self.gf += 1 * var_body["type"] == "float"
+        self.proc_dir['global']['var_table'][self.curr_scope] = var_body
+
+    def set_curr_procedure_call(self, call_id: str) -> None:
+        self.curr_executing_procedure = call_id
+        self.curr_executing_procedure_type = self.proc_dir[call_id]['return_type']
+
+    def get_curr_procedure_call(self) -> str:
+        return self.curr_executing_procedure, self.proc_dir[self.curr_executing_procedure]["return_type"], self.proc_dir[self.curr_executing_procedure]["initial_instruction_pointer"]
+
+    def reset_curr_procedure_call(self) -> None:
+        self.curr_executing_procedure = ""
+        self.curr_executing_procedure_type = ""
+
+    def validate_param_type(self, call_param_type: str) -> None:
+        param_name = list(self.proc_dir[self.curr_executing_procedure]["param_table"])[
+            self.call_param_count - 1]
+        defined_param_type = self.proc_dir[self.curr_executing_procedure]["param_table"][param_name]["type"]
+        if defined_param_type != call_param_type:
+            raise_error(None, "param_type_mismatch", args=(
+                self.curr_executing_procedure, param_name, defined_param_type, call_param_type))
+
+    def validate_call_param_count(self) -> None:
+        defined_param_count = self.proc_dir[self.curr_executing_procedure]["param_count"]
+        if defined_param_count != self.call_param_count:
+            raise_error(None, "param_count", args=(
+                self.curr_executing_procedure, defined_param_count, self.call_param_count))
+
+    def augment_call_param_count(self) -> None:
+        self.call_param_count += 1
+
+    def reset_call_param_count(self) -> None:
+        self.call_param_count = 0
+
+    def get_call_param_count(self) -> int:
+        return self.call_param_count
+
     def set_return_type(self, return_type: str) -> None:
         self.proc_dir[self.curr_scope]["return_type"] = return_type
+
+    def get_current_scope(self) -> tuple:
+        return self.curr_scope, self.proc_dir[self.curr_scope]["return_type"]
 
     def store_variable(self, yacc_production, var_kind: str, is_param: bool) -> None:
         if yacc_production[1] in list(self.proc_dir[self.curr_scope]["var_table"]):
@@ -95,6 +148,9 @@ class scope_manager():
                 self.proc_dir[self.curr_scope]["param_count"] += 1
                 self.proc_dir[self.curr_scope]["param_table"][yacc_production[1]] = var_body
 
+    def get_function_size(self, id: str) -> None:
+        return (self.proc_dir[id]["li"], self.proc_dir[id]["lf"], self.proc_dir[id]["ti"], self.proc_dir[id]["tf"], self.proc_dir[id]["tb"])
+
     def store_proc_ip(self, ip: int) -> None:
         self.proc_dir[self.curr_scope]["initial_instruction_pointer"] = ip
 
@@ -121,15 +177,19 @@ class scope_manager():
             return self.constants_table[operand[0]], operand[1]
         elif operand[0] in self.proc_dir[self.curr_scope]["var_table"]:
             return self.proc_dir[self.curr_scope]["var_table"][operand[0]]["virtual_direction"], operand[1]
+        elif operand[0] in self.proc_dir["global"]["var_table"]:
+            return self.proc_dir["global"]["var_table"][operand[0]]["virtual_direction"], operand[1]
         elif type(operand[0]) == int:
             return operand
 
     def get_var_type(self, id: str) -> str:
-        if id not in list(self.proc_dir[self.curr_scope]["var_table"]):
+        if id in list(self.proc_dir[self.curr_scope]["var_table"]):
+            return self.proc_dir[self.curr_scope]["var_table"][id]["type"]
+        elif id in list(self.proc_dir["global"]["var_table"]):
+            return self.proc_dir["global"]["var_table"][id]["type"]
+        else:
             raise_error(None, "undeclared_variable",
                         args=(id, self.curr_scope))
-        else:
-            return self.proc_dir[self.curr_scope]["var_table"][id]["type"]
 
     def dump_proc_dir(self) -> None:
         print("Constants table:", json.dumps(self.constants_table, indent=4))

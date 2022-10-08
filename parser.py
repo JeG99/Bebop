@@ -12,11 +12,11 @@ stack_manager = stack_manager(scope_manager)
 
 def p_routine(p) -> None:
     '''
-    routine : ROUTINE ID SEMICOLON global_scope_init global_vars_block function_block BEGIN COLON LSQBRACKET local_scope_init local_vars_block instructions_block RSQBRACKET
+    routine : ROUTINE ID SEMICOLON global_scope_init global_vars_block instructions_block function_block BEGIN COLON LSQBRACKET local_scope_init local_vars_block instructions_block RSQBRACKET
     '''
     p[0] = 1
     stack_manager.finish_instructions()
-    scope_manager.dump_proc_dir()
+    # scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
 
 
@@ -103,7 +103,7 @@ def p_function_block(p) -> None:
 def p_function_declarations(p) -> None:
     '''
     function_declarations : PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
-                          | PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return SEMICOLON function_rbracket function_declarations
+                          | PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return expression return_semicolon function_rbracket function_declarations
                           | empty
     '''
 
@@ -114,6 +114,7 @@ def p_function_rbracket(p) -> None:
     '''
     stack_manager.push_operator("endfunc")
     stack_manager.produce_quadruple("endfunc")
+    scope_manager.reset_curr_procedure_call()
 
 
 def p_proc_scope_init(p) -> None:
@@ -136,11 +137,21 @@ def p_set_return_type(p) -> None:
     set_return_type : 
     '''
     scope_manager.set_return_type(p[-1])
+    scope_manager.define_return_global_var()
 
 
 def p_return(p) -> None:
     '''
-    return : RETURN push_operator expression
+    return : RETURN
+    '''
+    stack_manager.push_operator("return")
+    procedure = scope_manager.get_current_scope()
+    stack_manager.push_operand(procedure[0], procedure[1])
+
+
+def p_return_semicolon(p) -> None:
+    '''
+    return_semicolon : SEMICOLON
     '''
     stack_manager.produce_quadruple("return")
 
@@ -330,7 +341,7 @@ def p_fill_returning_jump(p) -> None:
 
 def p_function_call(p) -> None:
     '''
-    function_call : ID function_call_check LPAREN call_params0 RPAREN 
+    function_call : ID function_call_check function_call_lparen call_params0 function_call_rparen 
     '''
 
 
@@ -339,20 +350,53 @@ def p_function_call_check(p) -> None:
     function_call_check : 
     '''
     scope_manager.check_function_call(p[-1])
+    scope_manager.set_curr_procedure_call(p[-1])
+    return_global_var = scope_manager.get_curr_procedure_call()
+    stack_manager.push_operand(return_global_var[0], return_global_var[1])
+    stack_manager.push_operand(scope_manager.get_function_size(p[-1]), None)
+
+
+def p_function_call_lparen(p):
+    '''
+    function_call_lparen : LPAREN
+    '''
+    stack_manager.push_operator("era")
+    stack_manager.produce_quadruple("era")
+    stack_manager.push_operator("(")
+
+
+def p_function_call_rparen(p):
+    '''
+    function_call_rparen : RPAREN
+    '''
+    scope_manager.validate_call_param_count()
+    stack_manager.push_operator("gosub")
+    stack_manager.produce_quadruple("gosub")
+    stack_manager.pop_operator()
+    scope_manager.reset_call_param_count()
 
 
 def p_call_params0(p) -> None:
     '''
-    call_params0 : expression call_params1
+    call_params0 : hyper_expression handle_call_param call_params1
                  | empty
     '''
 
 
 def p_call_params1(p) -> None:
     '''
-    call_params1 : COMMA expression call_params1
+    call_params1 : COMMA hyper_expression handle_call_param call_params1
                  | empty
     '''
+
+
+def p_handle_call_param(p) -> None:
+    '''
+    handle_call_param : 
+    '''
+    scope_manager.augment_call_param_count()
+    stack_manager.push_operator("param")
+    stack_manager.produce_quadruple("param")
 
 
 def p_special_function_call(p) -> None:
