@@ -20,9 +20,7 @@ procedures:
 	    return m;
     }
 
-	proc voidfunc(): void {}
-
 begin: [
     instructions:
-        write voidfunc();
+        write fib(4);
 ]
