@@ -30,6 +30,21 @@ class scope_manager():
         self.proc_dir = {}
         self.curr_scope = ""
 
+    def get_initial_dirs(self) -> list:
+        return [
+            self.gi, self.gf,
+            self.li, self.lf,
+            self.ti, self.tf, self.tb,
+            self.ci, self.cf,
+            self.tp
+        ]
+
+    def get_const_table(self) -> dict:
+        return self.constants_table
+
+    def get_proc_dir(self) -> dict:
+        return self.proc_dir
+
     def push_constant(self, const: str, type: str) -> None:
         if const not in self.constants_table:
             self.constants_table[const] = self.ci * \

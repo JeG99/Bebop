@@ -4,10 +4,13 @@ import sys
 from lexer import lexer, tokens
 from scope_manager import scope_manager
 from stack_manager import stack_manager
+from memory_manager import memory_manager
 from error_handler import raise_error
 
 scope_manager = scope_manager()
+initial_dirs = scope_manager.get_initial_dirs()
 stack_manager = stack_manager(scope_manager)
+memory_manager = memory_manager()
 
 
 def p_routine(p) -> None:
@@ -16,8 +19,9 @@ def p_routine(p) -> None:
     '''
     p[0] = 1
     stack_manager.finish_instructions()
-    # scope_manager.dump_proc_dir()
+    scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
+    memory_manager.mem_init(scope_manager.get_const_table(), scope_manager.get_proc_dir())
 
 
 def p_global_vars_block(p) -> None:
