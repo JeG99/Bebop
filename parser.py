@@ -15,7 +15,7 @@ memory_manager = memory_manager()
 
 def p_routine(p) -> None:
     '''
-    routine : ROUTINE ID SEMICOLON global_scope_init global_vars_block instructions_block function_block BEGIN COLON LSQBRACKET local_scope_init local_vars_block instructions_block RSQBRACKET
+    routine : routine_init ID SEMICOLON global_scope_init global_vars_block instructions_block function_block BEGIN COLON LSQBRACKET local_scope_init local_vars_block fill_main_jump instructions_block RSQBRACKET
     '''
     p[0] = 1
     stack_manager.finish_instructions()
@@ -23,6 +23,17 @@ def p_routine(p) -> None:
     stack_manager.dump_stacks()
     memory_manager.mem_init(scope_manager.get_const_table(), scope_manager.get_proc_dir())
 
+def p_routine_init(p) -> None:
+    '''
+    routine_init : ROUTINE
+    '''
+    stack_manager.start_instructions()
+
+def p_fill_main_jump(p) -> None:
+    '''
+    fill_main_jump : 
+    '''
+    stack_manager.fill_main_jump()
 
 def p_global_vars_block(p) -> None:
     '''

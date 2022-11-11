@@ -16,6 +16,9 @@ class stack_manager():
         self.jump_stack = []
         self.quadruples = []
 
+    def fill_main_jump(self) -> None:
+        self.quadruples[0][3] = self.instruction_counter
+
     def push_operand(self, operand: str, type: str) -> None:
         self.operand_stack.append(operand)
         self.type_stack.append(type)
@@ -59,8 +62,12 @@ class stack_manager():
         table = [ip + fmt.format(*row) for ip, row in quads.items()]
         print('\n'.join(table))
 
+    def start_instructions(self) -> None:
+        self.quadruples.append(["goto", None, None, None])
+        self.instruction_counter += 1
+
     def finish_instructions(self) -> None:
-        self.quadruples.append(["END", None, None, None])
+        self.quadruples.append(["end", None, None, None])
 
     def produce_quadruple(self, level: str) -> None:
         if level == "gosub":
