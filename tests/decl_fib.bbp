@@ -1,0 +1,21 @@
+routine dec_fib;
+
+begin: [
+	locals:
+		var num: int;
+		var n: int;
+		var m: int;
+		var o: int;
+
+	instructions:
+		num = 7; 
+		n = 1;
+		m = 0;
+		repeat (num > 0) {
+			o = n;
+			n = n + m;
+			m = o;
+			num = num - 1;
+		}
+		write "Fib(7) = ", m;
+]

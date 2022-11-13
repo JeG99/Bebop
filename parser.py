@@ -445,7 +445,7 @@ def p_super_expression(p) -> None:
     super_expression : super_expression LTHAN push_operator super_expression
                      | super_expression GTHAN push_operator super_expression
                      | super_expression EQUAL push_operator super_expression
-                     | super_expression DIFFERENT super_expression
+                     | super_expression DIFFERENT push_operator super_expression
                      | expression produce_superexp_quad
     '''
 

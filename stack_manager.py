@@ -102,6 +102,7 @@ class stack_manager():
             ops = ["*", "/"]
         if self.check_top_operator() in ops:
             operator = self.pop_operator()
+            print(operator)
             if level == "gosub":
                 procedure = self.sm_instance.get_curr_procedure_call()
                 self.quadruples.append(

@@ -105,7 +105,7 @@ Rule 95    hyper_expression -> super_expression produce_hyperexp_quad
 Rule 96    super_expression -> super_expression LTHAN push_operator super_expression
 Rule 97    super_expression -> super_expression GTHAN push_operator super_expression
 Rule 98    super_expression -> super_expression EQUAL push_operator super_expression
-Rule 99    super_expression -> super_expression DIFFERENT super_expression
+Rule 99    super_expression -> super_expression DIFFERENT push_operator super_expression
 Rule 100   super_expression -> expression produce_superexp_quad
 Rule 101   expression -> expression ADD push_operator expression
 Rule 102   expression -> expression SUB push_operator expression
@@ -248,7 +248,7 @@ produce_superexp_quad : 100
 produce_term_quad    : 106
 produce_write_quad   : 47 48 49 50
 push_cap             : 115
-push_operator        : 55 59 93 94 96 97 98 101 102 104 105
+push_operator        : 55 59 93 94 96 97 98 99 101 102 104 105
 read                 : 39
 repeat               : 68
 return               : 24
@@ -1649,7 +1649,7 @@ state 74
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -1748,7 +1748,7 @@ state 76
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -1903,7 +1903,7 @@ state 79
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -1985,7 +1985,7 @@ state 80
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -2067,7 +2067,7 @@ state 81
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -2149,7 +2149,7 @@ state 82
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -2231,7 +2231,7 @@ state 83
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -2313,7 +2313,7 @@ state 84
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -2395,7 +2395,7 @@ state 85
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -2477,7 +2477,7 @@ state 86
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -2559,7 +2559,7 @@ state 87
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -2641,7 +2641,7 @@ state 88
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -3263,7 +3263,7 @@ state 122
     (96) super_expression -> super_expression . LTHAN push_operator super_expression
     (97) super_expression -> super_expression . GTHAN push_operator super_expression
     (98) super_expression -> super_expression . EQUAL push_operator super_expression
-    (99) super_expression -> super_expression . DIFFERENT super_expression
+    (99) super_expression -> super_expression . DIFFERENT push_operator super_expression
     (108) produce_hyperexp_quad -> .
 
     LTHAN           shift and go to state 165
@@ -3322,7 +3322,7 @@ state 125
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -4059,75 +4059,28 @@ state 167
 
 state 168
 
-    (99) super_expression -> super_expression DIFFERENT . super_expression
-    (96) super_expression -> . super_expression LTHAN push_operator super_expression
-    (97) super_expression -> . super_expression GTHAN push_operator super_expression
-    (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
-    (100) super_expression -> . expression produce_superexp_quad
-    (101) expression -> . expression ADD push_operator expression
-    (102) expression -> . expression SUB push_operator expression
-    (103) expression -> . term produce_exp_quad
-    (104) term -> . term MUL push_operator term
-    (105) term -> . term DIV push_operator term
-    (106) term -> . factor produce_term_quad
-    (112) factor -> . identifier
-    (113) factor -> . const_int
-    (114) factor -> . const_float
-    (115) factor -> . LPAREN push_cap expression RPAREN pop_cap
-    (116) factor -> . array_access
-    (117) factor -> . matrix_access
-    (118) factor -> . function_call
-    (119) factor -> . special_function_call
-    (120) identifier -> . ID
-    (121) const_int -> . CONST_INT
-    (122) const_float -> . CONST_FLOAT
-    (125) array_access -> . ID LSQBRACKET expression RSQBRACKET
-    (126) matrix_access -> . ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET
-    (71) function_call -> . ID function_call_check function_call_lparen call_params0 function_call_rparen
-    (80) special_function_call -> . MEAN LPAREN call_params0 RPAREN
-    (81) special_function_call -> . MEDIAN LPAREN call_params0 RPAREN
-    (82) special_function_call -> . MODE LPAREN call_params0 RPAREN
-    (83) special_function_call -> . STD LPAREN call_params0 RPAREN
-    (84) special_function_call -> . KURTOSIS LPAREN call_params0 RPAREN
-    (85) special_function_call -> . PLOT LPAREN call_params0 RPAREN
-    (86) special_function_call -> . DPLOT LPAREN call_params0 RPAREN
-    (87) special_function_call -> . VARIANCE LPAREN call_params0 RPAREN
-    (88) special_function_call -> . SIMMETRY LPAREN call_params0 RPAREN
-    (89) special_function_call -> . CORRELATION LPAREN call_params0 RPAREN
-    (90) special_function_call -> . DFREAD LPAREN CONST_TEXT RPAREN
-    (91) special_function_call -> . HOMERO
-    (92) special_function_call -> . MARGE
+    (99) super_expression -> super_expression DIFFERENT . push_operator super_expression
+    (107) push_operator -> .
 
-    LPAREN          shift and go to state 110
-    ID              shift and go to state 115
-    CONST_INT       shift and go to state 116
-    CONST_FLOAT     shift and go to state 117
-    MEAN            shift and go to state 41
-    MEDIAN          shift and go to state 42
-    MODE            shift and go to state 43
-    STD             shift and go to state 44
-    KURTOSIS        shift and go to state 45
-    PLOT            shift and go to state 46
-    DPLOT           shift and go to state 47
-    VARIANCE        shift and go to state 48
-    SIMMETRY        shift and go to state 49
-    CORRELATION     shift and go to state 50
-    DFREAD          shift and go to state 51
-    HOMERO          shift and go to state 52
-    MARGE           shift and go to state 53
+    LPAREN          reduce using rule 107 (push_operator -> .)
+    ID              reduce using rule 107 (push_operator -> .)
+    CONST_INT       reduce using rule 107 (push_operator -> .)
+    CONST_FLOAT     reduce using rule 107 (push_operator -> .)
+    MEAN            reduce using rule 107 (push_operator -> .)
+    MEDIAN          reduce using rule 107 (push_operator -> .)
+    MODE            reduce using rule 107 (push_operator -> .)
+    STD             reduce using rule 107 (push_operator -> .)
+    KURTOSIS        reduce using rule 107 (push_operator -> .)
+    PLOT            reduce using rule 107 (push_operator -> .)
+    DPLOT           reduce using rule 107 (push_operator -> .)
+    VARIANCE        reduce using rule 107 (push_operator -> .)
+    SIMMETRY        reduce using rule 107 (push_operator -> .)
+    CORRELATION     reduce using rule 107 (push_operator -> .)
+    DFREAD          reduce using rule 107 (push_operator -> .)
+    HOMERO          reduce using rule 107 (push_operator -> .)
+    MARGE           reduce using rule 107 (push_operator -> .)
 
-    super_expression               shift and go to state 207
-    expression                     shift and go to state 123
-    term                           shift and go to state 104
-    factor                         shift and go to state 106
-    identifier                     shift and go to state 107
-    const_int                      shift and go to state 108
-    const_float                    shift and go to state 109
-    array_access                   shift and go to state 111
-    matrix_access                  shift and go to state 112
-    function_call                  shift and go to state 113
-    special_function_call          shift and go to state 114
+    push_operator                  shift and go to state 207
 
 state 169
 
@@ -4878,7 +4831,7 @@ state 202
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -4954,7 +4907,7 @@ state 203
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -5027,7 +4980,7 @@ state 204
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -5099,7 +5052,7 @@ state 205
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -5171,7 +5124,7 @@ state 206
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -5239,30 +5192,75 @@ state 206
 
 state 207
 
-    (99) super_expression -> super_expression DIFFERENT super_expression .
-    (96) super_expression -> super_expression . LTHAN push_operator super_expression
-    (97) super_expression -> super_expression . GTHAN push_operator super_expression
-    (98) super_expression -> super_expression . EQUAL push_operator super_expression
-    (99) super_expression -> super_expression . DIFFERENT super_expression
+    (99) super_expression -> super_expression DIFFERENT push_operator . super_expression
+    (96) super_expression -> . super_expression LTHAN push_operator super_expression
+    (97) super_expression -> . super_expression GTHAN push_operator super_expression
+    (98) super_expression -> . super_expression EQUAL push_operator super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
+    (100) super_expression -> . expression produce_superexp_quad
+    (101) expression -> . expression ADD push_operator expression
+    (102) expression -> . expression SUB push_operator expression
+    (103) expression -> . term produce_exp_quad
+    (104) term -> . term MUL push_operator term
+    (105) term -> . term DIV push_operator term
+    (106) term -> . factor produce_term_quad
+    (112) factor -> . identifier
+    (113) factor -> . const_int
+    (114) factor -> . const_float
+    (115) factor -> . LPAREN push_cap expression RPAREN pop_cap
+    (116) factor -> . array_access
+    (117) factor -> . matrix_access
+    (118) factor -> . function_call
+    (119) factor -> . special_function_call
+    (120) identifier -> . ID
+    (121) const_int -> . CONST_INT
+    (122) const_float -> . CONST_FLOAT
+    (125) array_access -> . ID LSQBRACKET expression RSQBRACKET
+    (126) matrix_access -> . ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET
+    (71) function_call -> . ID function_call_check function_call_lparen call_params0 function_call_rparen
+    (80) special_function_call -> . MEAN LPAREN call_params0 RPAREN
+    (81) special_function_call -> . MEDIAN LPAREN call_params0 RPAREN
+    (82) special_function_call -> . MODE LPAREN call_params0 RPAREN
+    (83) special_function_call -> . STD LPAREN call_params0 RPAREN
+    (84) special_function_call -> . KURTOSIS LPAREN call_params0 RPAREN
+    (85) special_function_call -> . PLOT LPAREN call_params0 RPAREN
+    (86) special_function_call -> . DPLOT LPAREN call_params0 RPAREN
+    (87) special_function_call -> . VARIANCE LPAREN call_params0 RPAREN
+    (88) special_function_call -> . SIMMETRY LPAREN call_params0 RPAREN
+    (89) special_function_call -> . CORRELATION LPAREN call_params0 RPAREN
+    (90) special_function_call -> . DFREAD LPAREN CONST_TEXT RPAREN
+    (91) special_function_call -> . HOMERO
+    (92) special_function_call -> . MARGE
 
-  ! shift/reduce conflict for LTHAN resolved as shift
-  ! shift/reduce conflict for GTHAN resolved as shift
-  ! shift/reduce conflict for EQUAL resolved as shift
-  ! shift/reduce conflict for DIFFERENT resolved as shift
-    AND             reduce using rule 99 (super_expression -> super_expression DIFFERENT super_expression .)
-    OR              reduce using rule 99 (super_expression -> super_expression DIFFERENT super_expression .)
-    RPAREN          reduce using rule 99 (super_expression -> super_expression DIFFERENT super_expression .)
-    COMMA           reduce using rule 99 (super_expression -> super_expression DIFFERENT super_expression .)
-    LTHAN           shift and go to state 165
-    GTHAN           shift and go to state 166
-    EQUAL           shift and go to state 167
-    DIFFERENT       shift and go to state 168
+    LPAREN          shift and go to state 110
+    ID              shift and go to state 115
+    CONST_INT       shift and go to state 116
+    CONST_FLOAT     shift and go to state 117
+    MEAN            shift and go to state 41
+    MEDIAN          shift and go to state 42
+    MODE            shift and go to state 43
+    STD             shift and go to state 44
+    KURTOSIS        shift and go to state 45
+    PLOT            shift and go to state 46
+    DPLOT           shift and go to state 47
+    VARIANCE        shift and go to state 48
+    SIMMETRY        shift and go to state 49
+    CORRELATION     shift and go to state 50
+    DFREAD          shift and go to state 51
+    HOMERO          shift and go to state 52
+    MARGE           shift and go to state 53
 
-  ! LTHAN           [ reduce using rule 99 (super_expression -> super_expression DIFFERENT super_expression .) ]
-  ! GTHAN           [ reduce using rule 99 (super_expression -> super_expression DIFFERENT super_expression .) ]
-  ! EQUAL           [ reduce using rule 99 (super_expression -> super_expression DIFFERENT super_expression .) ]
-  ! DIFFERENT       [ reduce using rule 99 (super_expression -> super_expression DIFFERENT super_expression .) ]
-
+    super_expression               shift and go to state 237
+    expression                     shift and go to state 123
+    term                           shift and go to state 104
+    factor                         shift and go to state 106
+    identifier                     shift and go to state 107
+    const_int                      shift and go to state 108
+    const_float                    shift and go to state 109
+    array_access                   shift and go to state 111
+    matrix_access                  shift and go to state 112
+    function_call                  shift and go to state 113
+    special_function_call          shift and go to state 114
 
 state 208
 
@@ -5325,7 +5323,7 @@ state 208
     REPEAT          shift and go to state 54
 
     repeat                         shift and go to state 39
-    statements                     shift and go to state 237
+    statements                     shift and go to state 238
     write                          shift and go to state 24
     read                           shift and go to state 25
     var_assignment                 shift and go to state 26
@@ -5434,7 +5432,7 @@ state 211
     HOMERO          shift and go to state 52
     MARGE           shift and go to state 53
 
-    expression                     shift and go to state 238
+    expression                     shift and go to state 239
     term                           shift and go to state 104
     factor                         shift and go to state 106
     identifier                     shift and go to state 107
@@ -5500,7 +5498,7 @@ state 212
     HOMERO          shift and go to state 52
     MARGE           shift and go to state 53
 
-    expression                     shift and go to state 239
+    expression                     shift and go to state 240
     term                           shift and go to state 104
     factor                         shift and go to state 106
     identifier                     shift and go to state 107
@@ -5527,7 +5525,7 @@ state 214
     (96) super_expression -> . super_expression LTHAN push_operator super_expression
     (97) super_expression -> . super_expression GTHAN push_operator super_expression
     (98) super_expression -> . super_expression EQUAL push_operator super_expression
-    (99) super_expression -> . super_expression DIFFERENT super_expression
+    (99) super_expression -> . super_expression DIFFERENT push_operator super_expression
     (100) super_expression -> . expression produce_superexp_quad
     (101) expression -> . expression ADD push_operator expression
     (102) expression -> . expression SUB push_operator expression
@@ -5581,7 +5579,7 @@ state 214
     HOMERO          shift and go to state 52
     MARGE           shift and go to state 53
 
-    hyper_expression               shift and go to state 240
+    hyper_expression               shift and go to state 241
     super_expression               shift and go to state 122
     expression                     shift and go to state 123
     term                           shift and go to state 104
@@ -5605,7 +5603,7 @@ state 216
 
     (18) matrix_declaration -> ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET . CONST_INT RSQBRACKET COLON type SEMICOLON
 
-    CONST_INT       shift and go to state 241
+    CONST_INT       shift and go to state 242
 
 
 state 217
@@ -5617,7 +5615,7 @@ state 217
     INT             shift and go to state 144
     FLOAT           shift and go to state 145
 
-    type                           shift and go to state 242
+    type                           shift and go to state 243
 
 state 218
 
@@ -5629,7 +5627,7 @@ state 218
     INSTRUCTIONS    shift and go to state 11
     RSQBRACKET      reduce using rule 129 (empty -> .)
 
-    instructions_block             shift and go to state 243
+    instructions_block             shift and go to state 244
     empty                          shift and go to state 12
 
 state 219
@@ -5647,14 +5645,14 @@ state 219
     RBRACKET        reduce using rule 129 (empty -> .)
     RETURN          reduce using rule 129 (empty -> .)
 
-    var_declarations               shift and go to state 244
+    var_declarations               shift and go to state 245
     empty                          shift and go to state 20
 
 state 220
 
     (37) param -> ID . COLON type
 
-    COLON           shift and go to state 245
+    COLON           shift and go to state 246
 
 
 state 221
@@ -5662,7 +5660,7 @@ state 221
     (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 . RPAREN COLON VOID set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
     (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 . RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return expression return_semicolon function_rbracket function_declarations
 
-    RPAREN          shift and go to state 246
+    RPAREN          shift and go to state 247
 
 
 state 222
@@ -5672,11 +5670,11 @@ state 222
     (36) params1 -> . empty
     (129) empty -> .
 
-    COMMA           shift and go to state 248
+    COMMA           shift and go to state 249
     RPAREN          reduce using rule 129 (empty -> .)
 
-    params1                        shift and go to state 247
-    empty                          shift and go to state 249
+    params1                        shift and go to state 248
+    empty                          shift and go to state 250
 
 state 223
 
@@ -5743,8 +5741,8 @@ state 224
     HOMERO          shift and go to state 52
     MARGE           shift and go to state 53
 
-    expression                     shift and go to state 250
-    const_text                     shift and go to state 251
+    expression                     shift and go to state 251
+    const_text                     shift and go to state 252
     term                           shift and go to state 104
     factor                         shift and go to state 106
     identifier                     shift and go to state 107
@@ -5879,7 +5877,7 @@ state 229
     RPAREN          reduce using rule 124 (pop_cap -> .)
     RSQBRACKET      reduce using rule 124 (pop_cap -> .)
 
-    pop_cap                        shift and go to state 252
+    pop_cap                        shift and go to state 253
 
 state 230
 
@@ -5900,7 +5898,7 @@ state 230
     OR              reduce using rule 125 (array_access -> ID LSQBRACKET expression RSQBRACKET .)
     RPAREN          reduce using rule 125 (array_access -> ID LSQBRACKET expression RSQBRACKET .)
     RSQBRACKET      reduce using rule 125 (array_access -> ID LSQBRACKET expression RSQBRACKET .)
-    LSQBRACKET      shift and go to state 253
+    LSQBRACKET      shift and go to state 254
 
 
 state 231
@@ -5908,7 +5906,7 @@ state 231
     (62) condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements . RBRACKET fill_pending_jump
     (63) condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements . RBRACKET else LBRACKET statements RBRACKET fill_pending_jump
 
-    RBRACKET        shift and go to state 254
+    RBRACKET        shift and go to state 255
 
 
 state 232
@@ -5951,7 +5949,7 @@ state 234
     (96) super_expression -> super_expression . LTHAN push_operator super_expression
     (97) super_expression -> super_expression . GTHAN push_operator super_expression
     (98) super_expression -> super_expression . EQUAL push_operator super_expression
-    (99) super_expression -> super_expression . DIFFERENT super_expression
+    (99) super_expression -> super_expression . DIFFERENT push_operator super_expression
 
   ! shift/reduce conflict for LTHAN resolved as shift
   ! shift/reduce conflict for GTHAN resolved as shift
@@ -5978,7 +5976,7 @@ state 235
     (96) super_expression -> super_expression . LTHAN push_operator super_expression
     (97) super_expression -> super_expression . GTHAN push_operator super_expression
     (98) super_expression -> super_expression . EQUAL push_operator super_expression
-    (99) super_expression -> super_expression . DIFFERENT super_expression
+    (99) super_expression -> super_expression . DIFFERENT push_operator super_expression
 
   ! shift/reduce conflict for LTHAN resolved as shift
   ! shift/reduce conflict for GTHAN resolved as shift
@@ -6005,7 +6003,7 @@ state 236
     (96) super_expression -> super_expression . LTHAN push_operator super_expression
     (97) super_expression -> super_expression . GTHAN push_operator super_expression
     (98) super_expression -> super_expression . EQUAL push_operator super_expression
-    (99) super_expression -> super_expression . DIFFERENT super_expression
+    (99) super_expression -> super_expression . DIFFERENT push_operator super_expression
 
   ! shift/reduce conflict for LTHAN resolved as shift
   ! shift/reduce conflict for GTHAN resolved as shift
@@ -6028,23 +6026,50 @@ state 236
 
 state 237
 
-    (68) loop -> repeat cond_lparen hyper_expression cond_rparen LBRACKET statements . RBRACKET fill_returning_jump
+    (99) super_expression -> super_expression DIFFERENT push_operator super_expression .
+    (96) super_expression -> super_expression . LTHAN push_operator super_expression
+    (97) super_expression -> super_expression . GTHAN push_operator super_expression
+    (98) super_expression -> super_expression . EQUAL push_operator super_expression
+    (99) super_expression -> super_expression . DIFFERENT push_operator super_expression
 
-    RBRACKET        shift and go to state 255
+  ! shift/reduce conflict for LTHAN resolved as shift
+  ! shift/reduce conflict for GTHAN resolved as shift
+  ! shift/reduce conflict for EQUAL resolved as shift
+  ! shift/reduce conflict for DIFFERENT resolved as shift
+    AND             reduce using rule 99 (super_expression -> super_expression DIFFERENT push_operator super_expression .)
+    OR              reduce using rule 99 (super_expression -> super_expression DIFFERENT push_operator super_expression .)
+    RPAREN          reduce using rule 99 (super_expression -> super_expression DIFFERENT push_operator super_expression .)
+    COMMA           reduce using rule 99 (super_expression -> super_expression DIFFERENT push_operator super_expression .)
+    LTHAN           shift and go to state 165
+    GTHAN           shift and go to state 166
+    EQUAL           shift and go to state 167
+    DIFFERENT       shift and go to state 168
+
+  ! LTHAN           [ reduce using rule 99 (super_expression -> super_expression DIFFERENT push_operator super_expression .) ]
+  ! GTHAN           [ reduce using rule 99 (super_expression -> super_expression DIFFERENT push_operator super_expression .) ]
+  ! EQUAL           [ reduce using rule 99 (super_expression -> super_expression DIFFERENT push_operator super_expression .) ]
+  ! DIFFERENT       [ reduce using rule 99 (super_expression -> super_expression DIFFERENT push_operator super_expression .) ]
 
 
 state 238
+
+    (68) loop -> repeat cond_lparen hyper_expression cond_rparen LBRACKET statements . RBRACKET fill_returning_jump
+
+    RBRACKET        shift and go to state 256
+
+
+state 239
 
     (61) matrix_assignment -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression . RSQBRACKET ASSIGN expression
     (101) expression -> expression . ADD push_operator expression
     (102) expression -> expression . SUB push_operator expression
 
-    RSQBRACKET      shift and go to state 256
+    RSQBRACKET      shift and go to state 257
     ADD             shift and go to state 150
     SUB             shift and go to state 151
 
 
-state 239
+state 240
 
     (60) array_assignment -> ID LSQBRACKET expression RSQBRACKET ASSIGN expression .
     (101) expression -> expression . ADD push_operator expression
@@ -6055,7 +6080,7 @@ state 239
     SUB             shift and go to state 151
 
 
-state 240
+state 241
 
     (77) call_params1 -> COMMA hyper_expression . handle_call_param call_params1
     (93) hyper_expression -> hyper_expression . AND push_operator hyper_expression
@@ -6067,30 +6092,30 @@ state 240
     COMMA           reduce using rule 79 (handle_call_param -> .)
     RPAREN          reduce using rule 79 (handle_call_param -> .)
 
-    handle_call_param              shift and go to state 257
-
-state 241
-
-    (18) matrix_declaration -> ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET CONST_INT . RSQBRACKET COLON type SEMICOLON
-
-    RSQBRACKET      shift and go to state 258
-
+    handle_call_param              shift and go to state 258
 
 state 242
 
-    (17) array_declaration -> ID LSQBRACKET CONST_INT RSQBRACKET COLON type . SEMICOLON
+    (18) matrix_declaration -> ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET CONST_INT . RSQBRACKET COLON type SEMICOLON
 
-    SEMICOLON       shift and go to state 259
+    RSQBRACKET      shift and go to state 259
 
 
 state 243
 
-    (1) routine -> routine_init ID SEMICOLON global_scope_init global_vars_block instructions_block function_block BEGIN COLON LSQBRACKET local_scope_init local_vars_block fill_main_jump instructions_block . RSQBRACKET
+    (17) array_declaration -> ID LSQBRACKET CONST_INT RSQBRACKET COLON type . SEMICOLON
 
-    RSQBRACKET      shift and go to state 260
+    SEMICOLON       shift and go to state 260
 
 
 state 244
+
+    (1) routine -> routine_init ID SEMICOLON global_scope_init global_vars_block instructions_block function_block BEGIN COLON LSQBRACKET local_scope_init local_vars_block fill_main_jump instructions_block . RSQBRACKET
+
+    RSQBRACKET      shift and go to state 261
+
+
+state 245
 
     (6) local_vars_block -> LOCALS COLON var_declarations .
 
@@ -6100,7 +6125,7 @@ state 244
     RETURN          reduce using rule 6 (local_vars_block -> LOCALS COLON var_declarations .)
 
 
-state 245
+state 246
 
     (37) param -> ID COLON . type
     (127) type -> . INT
@@ -6109,40 +6134,40 @@ state 245
     INT             shift and go to state 144
     FLOAT           shift and go to state 145
 
-    type                           shift and go to state 261
+    type                           shift and go to state 262
 
-state 246
+state 247
 
     (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN . COLON VOID set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
     (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN . COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return expression return_semicolon function_rbracket function_declarations
 
-    COLON           shift and go to state 262
+    COLON           shift and go to state 263
 
 
-state 247
+state 248
 
     (33) params0 -> param params1 .
 
     RPAREN          reduce using rule 33 (params0 -> param params1 .)
 
 
-state 248
+state 249
 
     (35) params1 -> COMMA . param params1
     (37) param -> . ID COLON type
 
     ID              shift and go to state 220
 
-    param                          shift and go to state 263
+    param                          shift and go to state 264
 
-state 249
+state 250
 
     (36) params1 -> empty .
 
     RPAREN          reduce using rule 36 (params1 -> empty .)
 
 
-state 250
+state 251
 
     (49) write_params1 -> COMMA write_operator expression . produce_write_quad write_params1
     (101) expression -> expression . ADD push_operator expression
@@ -6154,9 +6179,9 @@ state 250
     COMMA           reduce using rule 54 (produce_write_quad -> .)
     SEMICOLON       reduce using rule 54 (produce_write_quad -> .)
 
-    produce_write_quad             shift and go to state 264
+    produce_write_quad             shift and go to state 265
 
-state 251
+state 252
 
     (50) write_params1 -> COMMA write_operator const_text . produce_write_quad write_params1
     (54) produce_write_quad -> .
@@ -6164,9 +6189,9 @@ state 251
     COMMA           reduce using rule 54 (produce_write_quad -> .)
     SEMICOLON       reduce using rule 54 (produce_write_quad -> .)
 
-    produce_write_quad             shift and go to state 265
+    produce_write_quad             shift and go to state 266
 
-state 252
+state 253
 
     (115) factor -> LPAREN push_cap expression RPAREN pop_cap .
 
@@ -6186,7 +6211,7 @@ state 252
     RSQBRACKET      reduce using rule 115 (factor -> LPAREN push_cap expression RPAREN pop_cap .)
 
 
-state 253
+state 254
 
     (126) matrix_access -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET . expression RSQBRACKET
     (101) expression -> . expression ADD push_operator expression
@@ -6241,7 +6266,7 @@ state 253
     HOMERO          shift and go to state 52
     MARGE           shift and go to state 53
 
-    expression                     shift and go to state 266
+    expression                     shift and go to state 267
     term                           shift and go to state 104
     factor                         shift and go to state 106
     identifier                     shift and go to state 107
@@ -6252,7 +6277,7 @@ state 253
     function_call                  shift and go to state 113
     special_function_call          shift and go to state 114
 
-state 254
+state 255
 
     (62) condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET . fill_pending_jump
     (63) condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET . else LBRACKET statements RBRACKET fill_pending_jump
@@ -6282,12 +6307,12 @@ state 254
     RSQBRACKET      reduce using rule 66 (fill_pending_jump -> .)
     RBRACKET        reduce using rule 66 (fill_pending_jump -> .)
     RETURN          reduce using rule 66 (fill_pending_jump -> .)
-    ELSE            shift and go to state 269
+    ELSE            shift and go to state 270
 
-    fill_pending_jump              shift and go to state 267
-    else                           shift and go to state 268
+    fill_pending_jump              shift and go to state 268
+    else                           shift and go to state 269
 
-state 255
+state 256
 
     (68) loop -> repeat cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET . fill_returning_jump
     (70) fill_returning_jump -> .
@@ -6316,16 +6341,16 @@ state 255
     RBRACKET        reduce using rule 70 (fill_returning_jump -> .)
     RETURN          reduce using rule 70 (fill_returning_jump -> .)
 
-    fill_returning_jump            shift and go to state 270
+    fill_returning_jump            shift and go to state 271
 
-state 256
+state 257
 
     (61) matrix_assignment -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET . ASSIGN expression
 
-    ASSIGN          shift and go to state 271
+    ASSIGN          shift and go to state 272
 
 
-state 257
+state 258
 
     (77) call_params1 -> COMMA hyper_expression handle_call_param . call_params1
     (77) call_params1 -> . COMMA hyper_expression handle_call_param call_params1
@@ -6335,17 +6360,17 @@ state 257
     COMMA           shift and go to state 214
     RPAREN          reduce using rule 129 (empty -> .)
 
-    call_params1                   shift and go to state 272
+    call_params1                   shift and go to state 273
     empty                          shift and go to state 215
 
-state 258
+state 259
 
     (18) matrix_declaration -> ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET CONST_INT RSQBRACKET . COLON type SEMICOLON
 
-    COLON           shift and go to state 273
+    COLON           shift and go to state 274
 
 
-state 259
+state 260
 
     (17) array_declaration -> ID LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON .
 
@@ -6358,14 +6383,14 @@ state 259
     RETURN          reduce using rule 17 (array_declaration -> ID LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON .)
 
 
-state 260
+state 261
 
     (1) routine -> routine_init ID SEMICOLON global_scope_init global_vars_block instructions_block function_block BEGIN COLON LSQBRACKET local_scope_init local_vars_block fill_main_jump instructions_block RSQBRACKET .
 
     $end            reduce using rule 1 (routine -> routine_init ID SEMICOLON global_scope_init global_vars_block instructions_block function_block BEGIN COLON LSQBRACKET local_scope_init local_vars_block fill_main_jump instructions_block RSQBRACKET .)
 
 
-state 261
+state 262
 
     (37) param -> ID COLON type .
 
@@ -6373,7 +6398,7 @@ state 261
     RPAREN          reduce using rule 37 (param -> ID COLON type .)
 
 
-state 262
+state 263
 
     (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON . VOID set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
     (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON . func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return expression return_semicolon function_rbracket function_declarations
@@ -6381,43 +6406,29 @@ state 262
     (127) type -> . INT
     (128) type -> . FLOAT
 
-    VOID            shift and go to state 274
+    VOID            shift and go to state 275
     INT             shift and go to state 144
     FLOAT           shift and go to state 145
 
-    func_type                      shift and go to state 275
-    type                           shift and go to state 276
+    func_type                      shift and go to state 276
+    type                           shift and go to state 277
 
-state 263
+state 264
 
     (35) params1 -> COMMA param . params1
     (35) params1 -> . COMMA param params1
     (36) params1 -> . empty
     (129) empty -> .
 
-    COMMA           shift and go to state 248
+    COMMA           shift and go to state 249
     RPAREN          reduce using rule 129 (empty -> .)
 
-    params1                        shift and go to state 277
-    empty                          shift and go to state 249
-
-state 264
-
-    (49) write_params1 -> COMMA write_operator expression produce_write_quad . write_params1
-    (49) write_params1 -> . COMMA write_operator expression produce_write_quad write_params1
-    (50) write_params1 -> . COMMA write_operator const_text produce_write_quad write_params1
-    (51) write_params1 -> . empty
-    (129) empty -> .
-
-    COMMA           shift and go to state 192
-    SEMICOLON       reduce using rule 129 (empty -> .)
-
-    write_params1                  shift and go to state 278
-    empty                          shift and go to state 193
+    params1                        shift and go to state 278
+    empty                          shift and go to state 250
 
 state 265
 
-    (50) write_params1 -> COMMA write_operator const_text produce_write_quad . write_params1
+    (49) write_params1 -> COMMA write_operator expression produce_write_quad . write_params1
     (49) write_params1 -> . COMMA write_operator expression produce_write_quad write_params1
     (50) write_params1 -> . COMMA write_operator const_text produce_write_quad write_params1
     (51) write_params1 -> . empty
@@ -6431,16 +6442,30 @@ state 265
 
 state 266
 
+    (50) write_params1 -> COMMA write_operator const_text produce_write_quad . write_params1
+    (49) write_params1 -> . COMMA write_operator expression produce_write_quad write_params1
+    (50) write_params1 -> . COMMA write_operator const_text produce_write_quad write_params1
+    (51) write_params1 -> . empty
+    (129) empty -> .
+
+    COMMA           shift and go to state 192
+    SEMICOLON       reduce using rule 129 (empty -> .)
+
+    write_params1                  shift and go to state 280
+    empty                          shift and go to state 193
+
+state 267
+
     (126) matrix_access -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression . RSQBRACKET
     (101) expression -> expression . ADD push_operator expression
     (102) expression -> expression . SUB push_operator expression
 
-    RSQBRACKET      shift and go to state 280
+    RSQBRACKET      shift and go to state 281
     ADD             shift and go to state 150
     SUB             shift and go to state 151
 
 
-state 267
+state 268
 
     (62) condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET fill_pending_jump .
 
@@ -6469,21 +6494,21 @@ state 267
     RETURN          reduce using rule 62 (condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET fill_pending_jump .)
 
 
-state 268
+state 269
 
     (63) condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET else . LBRACKET statements RBRACKET fill_pending_jump
 
-    LBRACKET        shift and go to state 281
+    LBRACKET        shift and go to state 282
 
 
-state 269
+state 270
 
     (67) else -> ELSE .
 
     LBRACKET        reduce using rule 67 (else -> ELSE .)
 
 
-state 270
+state 271
 
     (68) loop -> repeat cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET fill_returning_jump .
 
@@ -6512,7 +6537,7 @@ state 270
     RETURN          reduce using rule 68 (loop -> repeat cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET fill_returning_jump .)
 
 
-state 271
+state 272
 
     (61) matrix_assignment -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET ASSIGN . expression
     (101) expression -> . expression ADD push_operator expression
@@ -6567,7 +6592,7 @@ state 271
     HOMERO          shift and go to state 52
     MARGE           shift and go to state 53
 
-    expression                     shift and go to state 282
+    expression                     shift and go to state 283
     term                           shift and go to state 104
     factor                         shift and go to state 106
     identifier                     shift and go to state 107
@@ -6578,14 +6603,14 @@ state 271
     function_call                  shift and go to state 113
     special_function_call          shift and go to state 114
 
-state 272
+state 273
 
     (77) call_params1 -> COMMA hyper_expression handle_call_param call_params1 .
 
     RPAREN          reduce using rule 77 (call_params1 -> COMMA hyper_expression handle_call_param call_params1 .)
 
 
-state 273
+state 274
 
     (18) matrix_declaration -> ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET CONST_INT RSQBRACKET COLON . type SEMICOLON
     (127) type -> . INT
@@ -6594,20 +6619,11 @@ state 273
     INT             shift and go to state 144
     FLOAT           shift and go to state 145
 
-    type                           shift and go to state 283
-
-state 274
-
-    (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID . set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
-    (29) set_return_type -> .
-
-    LBRACKET        reduce using rule 29 (set_return_type -> .)
-
-    set_return_type                shift and go to state 284
+    type                           shift and go to state 284
 
 state 275
 
-    (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type . set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return expression return_semicolon function_rbracket function_declarations
+    (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID . set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
     (29) set_return_type -> .
 
     LBRACKET        reduce using rule 29 (set_return_type -> .)
@@ -6616,33 +6632,42 @@ state 275
 
 state 276
 
+    (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type . set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return expression return_semicolon function_rbracket function_declarations
+    (29) set_return_type -> .
+
+    LBRACKET        reduce using rule 29 (set_return_type -> .)
+
+    set_return_type                shift and go to state 286
+
+state 277
+
     (32) func_type -> type .
 
     LBRACKET        reduce using rule 32 (func_type -> type .)
 
 
-state 277
+state 278
 
     (35) params1 -> COMMA param params1 .
 
     RPAREN          reduce using rule 35 (params1 -> COMMA param params1 .)
 
 
-state 278
+state 279
 
     (49) write_params1 -> COMMA write_operator expression produce_write_quad write_params1 .
 
     SEMICOLON       reduce using rule 49 (write_params1 -> COMMA write_operator expression produce_write_quad write_params1 .)
 
 
-state 279
+state 280
 
     (50) write_params1 -> COMMA write_operator const_text produce_write_quad write_params1 .
 
     SEMICOLON       reduce using rule 50 (write_params1 -> COMMA write_operator const_text produce_write_quad write_params1 .)
 
 
-state 280
+state 281
 
     (126) matrix_access -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET .
 
@@ -6662,7 +6687,7 @@ state 280
     RSQBRACKET      reduce using rule 126 (matrix_access -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET .)
 
 
-state 281
+state 282
 
     (63) condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET else LBRACKET . statements RBRACKET fill_pending_jump
     (38) statements -> . write SEMICOLON statements
@@ -6722,7 +6747,7 @@ state 281
     RBRACKET        reduce using rule 129 (empty -> .)
     REPEAT          shift and go to state 54
 
-    statements                     shift and go to state 286
+    statements                     shift and go to state 287
     write                          shift and go to state 24
     read                           shift and go to state 25
     var_assignment                 shift and go to state 26
@@ -6737,7 +6762,7 @@ state 281
     matrix_assignment              shift and go to state 37
     repeat                         shift and go to state 39
 
-state 282
+state 283
 
     (61) matrix_assignment -> ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET ASSIGN expression .
     (101) expression -> expression . ADD push_operator expression
@@ -6748,35 +6773,35 @@ state 282
     SUB             shift and go to state 151
 
 
-state 283
+state 284
 
     (18) matrix_declaration -> ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET CONST_INT RSQBRACKET COLON type . SEMICOLON
 
-    SEMICOLON       shift and go to state 287
-
-
-state 284
-
-    (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type . LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
-
-    LBRACKET        shift and go to state 288
+    SEMICOLON       shift and go to state 288
 
 
 state 285
 
-    (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type . LBRACKET local_vars_block store_curr_ip instructions_block return expression return_semicolon function_rbracket function_declarations
+    (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type . LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
 
     LBRACKET        shift and go to state 289
 
 
 state 286
 
-    (63) condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET else LBRACKET statements . RBRACKET fill_pending_jump
+    (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type . LBRACKET local_vars_block store_curr_ip instructions_block return expression return_semicolon function_rbracket function_declarations
 
-    RBRACKET        shift and go to state 290
+    LBRACKET        shift and go to state 290
 
 
 state 287
+
+    (63) condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET else LBRACKET statements . RBRACKET fill_pending_jump
+
+    RBRACKET        shift and go to state 291
+
+
+state 288
 
     (18) matrix_declaration -> ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON .
 
@@ -6789,7 +6814,7 @@ state 287
     RETURN          reduce using rule 18 (matrix_declaration -> ID LSQBRACKET CONST_INT RSQBRACKET LSQBRACKET CONST_INT RSQBRACKET COLON type SEMICOLON .)
 
 
-state 288
+state 289
 
     (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type LBRACKET . local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
     (6) local_vars_block -> . LOCALS COLON var_declarations
@@ -6800,10 +6825,10 @@ state 288
     INSTRUCTIONS    reduce using rule 129 (empty -> .)
     RBRACKET        reduce using rule 129 (empty -> .)
 
-    local_vars_block               shift and go to state 291
+    local_vars_block               shift and go to state 292
     empty                          shift and go to state 189
 
-state 289
+state 290
 
     (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET . local_vars_block store_curr_ip instructions_block return expression return_semicolon function_rbracket function_declarations
     (6) local_vars_block -> . LOCALS COLON var_declarations
@@ -6814,10 +6839,10 @@ state 289
     INSTRUCTIONS    reduce using rule 129 (empty -> .)
     RETURN          reduce using rule 129 (empty -> .)
 
-    local_vars_block               shift and go to state 292
+    local_vars_block               shift and go to state 293
     empty                          shift and go to state 189
 
-state 290
+state 291
 
     (63) condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET else LBRACKET statements RBRACKET . fill_pending_jump
     (66) fill_pending_jump -> .
@@ -6846,9 +6871,9 @@ state 290
     RBRACKET        reduce using rule 66 (fill_pending_jump -> .)
     RETURN          reduce using rule 66 (fill_pending_jump -> .)
 
-    fill_pending_jump              shift and go to state 293
+    fill_pending_jump              shift and go to state 294
 
-state 291
+state 292
 
     (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type LBRACKET local_vars_block . store_curr_ip instructions_block function_rbracket function_declarations
     (28) store_curr_ip -> .
@@ -6856,9 +6881,9 @@ state 291
     INSTRUCTIONS    reduce using rule 28 (store_curr_ip -> .)
     RBRACKET        reduce using rule 28 (store_curr_ip -> .)
 
-    store_curr_ip                  shift and go to state 294
+    store_curr_ip                  shift and go to state 295
 
-state 292
+state 293
 
     (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block . store_curr_ip instructions_block return expression return_semicolon function_rbracket function_declarations
     (28) store_curr_ip -> .
@@ -6866,9 +6891,9 @@ state 292
     INSTRUCTIONS    reduce using rule 28 (store_curr_ip -> .)
     RETURN          reduce using rule 28 (store_curr_ip -> .)
 
-    store_curr_ip                  shift and go to state 295
+    store_curr_ip                  shift and go to state 296
 
-state 293
+state 294
 
     (63) condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET else LBRACKET statements RBRACKET fill_pending_jump .
 
@@ -6897,7 +6922,7 @@ state 293
     RETURN          reduce using rule 63 (condition -> IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET else LBRACKET statements RBRACKET fill_pending_jump .)
 
 
-state 294
+state 295
 
     (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type LBRACKET local_vars_block store_curr_ip . instructions_block function_rbracket function_declarations
     (8) instructions_block -> . INSTRUCTIONS COLON statements
@@ -6907,10 +6932,10 @@ state 294
     INSTRUCTIONS    shift and go to state 11
     RBRACKET        reduce using rule 129 (empty -> .)
 
-    instructions_block             shift and go to state 296
+    instructions_block             shift and go to state 297
     empty                          shift and go to state 12
 
-state 295
+state 296
 
     (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip . instructions_block return expression return_semicolon function_rbracket function_declarations
     (8) instructions_block -> . INSTRUCTIONS COLON statements
@@ -6920,28 +6945,28 @@ state 295
     INSTRUCTIONS    shift and go to state 11
     RETURN          reduce using rule 129 (empty -> .)
 
-    instructions_block             shift and go to state 297
+    instructions_block             shift and go to state 298
     empty                          shift and go to state 12
 
-state 296
+state 297
 
     (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type LBRACKET local_vars_block store_curr_ip instructions_block . function_rbracket function_declarations
     (26) function_rbracket -> . RBRACKET
 
-    RBRACKET        shift and go to state 299
+    RBRACKET        shift and go to state 300
 
-    function_rbracket              shift and go to state 298
+    function_rbracket              shift and go to state 299
 
-state 297
+state 298
 
     (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block . return expression return_semicolon function_rbracket function_declarations
     (30) return -> . RETURN
 
-    RETURN          shift and go to state 301
+    RETURN          shift and go to state 302
 
-    return                         shift and go to state 300
+    return                         shift and go to state 301
 
-state 298
+state 299
 
     (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket . function_declarations
     (23) function_declarations -> . PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
@@ -6952,10 +6977,10 @@ state 298
     PROC            shift and go to state 61
     BEGIN           reduce using rule 129 (empty -> .)
 
-    function_declarations          shift and go to state 302
+    function_declarations          shift and go to state 303
     empty                          shift and go to state 62
 
-state 299
+state 300
 
     (26) function_rbracket -> RBRACKET .
 
@@ -6963,7 +6988,7 @@ state 299
     BEGIN           reduce using rule 26 (function_rbracket -> RBRACKET .)
 
 
-state 300
+state 301
 
     (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return . expression return_semicolon function_rbracket function_declarations
     (101) expression -> . expression ADD push_operator expression
@@ -7018,7 +7043,7 @@ state 300
     HOMERO          shift and go to state 52
     MARGE           shift and go to state 53
 
-    expression                     shift and go to state 303
+    expression                     shift and go to state 304
     term                           shift and go to state 104
     factor                         shift and go to state 106
     identifier                     shift and go to state 107
@@ -7029,7 +7054,7 @@ state 300
     function_call                  shift and go to state 113
     special_function_call          shift and go to state 114
 
-state 301
+state 302
 
     (30) return -> RETURN .
 
@@ -7052,14 +7077,14 @@ state 301
     MARGE           reduce using rule 30 (return -> RETURN .)
 
 
-state 302
+state 303
 
     (23) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations .
 
     BEGIN           reduce using rule 23 (function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations .)
 
 
-state 303
+state 304
 
     (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return expression . return_semicolon function_rbracket function_declarations
     (101) expression -> expression . ADD push_operator expression
@@ -7068,27 +7093,27 @@ state 303
 
     ADD             shift and go to state 150
     SUB             shift and go to state 151
-    SEMICOLON       shift and go to state 305
+    SEMICOLON       shift and go to state 306
 
-    return_semicolon               shift and go to state 304
+    return_semicolon               shift and go to state 305
 
-state 304
+state 305
 
     (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return expression return_semicolon . function_rbracket function_declarations
     (26) function_rbracket -> . RBRACKET
 
-    RBRACKET        shift and go to state 299
+    RBRACKET        shift and go to state 300
 
-    function_rbracket              shift and go to state 306
+    function_rbracket              shift and go to state 307
 
-state 305
+state 306
 
     (31) return_semicolon -> SEMICOLON .
 
     RBRACKET        reduce using rule 31 (return_semicolon -> SEMICOLON .)
 
 
-state 306
+state 307
 
     (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return expression return_semicolon function_rbracket . function_declarations
     (23) function_declarations -> . PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
@@ -7099,10 +7124,10 @@ state 306
     PROC            shift and go to state 61
     BEGIN           reduce using rule 129 (empty -> .)
 
-    function_declarations          shift and go to state 307
+    function_declarations          shift and go to state 308
     empty                          shift and go to state 62
 
-state 307
+state 308
 
     (24) function_declarations -> PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return expression return_semicolon function_rbracket function_declarations .
 
@@ -7111,10 +7136,6 @@ state 307
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for LTHAN in state 207 resolved as shift
-WARNING: shift/reduce conflict for GTHAN in state 207 resolved as shift
-WARNING: shift/reduce conflict for EQUAL in state 207 resolved as shift
-WARNING: shift/reduce conflict for DIFFERENT in state 207 resolved as shift
 WARNING: shift/reduce conflict for ADD in state 225 resolved as shift
 WARNING: shift/reduce conflict for SUB in state 225 resolved as shift
 WARNING: shift/reduce conflict for ADD in state 226 resolved as shift
@@ -7139,3 +7160,7 @@ WARNING: shift/reduce conflict for LTHAN in state 236 resolved as shift
 WARNING: shift/reduce conflict for GTHAN in state 236 resolved as shift
 WARNING: shift/reduce conflict for EQUAL in state 236 resolved as shift
 WARNING: shift/reduce conflict for DIFFERENT in state 236 resolved as shift
+WARNING: shift/reduce conflict for LTHAN in state 237 resolved as shift
+WARNING: shift/reduce conflict for GTHAN in state 237 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 237 resolved as shift
+WARNING: shift/reduce conflict for DIFFERENT in state 237 resolved as shift

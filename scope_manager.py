@@ -182,10 +182,11 @@ class scope_manager():
             self.proc_dir[self.curr_scope]["ti"] += 1 * temp_type == "int"
             self.proc_dir[self.curr_scope]["tf"] += 1 * temp_type == "float"
             self.proc_dir[self.curr_scope]["tb"] += 1 * temp_type == "bool"
+        curr_ti, curr_tf, curr_tb = self.ti, self.tf, self.tb
         self.ti += 1 * temp_type == "int"
         self.tf += 1 * temp_type == "float"
         self.tb += 1 * temp_type == "bool"
-        return self.ti * (temp_type == "int") + self.tf * (temp_type == "float") + self.tb * (temp_type == "bool")
+        return curr_ti * (temp_type == "int") + curr_tf * (temp_type == "float") + curr_tb * (temp_type == "bool")
 
     def get_operand_virtual_direction(self, operand: tuple) -> tuple:
         if operand[0] in self.constants_table:

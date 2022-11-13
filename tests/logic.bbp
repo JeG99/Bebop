@@ -1,0 +1,10 @@
+routine logic;
+
+begin: [
+    instructions:
+        if( 2 == 2 and 2 > 3 or 1 <> 5) {
+            write "jala";
+        } else {
+            write "no jala";
+        }
+]
