@@ -7,14 +7,12 @@ procedures:
             var n: int;
 			var m: int;
 			var o: int;
-            var p: float;
 
 		instructions:
-            p = 2.456;
 			n = 1;
 			m = 0;
 			repeat (num > 0) {
-                o = num;
+                o = n;
 				n = n + m;
 				m = o;
 				num = num - 1;
