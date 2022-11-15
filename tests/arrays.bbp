@@ -1,0 +1,17 @@
+routine dec_fib;
+
+globals:
+		var int1: int;
+		
+        var arr1[6]: int;
+        
+        var int2: int;
+        
+        var arr2[10][10]: int;
+		
+        var int3: int;
+
+begin: [
+	instructions:
+		write "Hola probando";
+]

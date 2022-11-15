@@ -5,6 +5,7 @@ class virtual_machine():
         self.proc_dir = {}
         self.mem = []
         self.curr_ip = 0
+        self.call_stack = []
 
     def rel_dir(self, dir) -> int:
         return int(dir / 1000)

@@ -1,5 +1,4 @@
 import json
-from subprocess import call
 
 from error_handler import raise_error
 
@@ -138,26 +137,33 @@ class scope_manager():
                     "type": yacc_production[6],
                     "indexed": True,
                     "dimensionality": 1,
-                    "size": yacc_production[3]
+                    "lim_sup1": int(yacc_production[3]),
                 }
             elif (var_kind == "matrix"):
                 var_body = {
                     "type": yacc_production[9],
                     "indexed": True,
                     "dimensionality": 2,
-                    "rows": yacc_production[3],
-                    "columns": yacc_production[6]
+                    "lim_sup1": int(yacc_production[3]),
+                    "lim_sup2": int(yacc_production[6]),
                 }
             var_body["virtual_direction"] = (self.curr_scope == "global") * (self.gi * (var_body["type"] == "int") + self.gf * (var_body["type"] == "float")) + (
                 self.curr_scope != "global") * (self.li * (var_body["type"] == "int") + self.lf * (var_body["type"] == "float"))
-            self.gi += 1 * \
-                var_body["type"] == "int" and self.curr_scope == "global"
-            self.gf += 1 * \
-                var_body["type"] == "float" and self.curr_scope == "global"
-            self.li += 1 * \
-                var_body["type"] == "int" and self.curr_scope != "global"
-            self.lf += 1 * \
-                var_body["type"] == "float" and self.curr_scope != "global"
+            mem_step = 1
+            if var_body["indexed"]:
+                if var_body["dimensionality"] == 1:
+                    mem_step = var_body["lim_sup1"]
+                elif var_body["dimensionality"] == 2:
+                    mem_step = var_body["lim_sup1"] * var_body["lim_sup2"] 
+            print(mem_step)
+            self.gi += mem_step * \
+                int(var_body["type"] == "int" and self.curr_scope == "global")
+            self.gf += mem_step * \
+                int(var_body["type"] == "float" and self.curr_scope == "global")
+            self.li += mem_step * \
+                int(var_body["type"] == "int" and self.curr_scope != "global")
+            self.lf += mem_step * \
+                int(var_body["type"] == "float" and self.curr_scope != "global")
             self.proc_dir[self.curr_scope]["var_table"][yacc_production[1]] = var_body
             if is_param:
                 self.proc_dir[self.curr_scope]["param_count"] += 1
