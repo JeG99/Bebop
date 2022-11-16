@@ -36,3 +36,5 @@ def raise_error(p, cause="bad_syntax", **args) -> None:
     elif cause == "param_count":
         raise Error(
             f"Semantic error: Procedure <{args['args'][0]}> takes exactly <{args['args'][1]}> arguments, found <{args['args'][2]}> instead")
+    elif cause == "non_indexed_var":
+        raise Error(f"Semantic error: <{args['args'][0]}: {args['args'][1]}> is not an indexed variable")

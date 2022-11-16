@@ -21,19 +21,24 @@ def p_routine(p) -> None:
     stack_manager.finish_instructions()
     scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
-    virtual_machine.mem_init(scope_manager.get_const_table(), scope_manager.get_proc_dir())
-    virtual_machine.run(stack_manager.quadruples)
+    virtual_machine.mem_init(
+        scope_manager.get_const_table(), scope_manager.get_proc_dir())
+    # virtual_machine.run(stack_manager.quadruples)
+
+
 def p_routine_init(p) -> None:
     '''
     routine_init : ROUTINE
     '''
     stack_manager.start_instructions()
 
+
 def p_fill_main_jump(p) -> None:
     '''
     fill_main_jump : 
     '''
     stack_manager.fill_main_jump()
+
 
 def p_global_vars_block(p) -> None:
     '''
@@ -262,10 +267,10 @@ def p_read(p) -> None:
 
 
 def p_var_assignment(p) -> None:
+    # TODO: ADD BACK MATRIX_ASSIGNMENT
     '''
     var_assignment : simple_assignment
                    | array_assignment
-                   | matrix_assignment
     '''
 
 
@@ -278,14 +283,14 @@ def p_simple_assignment(p) -> None:
 
 def p_array_assignment(p) -> None:
     '''
-    array_assignment : ID LSQBRACKET expression RSQBRACKET ASSIGN expression
+    array_assignment : array_access ASSIGN push_operator expression
     '''
+    stack_manager.produce_quadruple("simple_assignment")
 
-
-def p_matrix_assignment(p) -> None:
-    '''
-    matrix_assignment : ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET ASSIGN expression
-    '''
+# def p_matrix_assignment(p) -> None:
+#     '''
+#     matrix_assignment : ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET ASSIGN expression
+#     '''
 
 
 def p_condition(p) -> None:
@@ -514,7 +519,7 @@ def p_factor(p) -> None:
     '''
 
 
-def p_idendifier(p) -> None:
+def p_identifier(p) -> None:
     '''
     identifier : ID
     '''
@@ -553,15 +558,60 @@ def p_pop_cap(p) -> None:
 
 def p_array_access(p) -> None:
     '''
-    array_access : ID LSQBRACKET expression RSQBRACKET
+    array_access : identifier lsqbracket expression array_rsqbracket
     '''
 
 
 def p_matrix_access(p) -> None:
-    '''
-    matrix_access : ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET
-    '''
+     '''
+     matrix_access : identifier lsqbracket expression matrix_rsqbracket_1 matrix_lsqbracket_2 expression matrix_rsqbracket_2
+     '''
 
+
+def p_lsqbracket(p) -> None:
+    '''
+    lsqbracket : LSQBRACKET
+    '''
+    stack_manager.verify_indexed_var(1)
+    stack_manager.set_dim(1)
+    stack_manager.push_dim()
+    stack_manager.push_operator('(')
+
+
+def p_array_rsqbracket(p) -> None:
+    '''
+    array_rsqbracket : RSQBRACKET
+    '''
+    stack_manager.push_operator("verify")
+    stack_manager.produce_quadruple("verify")
+    stack_manager.push_operator("+")
+    stack_manager.produce_quadruple("array_access")
+
+def p_matrix_rsqbracket_1(p) -> None:
+    '''
+    matrix_rsqbracket_1 : RSQBRACKET
+    '''
+    stack_manager.push_operator("verify")
+    stack_manager.produce_quadruple("verify")
+    stack_manager.push_operator("*")
+    stack_manager.produce_quadruple("matrix_access_dim1")
+
+def p_matrix_lsqbracket_2(p) -> None:
+    '''
+    matrix_lsqbracket_2 : LSQBRACKET
+    '''
+    stack_manager.set_dim(2)
+    stack_manager.push_dim()
+    stack_manager.push_operator('(')
+
+def p_matrix_rsqbracket_2(p) -> None:
+    '''
+    matrix_rsqbracket_2 : RSQBRACKET
+    '''
+    stack_manager.push_operator("verify")
+    stack_manager.produce_quadruple("verify")
+    stack_manager.push_operator("+")
+    stack_manager.produce_quadruple("matrix_access_dim2")
 
 def p_type(p) -> None:
     '''
@@ -596,9 +646,6 @@ if __name__ == "__main__":
             source = _file.read()
             _file.close()
             lexer.input(source)
-
-            # for lexem in lexer:
-            #    print(lexem)
 
             lexer.lineno = 1
             if parser.parse(source) == 1:

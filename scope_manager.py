@@ -61,6 +61,7 @@ class scope_manager():
             self.proc_dir[context]["ti"] = 0
             self.proc_dir[context]["tf"] = 0
             self.proc_dir[context]["tb"] = 0
+            self.proc_dir[context]["tp"] = 0
         self.curr_scope = context
         self.li = 2000
         self.lf = 3000
@@ -155,7 +156,6 @@ class scope_manager():
                     mem_step = var_body["lim_sup1"]
                 elif var_body["dimensionality"] == 2:
                     mem_step = var_body["lim_sup1"] * var_body["lim_sup2"] 
-            print(mem_step)
             self.gi += mem_step * \
                 int(var_body["type"] == "int" and self.curr_scope == "global")
             self.gf += mem_step * \
@@ -188,11 +188,13 @@ class scope_manager():
             self.proc_dir[self.curr_scope]["ti"] += 1 * temp_type == "int"
             self.proc_dir[self.curr_scope]["tf"] += 1 * temp_type == "float"
             self.proc_dir[self.curr_scope]["tb"] += 1 * temp_type == "bool"
-        curr_ti, curr_tf, curr_tb = self.ti, self.tf, self.tb
+            self.proc_dir[self.curr_scope]["tp"] += 1 * temp_type == "bool"
+        curr_ti, curr_tf, curr_tb, curr_tp = self.ti, self.tf, self.tb, self.tp
         self.ti += 1 * temp_type == "int"
         self.tf += 1 * temp_type == "float"
         self.tb += 1 * temp_type == "bool"
-        return curr_ti * (temp_type == "int") + curr_tf * (temp_type == "float") + curr_tb * (temp_type == "bool")
+        self.tp += 1 * temp_type == "pointer"
+        return curr_ti * (temp_type == "int") + curr_tf * (temp_type == "float") + curr_tb * (temp_type == "bool") + curr_tp * (temp_type == "pointer")
 
     def get_operand_virtual_direction(self, operand: tuple) -> tuple:
         if operand[0] in self.constants_table:
