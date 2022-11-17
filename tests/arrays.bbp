@@ -1,6 +1,5 @@
 routine dec_fib;
 
-		
 begin: [    
     locals:
         var int1: int;
@@ -10,4 +9,5 @@ begin: [
     instructions:
         arr1[1] = 0;
         arr2[arr1[1] + 1][1] = 4;
+        write arr2[1][1];
 ]

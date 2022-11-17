@@ -9,6 +9,7 @@ class virtual_machine():
         self.mem = []
         self.curr_ip = 0
         self.call_stack = []
+        self.jump_stack = []
 
     def rel_dir(self, dir) -> int:
         return int(dir / 1000)
@@ -90,9 +91,8 @@ class virtual_machine():
     def run(self, quadruples: list) -> None:
         self.quadruples = quadruples.copy()
         while self.quadruples[self.curr_ip][0] != "end":
-            # self.mem_dump()
             quad = self.quadruples[self.curr_ip]
-            if quad[0] in ["+", "-", "*", "/", "<", ">", "<>", "==", "and", "or"]:
+            if len(self.call_stack) == 0 and quad[0] in ["+", "-", "*", "/", "<", ">", "<>", "==", "and", "or"]:
                 if type(quad[3]) == int and self.rel_dir(quad[3]) in [4, 5, 6, 9] \
                         and self.dir_translator(quad[3])[1] >= len(self.mem[self.rel_dir(quad[3])]):
                     self.mem[self.rel_dir(quad[3])].append(None)
@@ -172,5 +172,33 @@ class virtual_machine():
                 sup_lim = int(self.mem[7][quad[3] - 7000])
                 if index < inf_lim or index >= sup_lim:
                     raise_error(None, "out_of_bounds")
-            self.mem_dump
+
+            elif quad[0] == "era":
+                req_space = quad[3]
+                activation_record = [[None for i in range(space)] for space in req_space]
+                self.call_stack.append(activation_record)
+            elif quad[0] == "return":
+                var = self.dir_translator(quad[1])
+                val = self.dir_translator(quad[3])
+                if val[0] in [0, 2, 4, 7, 9]:
+                    self.mem[var[0]][var[1]] = self.call_stack[-1][0][val[1]]
+                elif param_dir[0] in [1, 3, 5, 8, 9]:
+                    self.mem[var[0]][var[1]] = self.call_stack[-1][1][val[1]]
+            elif quad[0] == "param":
+                param_position = int(quad[3].split("$")[1])
+                param_dir = self.dir_translator(quad[1])
+                if param_dir[0] in [0, 2, 4, 7, 9]:
+                    self.call_stack[-1][0][param_position - 1] = self.mem[param_dir[0]][param_dir[1]]
+                elif param_dir[0] in [1, 3, 5, 8, 9]:
+                    self.call_stack[-1][1][param_position - 1] = self.mem[param_dir[0]][param_dir[1]]
+            elif quad[0] == "gosub":
+                self.jump_stack.append(self.curr_ip)
+                self.curr_ip = quad[3]
+                continue
+            elif quad[0] == "endfunc":
+                self.call_stack.pop()
+                self.curr_ip = self.jump_stack.pop() + 1
+                continue
+                # TODO
+
             self.curr_ip += 1

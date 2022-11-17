@@ -12,7 +12,7 @@ procedures:
 			n = 1;
 			m = 0;
 			repeat (num > 0) {
-                o = n;
+				o = n;
 				n = n + m;
 				m = o;
 				num = num - 1;
@@ -21,6 +21,11 @@ procedures:
     }
 
 begin: [
+	locals:
+		var param: int;
+
     instructions:
-        write fib(4);
+		param = 2 + 5;
+
+        write fib(param);
 ]

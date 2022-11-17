@@ -65,6 +65,9 @@ class scope_manager():
         self.curr_scope = context
         self.li = 2000
         self.lf = 3000
+        self.ti = 4000
+        self.tf = 5000
+        self.tb = 6000
 
     def define_return_global_var(self) -> None:
         var_body = {
