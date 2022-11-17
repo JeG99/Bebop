@@ -5,7 +5,7 @@ from lexer import lexer, tokens
 from scope_manager import scope_manager
 from stack_manager import stack_manager
 from virtual_machine import virtual_machine
-from error_handler import raise_error
+from bebop_error_handler import raise_error
 
 scope_manager = scope_manager()
 initial_dirs = scope_manager.get_initial_dirs()

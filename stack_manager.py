@@ -1,7 +1,7 @@
 import math
 
 from semantic_cube import semantic_cube
-from error_handler import raise_error
+from bebop_error_handler import raise_error
 
 
 class stack_manager():
@@ -97,22 +97,24 @@ class stack_manager():
             self.push_operand(temp[0], temp[1])
 
         curr_dim = ()
-        if self.sm_instance.proc_dir[self.sm_instance.curr_scope]["var_table"][id]["dimensionality"] == 1:
+        curr_scope = "global" if id in self.sm_instance.proc_dir["global"]["var_table"] else self.sm_instance.proc_dir
+
+        if self.sm_instance.proc_dir[curr_scope]["var_table"][id]["dimensionality"] == 1:
             curr_dim = (
                 id,
                 self.dim,
-                self.sm_instance.proc_dir[self.sm_instance.curr_scope]["var_table"][id]["lim_sup1"],
-                self.sm_instance.proc_dir[self.sm_instance.curr_scope]["var_table"][id]["virtual_direction"],
-                self.sm_instance.proc_dir[self.sm_instance.curr_scope]["var_table"][id]["dimensionality"]
+                self.sm_instance.proc_dir[curr_scope]["var_table"][id]["lim_sup1"],
+                self.sm_instance.proc_dir[curr_scope]["var_table"][id]["virtual_direction"],
+                self.sm_instance.proc_dir[curr_scope]["var_table"][id]["dimensionality"]
             )
-        elif self.sm_instance.proc_dir[self.sm_instance.curr_scope]["var_table"][id]["dimensionality"] == 2:
+        elif self.sm_instance.proc_dir[curr_scope]["var_table"][id]["dimensionality"] == 2:
             curr_dim = (
                 id,
                 self.dim,
-                self.sm_instance.proc_dir[self.sm_instance.curr_scope]["var_table"][id]["lim_sup1"],
-                self.sm_instance.proc_dir[self.sm_instance.curr_scope]["var_table"][id]["lim_sup2"],
-                self.sm_instance.proc_dir[self.sm_instance.curr_scope]["var_table"][id]["virtual_direction"],
-                self.sm_instance.proc_dir[self.sm_instance.curr_scope]["var_table"][id]["dimensionality"]
+                self.sm_instance.proc_dir[curr_scope]["var_table"][id]["lim_sup1"],
+                self.sm_instance.proc_dir[curr_scope]["var_table"][id]["lim_sup2"],
+                self.sm_instance.proc_dir[curr_scope]["var_table"][id]["virtual_direction"],
+                self.sm_instance.proc_dir[curr_scope]["var_table"][id]["dimensionality"]
             )
         
         self.dim_stack.append(curr_dim)

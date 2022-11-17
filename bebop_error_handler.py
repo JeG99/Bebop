@@ -1,3 +1,7 @@
+import sys
+sys.tracebacklimit=0
+
+
 class Error(Exception):
     """Base class for other exceptions"""
     pass
@@ -17,7 +21,7 @@ def raise_error(p, cause="bad_syntax", **args) -> None:
             f"Semantic error: Variable <{args['args'][0]}> already declared as type <{args['args'][1]}>")
     elif cause == "undeclared_variable":
         raise Error(
-            f"Semantic error: Variable <{args['args'][0]}> not declared in current scope <{args['args'][1]}>")
+            f"Semantic error: Variable <{args['args'][0]}> not declared in current scope <{args['args'][1]}> nor <global>")
     elif cause == "type_mismatch":
         if len(args["args"]) == 3:
             raise Error(
@@ -38,3 +42,5 @@ def raise_error(p, cause="bad_syntax", **args) -> None:
             f"Semantic error: Procedure <{args['args'][0]}> takes exactly <{args['args'][1]}> arguments, found <{args['args'][2]}> instead")
     elif cause == "non_indexed_var":
         raise Error(f"Semantic error: <{args['args'][0]}: {args['args'][1]}> is not an indexed variable")
+    elif cause == "out_of_bounds":
+        raise Error(f"Runtime error: Index out of bounds")

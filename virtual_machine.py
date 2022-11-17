@@ -1,3 +1,6 @@
+from bebop_error_handler import raise_error
+
+
 class virtual_machine():
     def __init__(self):
         self.quadruples = {}
@@ -23,7 +26,7 @@ class virtual_machine():
                 if indexed:
                     if var_data["dimensionality"] == 1:
                         dir_list.append((dir, var_data["lim_sup1"]))
-                    elif var_data["dimensionality"] == 1:
+                    elif var_data["dimensionality"] == 2:
                         dir_list.append((dir, var_data["lim_sup1"] * var_data["lim_sup2"]))
                 else:
                     dir_list.append(dir)
@@ -71,7 +74,6 @@ class virtual_machine():
     def get_operand(self, dir: int):
         if dir >= 9000:
             pointed_dir = int(self.mem[9][dir - 9000])
-            print(int(pointed_dir / 1000), pointed_dir - int(pointed_dir / 1000) * 1000, self.mem[9])
             operand = self.mem[int(pointed_dir / 1000)][pointed_dir - int(pointed_dir / 1000) * 1000]
             if int(pointed_dir / 1000) in [0, 2, 4, 7]:
                 return int(operand)
@@ -88,7 +90,7 @@ class virtual_machine():
     def run(self, quadruples: list) -> None:
         self.quadruples = quadruples.copy()
         while self.quadruples[self.curr_ip][0] != "end":
-            self.mem_dump()
+            # self.mem_dump()
             quad = self.quadruples[self.curr_ip]
             if quad[0] in ["+", "-", "*", "/", "<", ">", "<>", "==", "and", "or"]:
                 if type(quad[3]) == int and self.rel_dir(quad[3]) in [4, 5, 6, 9] \
@@ -188,7 +190,12 @@ class virtual_machine():
                     output += next_output
                     self.curr_ip += 1
                 print(output.replace('"', ''))
-            else:
-                pass
+            
+            elif quad[0] == "verify":
+                index = self.get_operand(quad[1])
+                inf_lim = int(self.mem[7][quad[2] - 7000])
+                sup_lim = int(self.mem[7][quad[3] - 7000])
+                if index < inf_lim or index >= sup_lim:
+                    raise_error(None, "out_of_bounds")
 
             self.curr_ip += 1

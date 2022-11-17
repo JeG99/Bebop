@@ -1,6 +1,6 @@
 import json
 
-from error_handler import raise_error
+from bebop_error_handler import raise_error
 
 
 class scope_manager():
