@@ -23,7 +23,7 @@ def p_routine(p) -> None:
     stack_manager.dump_stacks()
     virtual_machine.mem_init(
         scope_manager.get_const_table(), scope_manager.get_proc_dir())
-    # virtual_machine.run(stack_manager.quadruples)
+    virtual_machine.run(stack_manager.quadruples)
 
 
 def p_routine_init(p) -> None:
@@ -267,10 +267,10 @@ def p_read(p) -> None:
 
 
 def p_var_assignment(p) -> None:
-    # TODO: ADD BACK MATRIX_ASSIGNMENT
     '''
     var_assignment : simple_assignment
                    | array_assignment
+                   | matrix_assignment
     '''
 
 
@@ -287,11 +287,11 @@ def p_array_assignment(p) -> None:
     '''
     stack_manager.produce_quadruple("simple_assignment")
 
-# def p_matrix_assignment(p) -> None:
-#     '''
-#     matrix_assignment : ID LSQBRACKET expression RSQBRACKET LSQBRACKET expression RSQBRACKET ASSIGN expression
-#     '''
-
+def p_matrix_assignment(p) -> None:
+    '''
+    matrix_assignment : matrix_access ASSIGN push_operator expression
+    '''
+    stack_manager.produce_quadruple("simple_assignment")
 
 def p_condition(p) -> None:
     '''

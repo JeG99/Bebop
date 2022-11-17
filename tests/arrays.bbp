@@ -6,14 +6,15 @@ begin: [
     locals:
 		var int1: int;
 		
-        var arr1[6]: float;
+        var arr1[6]: int;
         
         var int2: int;
         
-        var arr2[10][10]: float;
+        var arr2[10][10]: int;
 		
         var int3: int;
 	instructions:
-        int1 = arr1[0];
-		write "Hola probando", arr2[arr1[0] + arr1[arr1[2 + arr2[0][0]]]] [arr1[0]];
+        arr1[2] = 1;
+        arr2[9][2] = 200;
+        write arr2[8 + arr1[2]][2];
 ]
