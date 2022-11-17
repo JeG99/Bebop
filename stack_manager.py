@@ -97,7 +97,7 @@ class stack_manager():
             self.push_operand(temp[0], temp[1])
 
         curr_dim = ()
-        curr_scope = "global" if id in self.sm_instance.proc_dir["global"]["var_table"] else self.sm_instance.proc_dir
+        curr_scope = "global" if id in self.sm_instance.proc_dir["global"]["var_table"] else self.sm_instance.curr_scope
 
         if self.sm_instance.proc_dir[curr_scope]["var_table"][id]["dimensionality"] == 1:
             curr_dim = (
@@ -266,8 +266,9 @@ class stack_manager():
                     base_dir_dir[0],
                     temporal
                 ])
-                self.push_operand(temporal, "pointer")
+                self.push_operand(temporal, "int")
                 self.pop_operator()
+                self.instruction_counter += 1
 
             elif level == "param":
                 operand1 = self.sm_instance.get_operand_virtual_direction(

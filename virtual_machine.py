@@ -122,56 +122,31 @@ class virtual_machine():
                                                                            or self.mem[op2_translated_dir[0]][op2_translated_dir[1]]
 
             elif quad[0] == ">":
-                op1_translated_dir = self.dir_translator(quad[1])
-                op2_translated_dir = self.dir_translator(quad[2])
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = float(
-                    self.mem[op1_translated_dir[0]][op1_translated_dir[1]]) > float(self.mem[op2_translated_dir[0]][op2_translated_dir[1]])
+                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) > self.get_operand(quad[2])
             elif quad[0] == "<":
-                op1_translated_dir = self.dir_translator(quad[1])
-                op2_translated_dir = self.dir_translator(quad[2])
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = float(
-                    self.mem[op1_translated_dir[0]][op1_translated_dir[1]]) < float(self.mem[op2_translated_dir[0]][op2_translated_dir[1]])
+                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) < self.get_operand(quad[2])
             elif quad[0] == "==":
-                op1_translated_dir = self.dir_translator(quad[1])
-                op2_translated_dir = self.dir_translator(quad[2])
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = float(
-                    self.mem[op1_translated_dir[0]][op1_translated_dir[1]]) == float(self.mem[op2_translated_dir[0]][op2_translated_dir[1]])
+                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) == self.get_operand(quad[2])
             elif quad[0] == "<>":
-                op1_translated_dir = self.dir_translator(quad[1])
-                op2_translated_dir = self.dir_translator(quad[2])
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = float(
-                    self.mem[op1_translated_dir[0]][op1_translated_dir[1]]) != float(self.mem[op2_translated_dir[0]][op2_translated_dir[1]])
+                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) != self.get_operand(quad[2])
 
             elif quad[0] == "+":
-                op1_translated_dir = self.dir_translator(quad[1])
-                op2_translated_dir = self.dir_translator(quad[2])
                 temp_translated_dir = self.dir_translator(quad[3])
                 self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) + self.get_operand(quad[2])
             elif quad[0] == "-":
-                op1_translated_dir = self.dir_translator(quad[1])
-                op2_translated_dir = self.dir_translator(quad[2])
                 temp_translated_dir = self.dir_translator(quad[3])
                 self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) - self.get_operand(quad[2])
             elif quad[0] == "*":
-                op1_translated_dir = self.dir_translator(quad[1])
-                op2_translated_dir = self.dir_translator(quad[2])
                 temp_translated_dir = self.dir_translator(quad[3])
                 self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) * self.get_operand(quad[2])
             elif quad[0] == "/":
-                op1_translated_dir = self.dir_translator(quad[1])
-                op2_translated_dir = self.dir_translator(quad[2])
                 temp_translated_dir = self.dir_translator(quad[3])
                 self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) / self.get_operand(quad[2])
-
-            # elif quad[0] == "=":
-            #     val_translated_dir = self.dir_translator(quad[1])
-            #     var_translated_dir = self.dir_translator(quad[3])
-            #     self.mem[var_translated_dir[0]][var_translated_dir[1]
-            #                                     ] = self.mem[val_translated_dir[0]][val_translated_dir[1]]
+                
             elif quad[0] == "=":
                 if quad[3] >= 9000:
                     var_translated_dir = self.dir_translator(quad[3])
@@ -197,5 +172,5 @@ class virtual_machine():
                 sup_lim = int(self.mem[7][quad[3] - 7000])
                 if index < inf_lim or index >= sup_lim:
                     raise_error(None, "out_of_bounds")
-
+            self.mem_dump
             self.curr_ip += 1

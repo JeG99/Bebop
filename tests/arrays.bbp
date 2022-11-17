@@ -1,11 +1,13 @@
 routine dec_fib;
 
-globals:
-
-    var int1: int;
-    var arr2[10][10]: int;
 		
 begin: [    
-	instructions:
-        write arr2[6][9];
+    locals:
+        var int1: int;
+        var arr2[2][2]: int;
+        var arr1[5]: int;
+	
+    instructions:
+        arr1[1] = 0;
+        arr2[arr1[1] + 1][1] = 4;
 ]
