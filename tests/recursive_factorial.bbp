@@ -1,0 +1,20 @@
+routine rec_fac;
+
+procedures:
+    proc rec_fac (n: int): int {
+        locals:
+            var fac_n_1: int;
+        instructions:
+            if (n == 0 or n == 1) {
+                return 1;
+            }
+            else {
+                fac_n_1 = rec_fac(n - 1);
+                return n * fac_n_1;
+            }   
+    }
+
+begin: [
+    instructions:
+        write rec_fac(1);
+]

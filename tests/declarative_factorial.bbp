@@ -1,0 +1,22 @@
+routine dec_fac;
+
+procedures:
+    proc dec_fac (n: int): int {
+        locals:
+            var i: int;
+            var j: int;
+
+        instructions:
+            i = 1;
+            j = 1;
+            repeat (i < n + 1) {
+                j = j * i;
+                i = i + 1;            
+            }
+            return j;
+    }
+
+begin: [
+    instructions:
+        write dec_fac(5);
+]

@@ -14,9 +14,15 @@ class stack_manager():
         self.operand_stack = []
         self.type_stack = []
         self.jump_stack = []
+        self.era_jump_stacks = {}
         self.dim_stack = []
         self.quadruples = []
         self.dim = 1
+
+    def push_era_jump(self, call: str, jump: int) -> None:
+        if call not in self.era_jump_stacks.keys():
+            self.era_jump_stacks[call] = []
+        self.era_jump_stacks[call].append(jump)
 
     def fill_main_jump(self) -> None:
         self.quadruples[0][3] = self.instruction_counter
@@ -53,11 +59,12 @@ class stack_manager():
         self.quadruples[quad][3] = jump
 
     def dump_stacks(self) -> None:
-        print("Operators stack:", self.operator_stack)
-        print("Operands stack:", self.operand_stack)
-        print("Types stack:", self.type_stack)
-        print("Jumps stack:", self.jump_stack)
-        print("Dimension stack:", self.dim_stack)
+        # print("Operators stack:", self.operator_stack)
+        # print("Operands stack:", self.operand_stack)
+        # print("Types stack:", self.type_stack)
+        # print("Jumps stack:", self.jump_stack)
+        # print("Dimension stack:", self.dim_stack)
+        # print("ERA jumps stacks:", self.era_jump_stacks)
         print("Quadruples:")
         s = [["----" if e == None else str(e) for e in row]
              for row in self.quadruples]
@@ -73,6 +80,14 @@ class stack_manager():
         self.instruction_counter += 1
 
     def finish_instructions(self) -> None:
+        # update era quads
+        for id, era_jump_stack in self.era_jump_stacks.items():
+            era_jump = 0
+            while len(era_jump_stack) > 0:
+                quad = era_jump_stack.pop()
+                self.assign_quadruple_jump(quad, self.sm_instance.get_function_size(id))
+                era_jump += 1
+        # append last quad
         self.quadruples.append(["end", None, None, None])
 
     def verify_indexed_var(self, dims: int) -> None:
@@ -278,8 +293,9 @@ class stack_manager():
                     [operator, operand1[0], None, operator + "$" + str(self.sm_instance.get_call_param_count())])
             
             elif level == "era":
+                procedure = self.sm_instance.get_curr_procedure_call()
                 size = self.pop_operand()
-                self.quadruples.append([operator, None, None, size[0]])
+                self.quadruples.append([operator, procedure[0], None, size[0]])
             
             elif level == "while_goto":
                 return_jump = self.pop_jump()
@@ -319,23 +335,13 @@ class stack_manager():
                         operand1)
                 self.quadruples.append([operator, None, None, operand1[0]])
             
-            # ! THIS WILL BE EASIER TO DEBUG/TEST WHEN THE VM IS READY
             elif level == "return":
                 op1 = self.pop_operand()
-                # self.push_operand(self.sm_instance.temp_augment(op1[1]))
                 op2 = self.pop_operand()
                 operand1 = self.sm_instance.get_operand_virtual_direction(op1)
                 operand2 = self.sm_instance.get_operand_virtual_direction(op2)
-                # res_type = self.sc_instance.type_match(
-                    # operator, operand1[1], operand2[1])
-                # if res_type != "ERR":
-                # temporal = self.sm_instance.temp_augment(operand1[1])
-                self.quadruples.append(
-                    [operator, operand2[0], None, operand1[0]])
-                # self.push_operand(temporal, operand1[1])
-                # else:
-                #     raise_error(None, "type_mismatch", args=(
-                #         operator, operand1, operand2))
+                # TODO: Return type typematching
+                self.quadruples.append([operator, operand2[0], None, operand1[0]])
             
             else:
                 op1, op2 = self.pop_operand(), self.pop_operand()

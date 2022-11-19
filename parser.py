@@ -19,7 +19,7 @@ def p_routine(p) -> None:
     '''
     p[0] = 1
     stack_manager.finish_instructions()
-    scope_manager.dump_proc_dir()
+    # scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
     virtual_machine.mem_init(
         scope_manager.get_const_table(), scope_manager.get_proc_dir())
@@ -58,6 +58,27 @@ def p_instructions_block(p) -> None:
     '''
     instructions_block : INSTRUCTIONS COLON statements
                        | empty
+    '''
+
+
+def p_proc_instructions_block(p) -> None:
+    '''
+    proc_instructions_block : INSTRUCTIONS COLON proc_statements
+                            | empty
+    '''
+
+
+def p_proc_statements(p) -> None:
+    '''
+    proc_statements : write SEMICOLON proc_statements
+                    | read SEMICOLON proc_statements
+                    | var_assignment SEMICOLON proc_statements
+                    | proc_condition proc_statements
+                    | proc_loop proc_statements
+                    | function_call SEMICOLON proc_statements
+                    | special_function_call SEMICOLON proc_statements
+                    | return expression return_semicolon proc_statements
+                    | empty
     '''
 
 
@@ -123,7 +144,7 @@ def p_function_block(p) -> None:
 def p_function_declarations(p) -> None:
     '''
     function_declarations : PROC ID proc_scope_init LPAREN params0 RPAREN COLON VOID set_return_type LBRACKET local_vars_block store_curr_ip instructions_block function_rbracket function_declarations
-                          | PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip instructions_block return expression return_semicolon function_rbracket function_declarations
+                          | PROC ID proc_scope_init LPAREN params0 RPAREN COLON func_type set_return_type LBRACKET local_vars_block store_curr_ip proc_instructions_block RBRACKET function_declarations
                           | empty
     '''
 
@@ -174,6 +195,9 @@ def p_return_semicolon(p) -> None:
     return_semicolon : SEMICOLON
     '''
     stack_manager.produce_quadruple("return")
+    stack_manager.push_operator("endfunc")
+    stack_manager.produce_quadruple("endfunc")
+    scope_manager.reset_curr_procedure_call()
 
 
 def p_func_type(p) -> None:
@@ -299,6 +323,11 @@ def p_condition(p) -> None:
               | IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET else LBRACKET statements RBRACKET fill_pending_jump   
     '''
 
+def p_proc_condition(p) -> None:
+    '''
+    proc_condition : IF cond_lparen hyper_expression cond_rparen LBRACKET proc_statements RBRACKET fill_pending_jump
+                   | IF cond_lparen hyper_expression cond_rparen LBRACKET proc_statements RBRACKET else LBRACKET proc_statements RBRACKET fill_pending_jump   
+    '''
 
 def p_cond_lparen(p) -> None:
     '''
@@ -340,6 +369,10 @@ def p_loop(p) -> None:
     loop : repeat cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET fill_returning_jump
     '''
 
+def p_proc_loop(p) -> None:
+    '''
+    proc_loop : repeat cond_lparen hyper_expression cond_rparen LBRACKET proc_statements RBRACKET fill_returning_jump
+    '''
 
 def p_repeat(p) -> None:
     '''
@@ -373,6 +406,7 @@ def p_function_call_check(p) -> None:
     scope_manager.set_curr_procedure_call(p[-1])
     return_global_var = scope_manager.get_curr_procedure_call()
     stack_manager.push_operand(return_global_var[0], return_global_var[1])
+    stack_manager.push_era_jump(p[-1], stack_manager.get_current_istruction_pointer())
     stack_manager.push_operand(scope_manager.get_function_size(p[-1]), None)
 
 

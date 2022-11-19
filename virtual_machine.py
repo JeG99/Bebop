@@ -10,6 +10,8 @@ class virtual_machine():
         self.curr_ip = 0
         self.call_stack = []
         self.jump_stack = []
+        self.int_param_counter = 0
+        self.float_param_counter = 0
 
     def rel_dir(self, dir) -> int:
         return int(dir / 1000)
@@ -67,30 +69,50 @@ class virtual_machine():
 
     def mem_dump(self):
         mem_segs = ["GI", "GF", "LI", "LF", "TI", "TF", "TB", "CI", "CF", "TP"]
-        print("\n---VIRT MEM---")
+        print("\n----VIRT MEM----")
         for idx, seg in enumerate(self.mem):
             print("{:>4}".format(idx * 1000), mem_segs[idx], "==>", seg)
-        print("--------------\n")
+        print("---CALL STACK---")
+        for idx, activation_record in enumerate(self.call_stack):
+            print("---ACT REC {:>2}---".format(idx))
+            for idx, seg in enumerate(activation_record):
+                if idx not in [0, 1]:
+                    print("{:>4}".format(idx * 1000), mem_segs[idx], "==>", seg)
+        print("-----------------\n")
 
     def get_operand(self, dir: int):
+        if len(self.call_stack) > 0:
+            if int(dir / 1000) in [0, 1, 7, 8, 9]:
+                mem = self.mem
+            elif len(self.call_stack) > 1:
+                mem = self.call_stack[-2]
+            else:
+                mem = self.call_stack[-1]
+        else:
+            mem = self.mem
+
         if dir >= 9000:
-            pointed_dir = int(self.mem[9][dir - 9000])
-            operand = self.mem[int(pointed_dir / 1000)][pointed_dir - int(pointed_dir / 1000) * 1000]
+            pointed_dir = int(mem[9][dir - 9000])
+            operand = mem[int(pointed_dir / 1000)][pointed_dir - int(pointed_dir / 1000) * 1000]
             if int(pointed_dir / 1000) in [0, 2, 4, 7]:
                 return int(operand)
             elif int(pointed_dir / 1000) in [1, 3, 5, 8]:
                 return float(operand)
         else:
-            operand = self.mem[int(dir / 1000)][dir - int(dir / 1000) * 1000]
+            operand = mem[int(dir / 1000)][dir - int(dir / 1000) * 1000]
             if int(dir / 1000) in [0, 2, 4, 7]:
+                print(dir, mem, self.curr_ip)
                 return int(operand)
             elif int(dir / 1000) in [1, 3, 5, 8]:
                 return float(operand)
+            elif int(dir / 1000) == 6:
+                return bool(operand)
 
-                
+
     def run(self, quadruples: list) -> None:
         self.quadruples = quadruples.copy()
         while self.quadruples[self.curr_ip][0] != "end":
+            # self.mem_dump()
             quad = self.quadruples[self.curr_ip]
             if len(self.call_stack) == 0 and quad[0] in ["+", "-", "*", "/", "<", ">", "<>", "==", "and", "or"]:
                 if type(quad[3]) == int and self.rel_dir(quad[3]) in [4, 5, 6, 9] \
@@ -104,64 +126,91 @@ class virtual_machine():
                 self.curr_ip = quad[1]
                 continue
             elif quad[0] == "gotof":
-                if not self.mem[self.dir_translator(quad[1])[0]][self.dir_translator(quad[1])[1]]:
+                mem = self.call_stack[-1] if len(self.call_stack) > 0 else self.mem 
+                if not mem[self.dir_translator(quad[1])[0]][self.dir_translator(quad[1])[1]]:
                     self.curr_ip = quad[3]
                     continue
 
             elif quad[0] == "and":
-                op1_translated_dir = self.dir_translator(quad[1])
-                op2_translated_dir = self.dir_translator(quad[2])
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.mem[op1_translated_dir[0]][op1_translated_dir[1]] \
-                                                                           and self.mem[op2_translated_dir[0]][op2_translated_dir[1]]
+                res = self.get_operand(quad[1]) and self.get_operand(quad[2])
+                mem = self.call_stack[-1] if len(self.call_stack) > 0 else self.mem 
+                mem[temp_translated_dir[0]][temp_translated_dir[1]] = res
             elif quad[0] == "or":
-                op1_translated_dir = self.dir_translator(quad[1])
-                op2_translated_dir = self.dir_translator(quad[2])
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.mem[op1_translated_dir[0]][op1_translated_dir[1]] \
-                                                                           or self.mem[op2_translated_dir[0]][op2_translated_dir[1]]
+                res = self.get_operand(quad[1]) or self.get_operand(quad[2])
+                mem = self.call_stack[-1] if len(self.call_stack) > 0 else self.mem 
+                mem[temp_translated_dir[0]][temp_translated_dir[1]] = res
 
             elif quad[0] == ">":
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) > self.get_operand(quad[2])
+                res = self.get_operand(quad[1]) > self.get_operand(quad[2])
+                mem = self.call_stack[-1] if len(self.call_stack) > 0 else self.mem 
+                mem[temp_translated_dir[0]][temp_translated_dir[1]] = res
             elif quad[0] == "<":
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) < self.get_operand(quad[2])
+                res = self.get_operand(quad[1]) < self.get_operand(quad[2])
+                mem = self.call_stack[-1] if len(self.call_stack) > 0 else self.mem 
+                mem[temp_translated_dir[0]][temp_translated_dir[1]] = res
             elif quad[0] == "==":
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) == self.get_operand(quad[2])
+                res = self.get_operand(quad[1]) == self.get_operand(quad[2])
+                mem = self.call_stack[-1] if len(self.call_stack) > 0 else self.mem 
+                mem[temp_translated_dir[0]][temp_translated_dir[1]] = res
             elif quad[0] == "<>":
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) != self.get_operand(quad[2])
+                res = self.get_operand(quad[1]) != self.get_operand(quad[2])
+                mem = self.call_stack[-1] if len(self.call_stack) > 0 else self.mem 
+                mem[temp_translated_dir[0]][temp_translated_dir[1]] = res
 
             elif quad[0] == "+":
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) + self.get_operand(quad[2])
+                res = self.get_operand(quad[1]) + self.get_operand(quad[2])
+                mem = self.call_stack[-1] if len(self.call_stack) > 0 else self.mem 
+                mem[temp_translated_dir[0]][temp_translated_dir[1]] = res
             elif quad[0] == "-":
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) - self.get_operand(quad[2])
+                res = self.get_operand(quad[1]) - self.get_operand(quad[2])
+                mem = self.call_stack[-1] if len(self.call_stack) > 0 else self.mem 
+                mem[temp_translated_dir[0]][temp_translated_dir[1]] = res
             elif quad[0] == "*":
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) * self.get_operand(quad[2])
+                res = self.get_operand(quad[1]) * self.get_operand(quad[2])
+                mem = self.call_stack[-1] if len(self.call_stack) > 0 else self.mem 
+                mem[temp_translated_dir[0]][temp_translated_dir[1]] = res
             elif quad[0] == "/":
                 temp_translated_dir = self.dir_translator(quad[3])
-                self.mem[temp_translated_dir[0]][temp_translated_dir[1]] = self.get_operand(quad[1]) / self.get_operand(quad[2])
+                res = self.get_operand(quad[1]) / self.get_operand(quad[2])
+                mem = self.call_stack[-1] if len(self.call_stack) > 0 else self.mem 
+                mem[temp_translated_dir[0]][temp_translated_dir[1]] = res
                 
             elif quad[0] == "=":
-                if quad[3] >= 9000:
-                    var_translated_dir = self.dir_translator(quad[3])
-                    pointed_dir = self.mem[var_translated_dir[0]][var_translated_dir[1]]
-                    var_translated_pointed_dir = self.dir_translator(pointed_dir)
-                    self.mem[var_translated_pointed_dir[0]][var_translated_pointed_dir[1]] = self.get_operand(quad[1])
-                else:    
-                    var_translated_dir = self.dir_translator(quad[3])
-                    self.mem[var_translated_dir[0]][var_translated_dir[1]] = self.get_operand(quad[1])
+                if len(self.call_stack) > 0:
+                    if quad[3] >= 9000:
+                        var_translated_dir = self.dir_translator(quad[3])
+                        # TODO: HANDLE VALUES ASSIGNED OUTISIDE THE FUNCTION 
+                        pointed_dir = self.mem[var_translated_dir[0]][var_translated_dir[1]]
+                        var_translated_pointed_dir = self.dir_translator(pointed_dir)
+                        self.call_stack[-1][var_translated_pointed_dir[0]][var_translated_pointed_dir[1]] = self.get_operand(quad[1])
+                    else:    
+                        var_translated_dir = self.dir_translator(quad[3])
+                        self.call_stack[-1][var_translated_dir[0]][var_translated_dir[1]] = self.get_operand(quad[1])
+                else:
+                    if quad[3] >= 9000:
+                        var_translated_dir = self.dir_translator(quad[3])
+                        pointed_dir = self.mem[var_translated_dir[0]][var_translated_dir[1]]
+                        var_translated_pointed_dir = self.dir_translator(pointed_dir)
+                        self.mem[var_translated_pointed_dir[0]][var_translated_pointed_dir[1]] = self.get_operand(quad[1])
+                    else:
+                        var_translated_dir = self.dir_translator(quad[3])
+                        self.mem[var_translated_dir[0]][var_translated_dir[1]] = self.get_operand(quad[1])
 
             elif quad[0] == "write":
                 output = str(self.get_operand(quad[3])) if type(quad[3]) == int else quad[3]
                 while (self.quadruples[self.curr_ip + 1][0] == "write"):
                     write_quad = self.quadruples[self.curr_ip + 1]
-                    next_output = str(self.get_operand(write_quad[3])) if type(write_quad[3]) == int else write_quad[3]
+                    next_output = str(self.get_operand(write_quad[3])) if type(quad[3]) == int else write_quad[3]
+                    self.mem_dump(), print(next_output, self.curr_ip)
                     output += next_output
                     self.curr_ip += 1
                 print(output.replace('"', ''))
@@ -175,23 +224,42 @@ class virtual_machine():
 
             elif quad[0] == "era":
                 req_space = quad[3]
-                activation_record = [[None for i in range(space)] for space in req_space]
+                activation_record = [[None for i in range(space)] if type(space) == int else space for space in ["#", "#"] + list(req_space)]
                 self.call_stack.append(activation_record)
             elif quad[0] == "return":
                 var = self.dir_translator(quad[1])
                 val = self.dir_translator(quad[3])
-                if val[0] in [0, 2, 4, 7, 9]:
-                    self.mem[var[0]][var[1]] = self.call_stack[-1][0][val[1]]
-                elif param_dir[0] in [1, 3, 5, 8, 9]:
-                    self.mem[var[0]][var[1]] = self.call_stack[-1][1][val[1]]
+                if val[0] in [2, 4]:
+                    self.mem[var[0]][var[1]] = self.call_stack[-1][val[0]][val[1]]
+                elif val[0] in [0, 7, 9]:
+                    self.mem[var[0]][var[1]] = self.mem[val[0]][val[1]]
+                elif val[0] in [3, 5]:
+                    self.mem[var[0]][var[1]] = self.call_stack[-1][val[0]][val[1]]
+                elif val[0] in [1, 8, 9]:
+                    self.mem[var[0]][var[1]] = self.mem[val[0]][val[1]]
             elif quad[0] == "param":
-                param_position = int(quad[3].split("$")[1])
+                # TODO: Use param position for validation
+                param_position = int(quad[3].split("$")[1]) - 1
                 param_dir = self.dir_translator(quad[1])
-                if param_dir[0] in [0, 2, 4, 7, 9]:
-                    self.call_stack[-1][0][param_position - 1] = self.mem[param_dir[0]][param_dir[1]]
-                elif param_dir[0] in [1, 3, 5, 8, 9]:
-                    self.call_stack[-1][1][param_position - 1] = self.mem[param_dir[0]][param_dir[1]]
+                if len(self.call_stack) > 1:
+                    mem = self.call_stack[-1]
+                else:
+                    mem = self.mem
+                if param_dir[0] in [2, 4]:
+                    self.call_stack[-1][2][self.int_param_counter] = mem[param_dir[0]][param_dir[1]]
+                    self.int_param_counter += 1
+                elif param_dir[0] in [0, 7, 9]:
+                    self.call_stack[-1][2][self.int_param_counter] = self.mem[param_dir[0]][param_dir[1]]
+                    self.int_param_counter += 1
+                elif param_dir[0] in [3, 5]:
+                    self.call_stack[-1][3][self.float_param_counter] = mem[param_dir[0]][param_dir[1]]
+                    self.float_param_counter += 1
+                elif param_dir[0] in [1, 8, 9]:
+                    self.call_stack[-1][3][self.float_param_counter] = self.mem[param_dir[0]][param_dir[1]]
+                    self.float_param_counter += 1
             elif quad[0] == "gosub":
+                self.int_param_counter = 0
+                self.float_param_counter = 0
                 self.jump_stack.append(self.curr_ip)
                 self.curr_ip = quad[3]
                 continue
