@@ -68,6 +68,7 @@ class scope_manager():
         self.ti = 4000
         self.tf = 5000
         self.tb = 6000
+        self.tp = 9000
 
     def define_return_global_var(self) -> None:
         var_body = {

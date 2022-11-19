@@ -1,0 +1,68 @@
+routine quicksort;
+
+globals:
+    var list[10]: int;
+
+procedures:
+    proc partition (low: int, high: int, size: int): int {
+        locals: 
+            var pivot: int;
+            var i: int;
+            var j: int;
+            var temp: int; 
+
+        instructions:
+            i = low - 1;
+            j = 0;
+            repeat (j < pivot or j == pivot) {
+                if (list[j] < pivot or list[j] == pivot) {
+                    i = i + 1;
+                    temp = list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+                }
+            } 
+            temp = list[i + 1]; 
+            list[i + 1] = list[high];
+            list[high] = temp;
+
+            return i + 1;
+    }
+
+    proc quicksort(low: int, high: int, size: int): void {
+        locals:
+            var partition_index: int;
+        
+        instructions:
+            partition_index = partition(low, high, size);
+            quicksort(low, partition_index - 1, size);
+            quicksort(partition_index + 1, high, size);
+    }
+
+begin: [
+    locals:
+        var idx: int;
+        var list_size: int;
+
+    instructions:
+        list_size = 10;
+        list[0] = 10;
+        list[1] = 6;
+        list[2] = 1;
+        list[3] = 5;
+        list[4] = 2;
+        list[5] = 4;
+        list[6] = 8;
+        list[7] = 7;
+        list[8] = 3;
+        list[9] = 9;
+
+        quicksort(0, list_size - 1, list_size);
+        
+        idx = 0;
+        repeat (idx < list_size) {
+            write list[idx];
+            idx = idx + 1;
+        }
+        
+]

@@ -19,7 +19,7 @@ def p_routine(p) -> None:
     '''
     p[0] = 1
     stack_manager.finish_instructions()
-    # scope_manager.dump_proc_dir()
+    scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
     virtual_machine.mem_init(
         scope_manager.get_const_table(), scope_manager.get_proc_dir())

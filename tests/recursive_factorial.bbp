@@ -16,5 +16,5 @@ procedures:
 
 begin: [
     instructions:
-        write rec_fac(1);
+        write rec_fac(5);
 ]
