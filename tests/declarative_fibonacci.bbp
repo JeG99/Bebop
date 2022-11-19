@@ -1,19 +1,30 @@
 routine dec_fib;
 
+globals:
+	var n_fib[8]: int;
+
+procedures:
+	
+	proc dec_fib (n: int): int {
+		locals:
+			var i: int;
+
+		instructions:
+			n_fib[0] = 0;
+			n_fib[1] = 1;
+			i = 2;
+			repeat (i < n + 1) {
+				n_fib[i] = n_fib[i - 1] + n_fib[i - 2];
+				i = i + 1;
+			}
+			return n_fib[n];
+	}
+
 begin: [
 	locals:
-		var n_fib[8]: int;
-		var i: int;
 		var n: int;
 
-    instructions:
-        n_fib[0] = 0;
-		n_fib[1] = 1;
-		i = 2;
+	instructions:
 		n = 7;
-		repeat (i < n + 1) {
-			n_fib[i] = n_fib[i - 1] + n_fib[i - 2];
-			i = i + 1;
-		}
-		write n_fib[n];
+		write dec_fib(n);
 ]

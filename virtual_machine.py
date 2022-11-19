@@ -197,7 +197,7 @@ class virtual_machine():
                         # TODO: HANDLE VALUES ASSIGNED OUTISIDE THE FUNCTION 
                         pointed_dir = self.mem[var_translated_dir[0]][var_translated_dir[1]]
                         var_translated_pointed_dir = self.dir_translator(pointed_dir)
-                        self.call_stack[-1][var_translated_pointed_dir[0]][var_translated_pointed_dir[1]] = self.get_operand(quad[1])
+                        self.mem[var_translated_pointed_dir[0]][var_translated_pointed_dir[1]] = self.get_operand(quad[1])
                     else:    
                         var_translated_dir = self.dir_translator(quad[3])
                         self.call_stack[-1][var_translated_dir[0]][var_translated_dir[1]] = self.get_operand(quad[1])
@@ -236,12 +236,15 @@ class virtual_machine():
                 val = self.dir_translator(quad[3])
                 if val[0] in [2, 4]:
                     self.mem[var[0]][var[1]] = self.call_stack[-1][val[0]][val[1]]
-                elif val[0] in [0, 7, 9]:
+                elif val[0] in [0, 7]:
                     self.mem[var[0]][var[1]] = self.mem[val[0]][val[1]]
                 elif val[0] in [3, 5]:
                     self.mem[var[0]][var[1]] = self.call_stack[-1][val[0]][val[1]]
-                elif val[0] in [1, 8, 9]:
+                elif val[0] in [1, 8]:
                     self.mem[var[0]][var[1]] = self.mem[val[0]][val[1]]
+                elif val[0] == 9:
+                    pointed_dir = self.dir_translator(self.mem[val[0]][val[1]])
+                    self.mem[var[0]][var[1]] = self.mem[pointed_dir[0]][pointed_dir[1]]
             elif quad[0] == "param":
                 # TODO: Use param position for validation
                 param_position = int(quad[3].split("$")[1]) - 1
