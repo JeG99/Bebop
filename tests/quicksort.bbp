@@ -4,6 +4,11 @@ globals:
     var list[10]: int;
 
 procedures:
+    proc simple(n: int): int {
+        instructions:
+            return 200;
+    }
+
     proc partition (low: int, high: int, size: int): int {
         locals: 
             var pivot: int;
@@ -12,15 +17,18 @@ procedures:
             var temp: int; 
 
         instructions:
+            pivot = list[high];
             i = low - 1;
             j = 0;
-            repeat (j < pivot or j == pivot) {
+            repeat (j < high - low) {
                 if (list[j] < pivot or list[j] == pivot) {
                     i = i + 1;
                     temp = list[i];
+                    write "temp:", temp, "elem:", list[i], simple(2);
                     list[i] = list[j];
                     list[j] = temp;
                 }
+                j = j + 1;
             } 
             temp = list[i + 1]; 
             list[i + 1] = list[high];
@@ -33,10 +41,12 @@ procedures:
         locals:
             var partition_index: int;
         
-        instructions:
-            partition_index = partition(low, high, size);
-            quicksort(low, partition_index - 1, size);
-            quicksort(partition_index + 1, high, size);
+        instructions: 
+            if (low < high) {
+                partition_index = partition(low, high, size);
+                quicksort(low, partition_index - 1, size);
+                quicksort(partition_index + 1, high, size);
+            }
     }
 
 begin: [
@@ -60,9 +70,6 @@ begin: [
         quicksort(0, list_size - 1, list_size);
         
         idx = 0;
-        repeat (idx < list_size) {
-            write list[idx];
-            idx = idx + 1;
-        }
+        
         
 ]

@@ -3,9 +3,6 @@ routine rec_fib;
 procedures:
 
 	proc rec_fib(n: int): int {
-		locals:
-			var a: int;
-			var b: int;
 		instructions:
 			if (n == 0) {
 				return 0;
@@ -14,9 +11,7 @@ procedures:
 				return 1;
 			}
 			else {
-				a = rec_fib(n - 1);
-				b = rec_fib(n - 2);
-				return a + b;
+				return rec_fib(n - 1) + rec_fib(n - 2);
 			}
 	}
 

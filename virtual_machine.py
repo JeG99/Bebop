@@ -14,6 +14,7 @@ class virtual_machine():
         self.params_stack = []
         self.int_param_counter = 0
         self.float_param_counter = 0
+        self.taking_params = False
 
     def rel_dir(self, dir) -> int:
         return int(dir / 1000)
@@ -84,9 +85,11 @@ class virtual_machine():
 
     def get_operand(self, dir: int):
         if len(self.call_stack) > 0:
-            if self.rel_dir(dir) in [0, 1, 7, 8, 9]:
+            if type(dir) == str:
+                return dir
+            elif self.rel_dir(dir) in [0, 1, 7, 8, 9]:
                 mem = self.mem
-            elif len(self.call_stack) > 1 and self.rel_dir(dir) not in [4, 5, 6]:
+            elif len(self.call_stack) > 1 and self.rel_dir(dir) not in [4, 5, 6] and self.taking_params:
                 mem = self.call_stack[-2]
             else:
                 mem = self.call_stack[-1]
@@ -101,6 +104,7 @@ class virtual_machine():
             elif int(pointed_dir / 1000) in [1, 3, 5, 8]:
                 return float(operand)
         else:
+            # print(dir, self.curr_ip, self.call_stack)
             operand = mem[int(dir / 1000)][dir - int(dir / 1000) * 1000]
             if int(dir / 1000) in [0, 2, 4, 7]:
                 return int(operand)
@@ -215,9 +219,8 @@ class virtual_machine():
                 output = str(self.get_operand(quad[3])) if type(quad[3]) == int else quad[3]
                 while (self.quadruples[self.curr_ip + 1][0] == "write"):
                     write_quad = self.quadruples[self.curr_ip + 1]
-                    next_output = str(self.get_operand(write_quad[3])) if type(quad[3]) == int else write_quad[3]
-                    self.mem_dump(), print(next_output, self.curr_ip)
-                    output += next_output
+                    next_output = str(self.get_operand(write_quad[3])) if type(write_quad[3]) == int else write_quad[3]
+                    output += " " + next_output
                     self.curr_ip += 1
                 print(output.replace('"', ''))
             
@@ -249,14 +252,15 @@ class virtual_machine():
                 # TODO: Use param position for validation
                 param_position = int(quad[3].split("$")[1]) - 1
                 self.params_stack.append(quad[1])
+                self.taking_params = True
             elif quad[0] == "gosub":
                 self.call_stack.append(self.curr_activation_record)
 
                 while len(self.params_stack) > 0:
-                    param = self.params_stack.pop()
+                    param = self.params_stack.pop(0)
                     param_dir = self.dir_translator(param)
                     if len(self.call_stack) > 1:
-                        mem = self.call_stack[-1]
+                        mem = self.call_stack[-2]
                     else:
                         mem = self.mem
                     if param_dir[0] in [2, 4]:
@@ -272,6 +276,7 @@ class virtual_machine():
                         self.call_stack[-1][3][self.float_param_counter] = self.mem[param_dir[0]][param_dir[1]]
                         self.float_param_counter += 1
 
+                self.taking_params = False
                 self.int_param_counter = 0
                 self.float_param_counter = 0
                 self.jump_stack.append(self.curr_ip)

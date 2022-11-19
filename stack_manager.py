@@ -189,10 +189,9 @@ class stack_manager():
             elif level == "verify":
                 s1 = self.check_top_operand()
                 dim = self.check_dim()
-                print(dim)
                 self.sm_instance.push_constant(str(0), "int")
                 self.push_operand(str(0), "int")
-                
+
                 if dim[-1] == 2:
                     if dim[1] == 1:
                         self.sm_instance.push_constant(str(dim[2]), "int")
