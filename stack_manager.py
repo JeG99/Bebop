@@ -348,7 +348,7 @@ class stack_manager():
             elif level == "read":
                 operand1 = self.sm_instance.get_operand_virtual_direction(
                     self.pop_operand())
-                self.quadruples.append([operator, None, None, operand1[0]])
+                self.quadruples.append([operator, None, operand1[1], operand1[0]])
             
             elif level == "write":
                 operand1 = self.pop_operand()

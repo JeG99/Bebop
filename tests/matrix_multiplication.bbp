@@ -73,8 +73,8 @@ begin: [
                 write C[i][j];
                 j = j + 1;
             }
+            write "\n";
             i = i + 1;
             j = 0;
         }
-
 ]

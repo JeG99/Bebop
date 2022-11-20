@@ -46,7 +46,6 @@ reserved = {
     'return': 'RETURN',
     'and': 'AND',
     'or': 'OR',
-    'not': 'NOT',
 
     # Special reserved words
     'df': 'DF',

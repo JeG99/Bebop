@@ -681,7 +681,7 @@ if __name__ == "__main__":
 
             lexer.lineno = 1
             if parser.parse(source) == 1:
-                print("ROUTINE END")
+                print("\n--routine end--")
 
         except EOFError:
             print(EOFError)

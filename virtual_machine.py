@@ -216,12 +216,32 @@ class virtual_machine():
 
             elif quad[0] == "write":
                 output = str(self.get_operand(quad[3])) if type(quad[3]) == int else quad[3]
-                print(output.replace('"', ''), end=" ")
+                if output == r'"\n"':
+                    print("\n")
+                elif output.replace('"', '')[-2:] == r'\n':
+                    print(output.replace('"', '').replace(r'\n', ''), end="\n")
+                else:
+                    print(output.replace('"', '').replace(r'\n', '\n'), end=" ")
                 while (self.quadruples[self.curr_ip + 1][0] == "write"):
                     write_quad = self.quadruples[self.curr_ip + 1]
                     next_output = str(self.get_operand(write_quad[3])) if type(write_quad[3]) == int else write_quad[3]
-                    print(next_output.replace('"', ''), end=" ")
+                    if next_output == r'"\n"':
+                        print("\n")
+                    elif next_output.replace('"', '')[-2:] == r'\n':
+                        print(next_output.replace('"', '').replace(r'\n', ''), end="\n")
+                    else:
+                        print(next_output.replace('"', '').replace(r'\n', '\n'), end=" ")
                     self.curr_ip += 1
+            elif quad[0] == 'read':
+                read_dir = self.dir_translator(quad[3])
+                mem = self.call_stack[-1] if len(self.call_stack) > 0 else self.mem
+                alloc_type = quad[2]
+                try:
+                    val = eval(alloc_type + '( input() )')
+                except: 
+                    # TODO: USE CUSTOM ERROR
+                    raise ValueError("This input must be of type " + alloc_type)
+                mem[read_dir[0]][read_dir[1]] = val
             
             elif quad[0] == "verify":
                 index = self.get_operand(quad[1])
