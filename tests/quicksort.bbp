@@ -4,12 +4,8 @@ globals:
     var list[10]: int;
 
 procedures:
-    proc simple(n: int): int {
-        instructions:
-            return 200;
-    }
 
-    proc partition (low: int, high: int, size: int): int {
+    proc partition (low: int, high: int): int {
         locals: 
             var pivot: int;
             var i: int;
@@ -19,12 +15,11 @@ procedures:
         instructions:
             pivot = list[high];
             i = low - 1;
-            j = 0;
-            repeat (j < high - low) {
+            j = low;
+            repeat (j < high) {
                 if (list[j] < pivot or list[j] == pivot) {
                     i = i + 1;
                     temp = list[i];
-                    write "temp:", temp, "elem:", list[i], simple(2);
                     list[i] = list[j];
                     list[j] = temp;
                 }
@@ -37,15 +32,15 @@ procedures:
             return i + 1;
     }
 
-    proc quicksort(low: int, high: int, size: int): void {
+    proc quicksort(low: int, high: int): void {
         locals:
             var partition_index: int;
         
         instructions: 
             if (low < high) {
-                partition_index = partition(low, high, size);
-                quicksort(low, partition_index - 1, size);
-                quicksort(partition_index + 1, high, size);
+                partition_index = partition(low, high);
+                quicksort(low, partition_index - 1);
+                quicksort(partition_index + 1, high);
             }
     }
 
@@ -67,9 +62,12 @@ begin: [
         list[8] = 3;
         list[9] = 9;
 
-        quicksort(0, list_size - 1, list_size);
+        quicksort(0, list_size - 1);
         
         idx = 0;
-        
+        repeat (idx < list_size) {
+            write list[idx];
+            idx = idx + 1;
+        }
         
 ]
