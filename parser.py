@@ -19,7 +19,7 @@ def p_routine(p) -> None:
     '''
     p[0] = 1
     stack_manager.finish_instructions()
-    scope_manager.dump_proc_dir()
+    # scope_manager.dump_proc_dir()
     stack_manager.dump_stacks()
     virtual_machine.mem_init(
         scope_manager.get_const_table(), scope_manager.get_proc_dir())
@@ -404,8 +404,6 @@ def p_function_call_check(p) -> None:
     '''
     scope_manager.check_function_call(p[-1])
     scope_manager.set_curr_procedure_call(p[-1])
-    return_global_var = scope_manager.get_curr_procedure_call()
-    stack_manager.push_operand(return_global_var[0], return_global_var[1])
     stack_manager.push_era_jump(p[-1], stack_manager.get_current_istruction_pointer())
     stack_manager.push_operand(scope_manager.get_function_size(p[-1]), None)
 

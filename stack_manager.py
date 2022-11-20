@@ -185,6 +185,18 @@ class stack_manager():
                 procedure = self.sm_instance.get_curr_procedure_call()
                 self.quadruples.append(
                     [operator, procedure[0], None, procedure[2]])
+                
+                if procedure[1] != "void":
+                    func_dir = self.sm_instance.get_operand_virtual_direction((procedure[0], procedure[1]))
+                    temporal = self.sm_instance.temp_augment(procedure[1])
+                    self.quadruples.append([
+                        "=",
+                        func_dir[0],
+                        None,
+                        temporal
+                    ])
+                    self.push_operand(temporal, procedure[1])
+                    self.instruction_counter += 1
 
             elif level == "verify":
                 s1 = self.check_top_operand()

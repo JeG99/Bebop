@@ -117,9 +117,8 @@ class virtual_machine():
     def run(self, quadruples: list) -> None:
         self.quadruples = quadruples.copy()
         while self.quadruples[self.curr_ip][0] != "end":
-            # print(self.mem, self.call_stack, self.curr_ip)
             quad = self.quadruples[self.curr_ip]
-            if quad[0] in ["+", "-", "*", "/", "<", ">", "<>", "==", "and", "or"]:
+            if quad[0] in ["=", "+", "-", "*", "/", "<", ">", "<>", "==", "and", "or"]:
                 if len(self.call_stack) == 0:
                     if type(quad[3]) == int and self.rel_dir(quad[3]) in [4, 5, 6, 9] \
                         and self.dir_translator(quad[3])[1] >= len(self.mem[self.rel_dir(quad[3])]):
@@ -217,12 +216,12 @@ class virtual_machine():
 
             elif quad[0] == "write":
                 output = str(self.get_operand(quad[3])) if type(quad[3]) == int else quad[3]
+                print(output.replace('"', ''), end=" ")
                 while (self.quadruples[self.curr_ip + 1][0] == "write"):
                     write_quad = self.quadruples[self.curr_ip + 1]
                     next_output = str(self.get_operand(write_quad[3])) if type(write_quad[3]) == int else write_quad[3]
-                    output += " " + next_output
+                    print(next_output.replace('"', ''), end=" ")
                     self.curr_ip += 1
-                print(output.replace('"', ''))
             
             elif quad[0] == "verify":
                 index = self.get_operand(quad[1])

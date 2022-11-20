@@ -51,7 +51,7 @@ begin: [
 
     instructions:
         list_size = 10;
-        list[0] = 10;
+        list[0] = -10;
         list[1] = 6;
         list[2] = 1;
         list[3] = 5;
