@@ -12,6 +12,9 @@ procedures:
     }
 
 begin: [
+    locals:
+        var input: int;
     instructions:
-        write rec_fac(5);
+        read input;
+        write rec_fac(input);
 ]

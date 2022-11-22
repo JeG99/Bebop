@@ -361,7 +361,6 @@ class stack_manager():
                 op2 = self.pop_operand()
                 operand1 = self.sm_instance.get_operand_virtual_direction(op1)
                 operand2 = self.sm_instance.get_operand_virtual_direction(op2)
-                # TODO: Return type typematching
                 self.quadruples.append([operator, operand2[0], None, operand1[0]])
             
             else:

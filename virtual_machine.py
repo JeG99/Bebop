@@ -249,9 +249,8 @@ class virtual_machine():
                 alloc_type = quad[2]
                 try:
                     val = eval(alloc_type + '( input() )')
-                except: 
-                    # TODO: USE CUSTOM ERROR
-                    raise ValueError("This input must be of type " + alloc_type)
+                except:
+                    raise_error(None, "input_error", args=(alloc_type))
                 mem[read_dir[0]][read_dir[1]] = val
             
             elif quad[0] == "verify":
@@ -279,8 +278,6 @@ class virtual_machine():
                     pointed_dir = self.dir_translator(self.mem[val[0]][val[1]])
                     self.mem[var[0]][var[1]] = self.mem[pointed_dir[0]][pointed_dir[1]]
             elif quad[0] == "param":
-                # TODO: Use param position for validation
-                param_position = int(quad[3].split("$")[1]) - 1
                 self.params_stack.append(quad[1])
                 self.taking_params = True
             elif quad[0] == "gosub":

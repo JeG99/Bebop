@@ -46,3 +46,5 @@ def raise_error(p, cause="bad_syntax", **args) -> None:
         raise Error(f"Runtime error: Index out of bounds")
     elif cause == "unassigned_value":
         raise Error(f"Runtime error: Unassigned value")
+    elif cause == "input_error":
+        raise Error(f"Runtime error: This input must be of type <{args['args']}>")
