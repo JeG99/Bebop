@@ -1,6 +1,6 @@
 # The Bebop programming language
 
-## Análisis léxico-sintáctico:
+## Estado actual del lenguaje:
 21-11-22
 
 Estatus:
