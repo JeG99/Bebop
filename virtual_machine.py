@@ -100,16 +100,27 @@ class virtual_machine():
             pointed_dir = int(mem[9][dir - 9000])
             operand = mem[int(pointed_dir / 1000)][pointed_dir - int(pointed_dir / 1000) * 1000]
             if int(pointed_dir / 1000) in [0, 2, 4, 7]:
-                return int(operand)
+                try:
+                    return int(operand)
+                except:
+                    raise_error(None, "unassigned_value")
             elif int(pointed_dir / 1000) in [1, 3, 5, 8]:
-                return float(operand)
+                try:
+                    return float(operand)
+                except:
+                    raise_error(None, "unassigned_value")
         else:
-            # print(dir, self.curr_ip, self.call_stack)
             operand = mem[int(dir / 1000)][dir - int(dir / 1000) * 1000]
             if int(dir / 1000) in [0, 2, 4, 7]:
-                return int(operand)
+                try:
+                    return int(operand)
+                except:
+                    raise_error(None, "unassigned_value")
             elif int(dir / 1000) in [1, 3, 5, 8]:
-                return float(operand)
+                try:
+                    return float(operand)
+                except:
+                    raise_error(None, "unassigned_value")
             elif int(dir / 1000) == 6:
                 return bool(operand)
 

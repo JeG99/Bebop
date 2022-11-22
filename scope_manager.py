@@ -70,6 +70,24 @@ class scope_manager():
         self.tb = 6000
         self.tp = 9000
 
+    def init_global_scope(self):
+        self.gi = 200
+        self.gf = 1200
+        self.proc_dir["global"]["var_table"]["I_ARRAY"] = {
+            "type": "int",
+            "indexed": True,
+            "dimensionality": 1,
+            "lim_sup1": 200,
+            "virtual_direction": 0
+        }
+        self.proc_dir["global"]["var_table"]["F_ARRAY"] = {
+            "type": "float",
+            "indexed": True,
+            "dimensionality": 1,
+            "lim_sup1": 200,
+            "virtual_direction": 1000
+        }
+
     def define_return_global_var(self) -> None:
         var_body = {
             "type": self.proc_dir[self.curr_scope]["return_type"],
@@ -159,15 +177,17 @@ class scope_manager():
                 if var_body["dimensionality"] == 1:
                     mem_step = var_body["lim_sup1"]
                 elif var_body["dimensionality"] == 2:
-                    mem_step = var_body["lim_sup1"] * var_body["lim_sup2"] 
+                    mem_step = var_body["lim_sup1"] * var_body["lim_sup2"]
             self.gi += mem_step * \
                 int(var_body["type"] == "int" and self.curr_scope == "global")
             self.gf += mem_step * \
-                int(var_body["type"] == "float" and self.curr_scope == "global")
+                int(var_body["type"] ==
+                    "float" and self.curr_scope == "global")
             self.li += mem_step * \
                 int(var_body["type"] == "int" and self.curr_scope != "global")
             self.lf += mem_step * \
-                int(var_body["type"] == "float" and self.curr_scope != "global")
+                int(var_body["type"] ==
+                    "float" and self.curr_scope != "global")
             self.proc_dir[self.curr_scope]["var_table"][yacc_production[1]] = var_body
             if is_param:
                 self.proc_dir[self.curr_scope]["param_count"] += 1

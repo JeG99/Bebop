@@ -1,0 +1,223 @@
+        proc abs (n: float): float {
+            instructions:
+                if (n > 0 or n == 0) {
+                    return n;
+                }
+                else {
+                    return n * -1;
+                }
+        }
+
+        proc pow (n: float, p: int): float {
+            locals:
+                var i: int;
+
+            instructions:
+                i = 0;
+                repeat (i < p - 1) {
+                    n = n * n;
+                    i = i + 1;
+                }
+
+                return n;
+        }
+
+        proc is_even (n: int): int {
+            locals:
+                var i: int;
+                var even: int;
+
+            instructions:
+                even = 1;
+                i = 1;
+                repeat (i < n + 1) {
+                    if (even == 1) {
+                        even = 0;
+                    }
+                    else {
+                        even = 1;
+                    }
+                    i = i + 1;
+                }
+                return even;
+        }
+
+        proc sqrt_aprox (n: float): float {
+            locals:
+                var i: int;
+                var min: float;
+                var mid: float;
+                var max: float;
+                var res: float;
+                var sq: float;
+                var last: float;
+
+            instructions:
+                if (n == 0 or n == 1) {
+                    return n;
+                }
+
+                i = 0;
+                min = 0;
+                max = n;
+                last = 0;
+                repeat (i < 500) {
+                    mid = (min + max) / 2;
+                    sq = mid * mid;
+                    if (sq == n) {
+                        return mid;
+                    }
+                    if (sq > n) {
+                        max = mid;
+                    }
+                    if (sq < n) {
+                        min = mid;
+                    }
+                    if (last == mid) {
+                        return last;
+                    }
+                    last = mid;
+                }
+                return -1;
+        }
+
+        proc i_sum (start_index: int, size: int): int {
+            locals:
+                var i: int;
+                var sum: int;
+
+            instructions:
+                i = start_index;
+                sum = 0;
+                repeat (i < size) {
+                    sum = sum + I_ARRAY[i];
+                    i = i + 1;
+                }
+                return sum;
+        }
+
+        proc f_sum (start_index: int, size: int): float {
+            locals:
+                var i: int;
+                var sum: float;
+
+            instructions:
+                i = start_index;
+                sum = 0.0;
+                repeat (i < size) {
+                    sum = sum + F_ARRAY[i];
+                    i = i + 1;
+                }
+                return sum;
+        }
+
+        proc i_mul (start_index: int, size: int): int {
+            locals:
+                var i: int;
+                var prod: int;
+
+            instructions:
+                i = start_index;
+                prod = 1;
+                repeat (i < size) {
+                    prod = prod * I_ARRAY[i];
+                    i = i + 1;
+                }
+                return prod;
+        }
+
+        proc f_mul (start_index: int, size: int): float {
+            locals:
+                var i: int;
+                var prod: float;
+
+            instructions:
+                i = start_index;
+                prod = 1.0;
+                repeat (i < size) {
+                    prod = prod * F_ARRAY[i];
+                    i = i + 1;
+                }
+                return prod;
+        }
+
+        proc mean (start_index: int, size: int): float {
+            instructions:
+                return f_sum(start_index, size) / size;
+        }
+
+        proc median (start_index: int, size: int): float {
+            instructions:
+                if (is_even(size) == 1) {
+                    return ( F_ARRAY[(start_index + (size / 2)) - 1] + F_ARRAY[start_index + (size / 2)] ) / 2;
+                } 
+                else {
+                    return F_ARRAY[start_index + (size / 2)];
+                } 
+        }
+
+        proc std (start_index: int, size: int): float {
+            locals:
+                var sum: float;
+                var mn: float;
+                var i: int;
+                var tmp: float;
+
+            instructions:
+                sum = 0;
+                mn = mean(start_index, size);
+                i = start_index;
+                repeat (i < size) {
+                    tmp = abs(F_ARRAY[i] - mn);
+                    sum = sum + tmp * tmp;
+                    i = i + 1;
+                }
+                return sqrt_aprox(sum);
+        }
+
+        proc variance (start_index: int, size: int): float {
+            instructions:
+                return std(start_index, size) * std(start_index, size);
+        }
+
+        proc skew (start_index: int, size: int): float {
+            locals:
+                var i: int;
+                var sum: float;
+                var mn: float;
+                var tmp: float;
+                var sd: float;
+
+            instructions:
+                sum = 0;
+                i = start_index;
+                mn = mean(start_index, size);
+                repeat (i < size) {
+                    tmp = F_ARRAY[i] - mn;
+                    sum = sum + pow(tmp, 3);
+                    i = i + 1;
+                }
+                sd = std(start_index, size);
+                return sum / ((size - 1) * pow(sd, 3));
+        }
+
+        proc kurt (start_index: int, size: int): float {
+            locals:
+                var i: int;
+                var sum: float;
+                var mn: float;
+                var tmp: float;
+                var sd: float;
+
+            instructions:
+                sum = 0;
+                i = start_index;
+                mn = mean(start_index, size);
+                repeat (i < size) {
+                    tmp = F_ARRAY[i] - mn;
+                    sum = sum + pow(tmp, 4);
+                    i = i + 1;
+                }
+                sd = std(start_index, size);
+                return sum / ((size - 1) * pow(sd, 4));
+        }

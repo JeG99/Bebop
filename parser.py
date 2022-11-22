@@ -76,7 +76,6 @@ def p_proc_statements(p) -> None:
                     | proc_condition proc_statements
                     | proc_loop proc_statements
                     | function_call SEMICOLON proc_statements
-                    | special_function_call SEMICOLON proc_statements
                     | return expression return_semicolon proc_statements
                     | empty
     '''
@@ -87,6 +86,7 @@ def p_global_scope_init(p) -> None:
     global_scope_init : 
     '''
     scope_manager.context_change("global")
+    scope_manager.init_global_scope()
 
 
 def p_local_scope_init(p) -> None:
@@ -129,7 +129,6 @@ def p_matrix_declaration(p) -> None:
 def p_var_type(p) -> None:
     '''
     var_type : type
-             | DF
     '''
     p[0] = p[1]
 
@@ -236,7 +235,6 @@ def p_statements(p) -> None:
                | condition statements
                | loop statements
                | function_call SEMICOLON statements
-               | special_function_call SEMICOLON statements
                | empty
     '''
 
@@ -311,11 +309,13 @@ def p_array_assignment(p) -> None:
     '''
     stack_manager.produce_quadruple("simple_assignment")
 
+
 def p_matrix_assignment(p) -> None:
     '''
     matrix_assignment : matrix_access ASSIGN push_operator expression
     '''
     stack_manager.produce_quadruple("simple_assignment")
+
 
 def p_condition(p) -> None:
     '''
@@ -323,11 +323,13 @@ def p_condition(p) -> None:
               | IF cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET else LBRACKET statements RBRACKET fill_pending_jump   
     '''
 
+
 def p_proc_condition(p) -> None:
     '''
     proc_condition : IF cond_lparen hyper_expression cond_rparen LBRACKET proc_statements RBRACKET fill_pending_jump
                    | IF cond_lparen hyper_expression cond_rparen LBRACKET proc_statements RBRACKET else LBRACKET proc_statements RBRACKET fill_pending_jump   
     '''
+
 
 def p_cond_lparen(p) -> None:
     '''
@@ -369,10 +371,12 @@ def p_loop(p) -> None:
     loop : repeat cond_lparen hyper_expression cond_rparen LBRACKET statements RBRACKET fill_returning_jump
     '''
 
+
 def p_proc_loop(p) -> None:
     '''
     proc_loop : repeat cond_lparen hyper_expression cond_rparen LBRACKET proc_statements RBRACKET fill_returning_jump
     '''
+
 
 def p_repeat(p) -> None:
     '''
@@ -404,7 +408,8 @@ def p_function_call_check(p) -> None:
     '''
     scope_manager.check_function_call(p[-1])
     scope_manager.set_curr_procedure_call(p[-1])
-    stack_manager.push_era_jump(p[-1], stack_manager.get_current_istruction_pointer())
+    stack_manager.push_era_jump(
+        p[-1], stack_manager.get_current_istruction_pointer())
     stack_manager.push_operand(scope_manager.get_function_size(p[-1]), None)
 
 
@@ -449,24 +454,6 @@ def p_handle_call_param(p) -> None:
     scope_manager.augment_call_param_count()
     stack_manager.push_operator("param")
     stack_manager.produce_quadruple("param")
-
-
-def p_special_function_call(p) -> None:
-    '''
-    special_function_call : MEAN LPAREN call_params0 RPAREN
-                     | MEDIAN LPAREN call_params0 RPAREN
-                     | MODE LPAREN call_params0 RPAREN
-                     | STD LPAREN call_params0 RPAREN
-                     | KURTOSIS LPAREN call_params0 RPAREN
-                     | PLOT LPAREN call_params0 RPAREN
-                     | DPLOT LPAREN call_params0 RPAREN
-                     | VARIANCE LPAREN call_params0 RPAREN
-                     | SIMMETRY LPAREN call_params0 RPAREN
-                     | CORRELATION LPAREN call_params0 RPAREN
-                     | DFREAD LPAREN CONST_TEXT RPAREN
-                     | HOMERO
-                     | MARGE
-    '''
 
 
 def p_hyper_expression(p) -> None:
@@ -547,7 +534,6 @@ def p_factor(p) -> None:
            | array_access
            | matrix_access
            | function_call
-           | special_function_call
     '''
 
 
@@ -595,9 +581,9 @@ def p_array_access(p) -> None:
 
 
 def p_matrix_access(p) -> None:
-     '''
-     matrix_access : identifier lsqbracket expression matrix_rsqbracket_1 matrix_lsqbracket_2 expression matrix_rsqbracket_2
-     '''
+    '''
+    matrix_access : identifier lsqbracket expression matrix_rsqbracket_1 matrix_lsqbracket_2 expression matrix_rsqbracket_2
+    '''
 
 
 def p_lsqbracket(p) -> None:
@@ -619,6 +605,7 @@ def p_array_rsqbracket(p) -> None:
     stack_manager.push_operator("+")
     stack_manager.produce_quadruple("array_access")
 
+
 def p_matrix_rsqbracket_1(p) -> None:
     '''
     matrix_rsqbracket_1 : RSQBRACKET
@@ -628,6 +615,7 @@ def p_matrix_rsqbracket_1(p) -> None:
     stack_manager.push_operator("*")
     stack_manager.produce_quadruple("matrix_access_dim1")
 
+
 def p_matrix_lsqbracket_2(p) -> None:
     '''
     matrix_lsqbracket_2 : LSQBRACKET
@@ -635,6 +623,7 @@ def p_matrix_lsqbracket_2(p) -> None:
     stack_manager.set_dim(2)
     stack_manager.push_dim()
     stack_manager.push_operator('(')
+
 
 def p_matrix_rsqbracket_2(p) -> None:
     '''
@@ -644,6 +633,7 @@ def p_matrix_rsqbracket_2(p) -> None:
     stack_manager.produce_quadruple("verify")
     stack_manager.push_operator("+")
     stack_manager.produce_quadruple("matrix_access_dim2")
+
 
 def p_type(p) -> None:
     '''
@@ -677,6 +667,19 @@ if __name__ == "__main__":
             _file = open(code, "r")
             source = _file.read()
             _file.close()
+            _extras = open("extras.bbp", "r")
+            extras_source = _extras.read()
+
+            procs_tag_index = source.find("procedures:")
+            begin_tag_index = source.find("begin:")
+            if procs_tag_index != -1:
+                source = source[:(procs_tag_index + len("procedures:"))] + \
+                    extras_source + \
+                    source[(procs_tag_index + len("procedures:")):]
+            else:
+                source = source[:begin_tag_index] + "procedures:\n" + \
+                    extras_source + "\n\n" + source[begin_tag_index:]
+
             lexer.input(source)
 
             lexer.lineno = 1

@@ -44,3 +44,5 @@ def raise_error(p, cause="bad_syntax", **args) -> None:
         raise Error(f"Semantic error: <{args['args'][0]}: {args['args'][1]}> is not an indexed variable")
     elif cause == "out_of_bounds":
         raise Error(f"Runtime error: Index out of bounds")
+    elif cause == "unassigned_value":
+        raise Error(f"Runtime error: Unassigned value")

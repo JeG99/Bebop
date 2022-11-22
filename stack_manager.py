@@ -3,7 +3,6 @@ import math
 from semantic_cube import semantic_cube
 from bebop_error_handler import raise_error
 
-
 class stack_manager():
     def __init__(self, scope_manager) -> None:
         self.temp_counter = 0

@@ -45,23 +45,7 @@ reserved = {
     'void': 'VOID',
     'return': 'RETURN',
     'and': 'AND',
-    'or': 'OR',
-
-    # Special reserved words
-    'df': 'DF',
-    'mean': 'MEAN',
-    'median': 'MEDIAN',
-    'mode': 'MODE',
-    'std': 'STD',
-    'kurtosis': 'KURTOSIS',
-    'plot': 'PLOT',
-    'dplot': 'DPLOT',
-    'variance': 'VARIANCE',
-    'simmetry': 'SIMMETRY',
-    'correlation': 'CORRELATION',
-    'dfread': 'DFREAD',
-    '~(_8^(I)': 'HOMERO',
-    '###(_8^ |)': 'MARGE'
+    'or': 'OR'
 }
 
 tokens += list(reserved.values())

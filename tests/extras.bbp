@@ -1,0 +1,11 @@
+routine dec_fib;
+
+begin: [
+	instructions:
+		F_ARRAY[0] = 1;
+		F_ARRAY[1] = 22;
+		F_ARRAY[2] = 22;
+		F_ARRAY[3] = 1;
+
+		write f_mul(0, 4);
+]
